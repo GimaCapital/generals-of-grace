@@ -348,7 +348,7 @@ function SoulWinning() {
         className="relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-church-navy via-church-navy/90 to-church-gold/70">
-          <div className="absolute inset-0 bg-[url('images/soul.jpg')] bg-cover bg-center opacity-20" />
+          <div className="absolute inset-0 bg-[url('/images/soul.jpg')] bg-cover bg-center opacity-20" />
         </div>
 
         <div className="relative container-custom py-20 md:py-28">
@@ -711,7 +711,7 @@ function SoulWinning() {
               className="relative"
             >
               <img
-                src="images/aday.jpg"
+                src="/images/aday.jpg"
                 alt="Pastor Andrew Osalor"
                 className="rounded-2xl shadow-2xl w-full h-[450px] object-cover"
               />
@@ -749,7 +749,7 @@ function SoulWinning() {
             >
               <div className="relative h-80 overflow-hidden">
                 <img
-                  src="images/maximize-your-time.jpg"
+                  // src="images/maximize-your-time.jpg"
                   alt="Maximize Your Time"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
@@ -789,7 +789,7 @@ function SoulWinning() {
             >
               <div className="relative h-80 overflow-hidden">
                 <img
-                  src="images/soul.jpg"
+                  src="/images/soul.jpg"
                   alt="Soul Winning"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
@@ -829,7 +829,7 @@ function SoulWinning() {
             >
               <div className="relative h-80 overflow-hidden">
                 <img
-                  src="images/relationship.jpg"
+                  src="/images/relationship.jpg"
                   alt="Relationship"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {

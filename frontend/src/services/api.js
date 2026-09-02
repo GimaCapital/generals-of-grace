@@ -93,7 +93,7 @@
 import axios from 'axios';
 import { auth } from './firebase';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://gog-backend-ldpl.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || 'https://gog-backend-ldpl.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,

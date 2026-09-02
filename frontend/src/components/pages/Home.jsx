@@ -153,7 +153,6 @@ const testimonies = [
   return (
     <div>
       {/* ==================== HERO SECTION - WITH DRAMATIC ZOOM ==================== */}
-      {/* ==================== HERO SECTION - WITH DRAMATIC ZOOM ==================== */}
 <section className="relative min-h-[90vh] flex items-center overflow-hidden">
   {/* Background Image with Dramatic Zoom Animation */}
   <div className="absolute inset-0 overflow-hidden">
@@ -707,7 +706,7 @@ const testimonies = [
       <Link to="/ministries/prayer" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
         <div className="relative h-72 overflow-hidden bg-gray-200">
           <img 
-            src="images/prayer.jpg"
+            src="/images/prayer.jpg"
             alt="Prayer Ministry"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
             loading="lazy"
@@ -869,7 +868,7 @@ const testimonies = [
                     className="relative"
                   >
                     <img 
-                      src="images/aday.jpg" 
+                      src="/images/aday.jpg" 
                       alt="Pastor Andrew Osalor"
                       className="rounded-2xl shadow-2xl w-full h-[450px] object-cover"
                     />
@@ -907,7 +906,7 @@ const testimonies = [
                   >
                     <div className="relative h-80 overflow-hidden">
                       <img 
-                        src="images/maximize-your-time.jpg" 
+                        // src="images/maximize-your-time.jpg" 
                         alt="Maximize Your Time"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
