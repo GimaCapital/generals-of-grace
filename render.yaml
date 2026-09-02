@@ -2,8 +2,9 @@ services:
   # ============================================
   # FRONTEND - Static Site
   # ============================================
-  - type: static
+  - type: web
     name: gog-frontend
+    runtime: static
     repo: https://github.com/GimaCapital/generals-of-grace
     branch: main
     rootDir: frontend
