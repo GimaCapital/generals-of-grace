@@ -116,7 +116,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/settings', settingsRoutes);
 
 // ============================================
-// 404 HANDLER
+// 404 HANDLER - MUST BE AT THE END
 // ============================================
 app.use((req, res) => {
   res.status(404).json({
@@ -127,7 +127,7 @@ app.use((req, res) => {
 });
 
 // ============================================
-// ERROR HANDLER
+// ERROR HANDLER - MUST BE VERY LAST
 // ============================================
 app.use((err, req, res, next) => {
   logger.error('Error:', {

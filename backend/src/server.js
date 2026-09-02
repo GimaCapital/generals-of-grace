@@ -2,6 +2,17 @@ require('dotenv').config();
 const { logger } = require('./utils/logger');
 const app = require('./index');
 
+// Direct health route (fallback)
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
+
 // Handle uncaught exceptions
 process.on('uncaughtException', (error) => {
   logger.error('Uncaught Exception:', error);
