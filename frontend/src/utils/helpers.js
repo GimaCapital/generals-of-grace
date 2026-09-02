@@ -181,6 +181,7 @@ export const getBrowserInfo = () => {
   return { browser, version };
 };
 
+// ✅ slugify ONLY here
 export const slugify = (text) => {
   if (!text) return '';
   return text

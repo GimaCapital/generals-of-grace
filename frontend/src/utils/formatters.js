@@ -132,11 +132,3 @@ export const getYouTubeVideoId = (url) => {
   const match = url.match(regex);
   return match ? match[1] : null;
 };
-
-export const slugify = (text) => {
-  if (!text) return '';
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-};

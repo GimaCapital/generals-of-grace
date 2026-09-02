@@ -16,20 +16,32 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:3000'],
+      connectSrc: ["'self'", process.env.FRONTEND_URL || 'https://gog-frontend-2bq2.onrender.com'],
     },
   },
 }));
 
-// CORS middleware
+// ============================================
+// PRODUCTION-ONLY CORS
+// ============================================
+const allowedOrigins = [
+  'https://gog-frontend.onrender.com',
+  'https://gog-frontend-2bq2.onrender.com'
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:5173',
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:3000',
-    'https://gog-frontend.onrender.com'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if the origin is allowed
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      logger.warn(`CORS blocked request from origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -43,7 +55,9 @@ app.use(morgan('combined', {
   stream: { write: (message) => logger.info(message.trim()) },
 }));
 
-// Rate limiting
+// ============================================
+// RATE LIMITING
+// ============================================
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -90,7 +104,7 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     memory: process.memoryUsage(),
-    environment: process.env.NODE_ENV || 'development',
+    environment: process.env.NODE_ENV || 'production',
   });
 });
 
@@ -116,7 +130,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/settings', settingsRoutes);
 
 // ============================================
-// 404 HANDLER - MUST BE AT THE END
+// 404 HANDLER
 // ============================================
 app.use((req, res) => {
   res.status(404).json({
@@ -127,7 +141,7 @@ app.use((req, res) => {
 });
 
 // ============================================
-// ERROR HANDLER - MUST BE VERY LAST
+// ERROR HANDLER
 // ============================================
 app.use((err, req, res, next) => {
   logger.error('Error:', {
