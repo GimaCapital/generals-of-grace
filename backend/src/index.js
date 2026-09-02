@@ -1,0 +1,138 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const { logger } = require('./utils/logger');
+
+const app = express();
+
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:3000'],
+    },
+  },
+}));
+
+// backend/src/index.js
+app.use(cors({
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:5173', // ✅ Add this
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:3000'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+}));
+
+app.use(compression());
+app.use(express.json({ limit: process.env.MAX_REQUEST_SIZE || '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: process.env.MAX_REQUEST_SIZE || '10mb' }));
+
+app.use(morgan('combined', {
+  stream: { write: (message) => logger.info(message.trim()) },
+}));
+
+// Rate limiting
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests from this IP, please try again later.',
+});
+app.use('/api/', globalLimiter);
+
+const authLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 50,
+  message: 'Too many authentication attempts, please try again later.',
+});
+app.use('/api/auth/', authLimiter);
+
+// Routes
+const authRoutes = require('./routes/auth');
+const sermonRoutes = require('./routes/sermons');
+const eventRoutes = require('./routes/events');
+const givingRoutes = require('./routes/giving');
+const userRoutes = require('./routes/users');
+const ministryRoutes = require('./routes/ministries');
+const dashboardRoutes = require('./routes/dashboard');
+const settingsRoutes = require('./routes/settings'); // ✅ ADD THIS
+
+app.use('/api/auth', authRoutes);
+app.use('/api/sermons', sermonRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/giving', givingRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/ministries', ministryRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/settings', settingsRoutes); // ✅ ADD THIS
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found',
+    path: req.path,
+  });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  logger.error('Error:', {
+    message: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+    ip: req.ip,
+  });
+
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      success: false,
+      message: 'Validation error',
+      errors: err.errors || [err.message],
+    });
+  }
+
+  if (err.name === 'UnauthorizedError') {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized',
+    });
+  }
+
+  if (err.name === 'ForbiddenError') {
+    return res.status(403).json({
+      success: false,
+      message: 'Forbidden',
+    });
+  }
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+  });
+});
+
+module.exports = app;

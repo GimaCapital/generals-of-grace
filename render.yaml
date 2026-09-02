@@ -1,0 +1,61 @@
+services:
+  # ============================================
+  # FRONTEND - Static Site
+  # ============================================
+  - type: static
+    name: gog-frontend
+    repo: https://github.com/GimaCapital/generals-of-grace
+    branch: main
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://gog-backend.onrender.com/api
+
+  # ============================================
+  # BACKEND - Node.js API
+  # ============================================
+  - type: web
+    name: gog-backend
+    runtime: node
+    plan: free
+    repo: https://github.com/GimaCapital/generals-of-grace
+    branch: main
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      # ===== SERVER SETTINGS =====
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: MAX_REQUEST_SIZE
+        value: 10mb
+
+      # ===== CORS =====
+      - key: FRONTEND_URL
+        value: https://gog-frontend.onrender.com
+      - key: CORS_ORIGIN
+        value: https://gog-frontend.onrender.com
+
+      # ===== FIREBASE ADMIN SDK =====
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_STORAGE_BUCKET
+        sync: false
+
+      # ===== JWT =====
+      - key: JWT_SECRET
+        sync: false
+
+      # ===== EMAIL (Optional) =====
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false

@@ -1,0 +1,27 @@
+
+---
+
+### **2. For `C:\Users\HP\Desktop\generals-of-grace\.gitignore`**
+
+```gitignore
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+frontend/dist/
+frontend/node_modules/
+frontend/.env
+backend/node_modules/
+backend/.env
+backend/uploads/
+backend/temp/

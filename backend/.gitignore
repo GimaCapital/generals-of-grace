@@ -1,0 +1,23 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+uploads/
+temp/
+logs/
+*.log
+.DS_Store
+.vscode/
+.idea/
+coverage/
+serviceAccountKey.json
+# In backend/.gitignore
+logs/
+*.log
+*.log.*
+
+# In root .gitignore  
+logs/
+*.log
+*.log.*
