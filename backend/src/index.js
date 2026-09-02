@@ -109,6 +109,27 @@ app.get('/health', (req, res) => {
 });
 
 // ============================================
+// DEBUG ROUTE - Check registered routes
+// ============================================
+app.get('/api/routes', (req, res) => {
+  const routes = [];
+  app._router.stack.forEach((layer) => {
+    if (layer.route) {
+      const methods = Object.keys(layer.route.methods);
+      routes.push({
+        path: layer.route.path,
+        methods: methods
+      });
+    }
+  });
+  res.json({
+    success: true,
+    totalRoutes: routes.length,
+    routes: routes
+  });
+});
+
+// ============================================
 // API ROUTES
 // ============================================
 const authRoutes = require('./routes/auth');
