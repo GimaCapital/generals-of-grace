@@ -38,6 +38,7 @@ const server = app.listen(PORT, () => {
   logger.info(`📚 Environment: ${process.env.NODE_ENV || 'development'}`);
   logger.info(`🌐 URL: ${process.env.API_URL || `http://localhost:${PORT}`}`);
   logger.info(`🔗 Frontend: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+  logger.info(`✅ Health check: http://localhost:${PORT}/health`);
 });
 
 module.exports = server;

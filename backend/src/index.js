@@ -21,13 +21,14 @@ app.use(helmet({
   },
 }));
 
-// backend/src/index.js
+// CORS middleware
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL || 'http://localhost:5173', // ✅ Add this
+    process.env.FRONTEND_URL || 'http://localhost:5173',
     'http://localhost:5173',
     'http://localhost:5174',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://gog-frontend.onrender.com'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -57,26 +58,32 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/', authLimiter);
 
-// Routes
-const authRoutes = require('./routes/auth');
-const sermonRoutes = require('./routes/sermons');
-const eventRoutes = require('./routes/events');
-const givingRoutes = require('./routes/giving');
-const userRoutes = require('./routes/users');
-const ministryRoutes = require('./routes/ministries');
-const dashboardRoutes = require('./routes/dashboard');
-const settingsRoutes = require('./routes/settings'); // ✅ ADD THIS
+// ============================================
+// ROOT ROUTE
+// ============================================
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Generals of Grace API',
+    status: 'running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      api: '/api',
+      auth: '/api/auth',
+      sermons: '/api/sermons',
+      events: '/api/events',
+      ministries: '/api/ministries',
+      giving: '/api/giving',
+      users: '/api/users',
+      settings: '/api/settings',
+      dashboard: '/api/dashboard'
+    }
+  });
+});
 
-app.use('/api/auth', authRoutes);
-app.use('/api/sermons', sermonRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/giving', givingRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/ministries', ministryRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/settings', settingsRoutes); // ✅ ADD THIS
-
-// Health check
+// ============================================
+// HEALTH CHECK
+// ============================================
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -87,7 +94,30 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 404 handler
+// ============================================
+// API ROUTES
+// ============================================
+const authRoutes = require('./routes/auth');
+const sermonRoutes = require('./routes/sermons');
+const eventRoutes = require('./routes/events');
+const givingRoutes = require('./routes/giving');
+const userRoutes = require('./routes/users');
+const ministryRoutes = require('./routes/ministries');
+const dashboardRoutes = require('./routes/dashboard');
+const settingsRoutes = require('./routes/settings');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/sermons', sermonRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/giving', givingRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/ministries', ministryRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/settings', settingsRoutes);
+
+// ============================================
+// 404 HANDLER
+// ============================================
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -96,7 +126,9 @@ app.use((req, res) => {
   });
 });
 
-// Error handler
+// ============================================
+// ERROR HANDLER
+// ============================================
 app.use((err, req, res, next) => {
   logger.error('Error:', {
     message: err.message,
