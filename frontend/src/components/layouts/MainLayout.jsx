@@ -1,3 +1,4 @@
+// src/components/layouts/MainLayout.jsx
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from '../common/Header';
@@ -14,7 +15,8 @@ function MainLayout() {
   }, [location]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    // ✅ FIX: Added overflow-x-hidden to prevent horizontal scroll
+    <div className="min-h-screen flex flex-col bg-white overflow-x-hidden">
       <ScrollToTop />
       <Header onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
       <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />

@@ -152,31 +152,22 @@ const testimonies = [
 
   return (
     <div>
-      {/* ==================== HERO SECTION - WITH DRAMATIC ZOOM ==================== */}
+{/* ==================== HERO SECTION - WITH IMG TAG ==================== */}
 <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-  {/* Background Image with Dramatic Zoom Animation */}
+  {/* Background Image as <img> */}
   <div className="absolute inset-0 overflow-hidden">
-    <div 
-      className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-      style={{ 
-        backgroundImage: "url('/images/main_image_2026.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
+    <img 
+      src="/images/main_image_2026.jpg" 
+      alt="Generals of Grace Church"
+      className="w-full h-full object-cover md:object-cover object-center"
+      style={{
         animation: 'dramaticZoom 18s ease-in-out infinite alternate',
-        transform: 'scale(1.05)'
       }}
-    >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-church-navy/60"></div>
-      {/* Gradient overlay for smooth edges */}
-      <div className="absolute inset-0 bg-gradient-to-r from-church-navy/80 via-church-navy/40 to-transparent"></div>
-    </div>
+    />
+    {/* Dark overlay for readability */}
+    <div className="absolute inset-0 bg-church-navy/60"></div>
+    <div className="absolute inset-0 bg-gradient-to-r from-church-navy/80 via-church-navy/40 to-transparent"></div>
   </div>
-  
-  {/* Decorative blur elements */}
-  <div className="absolute bottom-0 right-0 w-96 h-96 bg-church-gold/10 rounded-full blur-3xl"></div>
-  <div className="absolute top-20 left-20 w-64 h-64 bg-church-gold/5 rounded-full blur-2xl"></div>
   
   <div className="container-custom relative z-10 py-20">
     <div className="max-w-3xl">
@@ -203,8 +194,7 @@ const testimonies = [
   </div>
 </section>
 
-      {/* ==================== STATS SECTION ==================== */}
-{/* ==================== STATS SECTION - INFINITE CAROUSEL ==================== */}
+{/* ==================== BOOKS SECTION - INFINITE CAROUSEL ==================== */}
 <section className="py-16 bg-church-navy relative overflow-hidden">
   {/* Gold accent line at top */}
   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-church-gold/50 to-transparent"></div>
@@ -225,71 +215,282 @@ const testimonies = [
     animation: 'pulseSlow 6s ease-in-out infinite 1s'
   }}></div>
   
-  <div className="container-custom relative z-10 overflow-hidden">
-    {/* Infinite Carousel - Desktop */}
-    <div className="hidden md:block">
+  <div className="container-custom relative z-10">
+    {/* Section Header */}
+    <div className="text-center mb-12">
+      <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Books</span>
+      <h2 className="text-3xl md:text-4xl font-display font-bold text-white mt-2">
+        Books by <span className="text-church-gold">Pastor Osalor</span>
+      </h2>
+      <div className="w-20 h-1 bg-church-gold mx-auto rounded-full mt-3"></div>
+      <p className="text-gray-400 mt-3 max-w-2xl mx-auto text-sm md:text-base">
+        Life-changing books that will transform your faith, relationships, and understanding of soul winning
+      </p>
+    </div>
+
+    {/* Desktop - Infinite Carousel */}
+    <div className="hidden md:block overflow-hidden">
       <div 
         className="flex"
         style={{
-          animation: 'scrollInfinite 20s linear infinite',
+          animation: 'scrollInfinite 25s linear infinite',
           width: 'max-content'
         }}
         onMouseEnter={(e) => e.currentTarget.style.animationPlayState = 'paused'}
         onMouseLeave={(e) => e.currentTarget.style.animationPlayState = 'running'}
       >
-        {/* First set of stats */}
+        {/* First set of books */}
         {[
-          { icon: <Users className="w-8 h-8" />, label: 'Members', value: '5,000+' },
-          { icon: <Play className="w-8 h-8" />, label: 'Sermons', value: '500+' },
-          { icon: <Calendar className="w-8 h-8" />, label: 'Events', value: '10+' },
-          { icon: <Heart className="w-8 h-8" />, label: 'Ministries', value: '5+' },
-        ].map((stat, index) => (
-          <div key={index} className="flex-shrink-0 w-64 text-center px-6 py-4">
-            <div className="text-church-gold flex justify-center mb-2">
-              <span className="text-4xl">{stat.icon}</span>
+          {
+            id: 1,
+            title: 'Maximize Your Time',
+            subtitle: 'Redeeming Your Time for Kingdom Impact',
+            image: '/images/maximize-your-time.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
+            description: 'Learn to prioritize what truly matters and make every moment count for eternity.',
+            pages: '256',
+            color: 'from-amber-500 to-orange-500'
+          },
+          {
+            id: 2,
+            title: 'Relationship',
+            subtitle: 'Building Godly Relationships That Honor God',
+            image: '/images/relationship-book.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
+            description: 'Discover the principles for lasting and fulfilling connections that honor God.',
+            pages: '288',
+            color: 'from-purple-500 to-pink-500'
+          },
+          {
+            id: 3,
+            title: 'Soul Winning',
+            subtitle: 'Sharing Your Faith with Boldness and Love',
+            image: '/images/soul.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
+            description: 'A practical guide to leading people to Christ and discipling them effectively.',
+            pages: '320',
+            color: 'from-red-500 to-rose-500'
+          },
+          
+          {
+            id: 4,
+            title: 'Faith Unleashed',
+            subtitle: 'Unlocking the Power of God in Your Life',
+            image: '/images/faith-unleashed.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
+            description: 'Discover how to activate your faith and see God move in supernatural ways.',
+            pages: '312',
+            color: 'from-blue-500 to-cyan-500'
+          },
+          {
+            id: 5,
+            title: 'Kingdom Finances',
+            subtitle: 'Biblical Principles for Financial Breakthrough',
+            image: '/images/kingdom-finances.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
+            description: 'Learn God\'s principles for financial freedom and kingdom generosity.',
+            pages: '280',
+            color: 'from-green-500 to-emerald-500'
+          },
+          {
+            id: 6,
+            title: 'Prayer Warriors',
+            subtitle: 'Becoming a Powerful Intercessor',
+            image: '/images/prayer-warriors.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1511632765486-325841a54eb7?w=400&h=500&fit=crop',
+            description: 'Develop a powerful prayer life that moves mountains and transforms nations.',
+            pages: '344',
+            color: 'from-indigo-500 to-purple-500'
+          },
+        ].map((book, index) => (
+          <div key={index} className="flex-shrink-0 w-72 mx-4 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+            <div className="relative h-64 overflow-hidden">
+              <img 
+                src={book.image} 
+                alt={book.title}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={(e) => { e.target.src = book.fallbackImage; }}
+                loading="lazy"
+              />
+              <div className={`absolute top-3 right-3 bg-gradient-to-r ${book.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
+                Book {book.id}
+              </div>
             </div>
-            <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-            <div className="text-gray-400 text-sm">{stat.label}</div>
+            <div className="p-5 text-white">
+              <h3 className="text-xl font-display font-bold text-white mb-1 truncate">{book.title}</h3>
+              <p className="text-sm text-church-gold mb-2 truncate">{book.subtitle}</p>
+              <p className="text-gray-300 text-sm leading-relaxed mb-3 line-clamp-2">{book.description}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-400">{book.pages} pages</span>
+                <button className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1">
+                  Learn More →
+                </button>
+              </div>
+            </div>
           </div>
         ))}
+        
         {/* Duplicate for infinite effect */}
         {[
-          { icon: <Users className="w-8 h-8" />, label: 'Members', value: '5,000+' },
-          { icon: <Play className="w-8 h-8" />, label: 'Sermons', value: '500+' },
-          { icon: <Calendar className="w-8 h-8" />, label: 'Events', value: '10+' },
-          { icon: <Heart className="w-8 h-8" />, label: 'Ministries', value: '5+' },
-        ].map((stat, index) => (
-          <div key={`dup-${index}`} className="flex-shrink-0 w-64 text-center px-6 py-4">
-            <div className="text-church-gold flex justify-center mb-2">
-              <span className="text-4xl">{stat.icon}</span>
+          {
+            id: 1,
+            title: 'Maximize Your Time',
+            subtitle: 'Redeeming Your Time for Kingdom Impact',
+            image: '/images/maximize-your-time.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
+            description: 'Learn to prioritize what truly matters and make every moment count for eternity.',
+            pages: '256',
+            color: 'from-amber-500 to-orange-500'
+          },
+          {
+            id: 2,
+            title: 'Relationship',
+            subtitle: 'Building Godly Relationships That Honor God',
+            image: '/images/relationship-book.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
+            description: 'Discover the principles for lasting and fulfilling connections that honor God.',
+            pages: '288',
+            color: 'from-purple-500 to-pink-500'
+          },
+          {
+            id: 3,
+            title: 'Soul Winning',
+            subtitle: 'Sharing Your Faith with Boldness and Love',
+            image: '/images/soul.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
+            description: 'A practical guide to leading people to Christ and discipling them effectively.',
+            pages: '320',
+            color: 'from-red-500 to-rose-500'
+          },
+          {
+            id: 4,
+            title: 'Faith Unleashed',
+            subtitle: 'Unlocking the Power of God in Your Life',
+            image: '/images/faith-unleashed.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
+            description: 'Discover how to activate your faith and see God move in supernatural ways.',
+            pages: '312',
+            color: 'from-blue-500 to-cyan-500'
+          },
+          {
+            id: 5,
+            title: 'Kingdom Finances',
+            subtitle: 'Biblical Principles for Financial Breakthrough',
+            image: '/images/kingdom-finances.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
+            description: 'Learn God\'s principles for financial freedom and kingdom generosity.',
+            pages: '280',
+            color: 'from-green-500 to-emerald-500'
+          },
+          {
+            id: 6,
+            title: 'Prayer Warriors',
+            subtitle: 'Becoming a Powerful Intercessor',
+            image: '/images/prayer-warriors.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1511632765486-325841a54eb7?w=400&h=500&fit=crop',
+            description: 'Develop a powerful prayer life that moves mountains and transforms nations.',
+            pages: '344',
+            color: 'from-indigo-500 to-purple-500'
+          },
+        ].map((book, index) => (
+          <div key={`dup-${index}`} className="flex-shrink-0 w-72 mx-4 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+            <div className="relative h-64 overflow-hidden">
+              <img 
+                src={book.image} 
+                alt={book.title}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                onError={(e) => { e.target.src = book.fallbackImage; }}
+                loading="lazy"
+              />
+              <div className={`absolute top-3 right-3 bg-gradient-to-r ${book.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
+                Book {book.id}
+              </div>
             </div>
-            <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-            <div className="text-gray-400 text-sm">{stat.label}</div>
+            <div className="p-5 text-white">
+              <h3 className="text-xl font-display font-bold text-white mb-1 truncate">{book.title}</h3>
+              <p className="text-sm text-church-gold mb-2 truncate">{book.subtitle}</p>
+              <p className="text-gray-300 text-sm leading-relaxed mb-3 line-clamp-2">{book.description}</p>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-400">{book.pages} pages</span>
+                <button className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1">
+                  Learn More →
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
     </div>
 
-    {/* Mobile - Grid Layout */}
-    <div className="md:hidden grid grid-cols-2 gap-6">
-      {[
-        { icon: <Users className="w-8 h-8" />, label: 'Members', value: '5,000+' },
-        { icon: <Play className="w-8 h-8" />, label: 'Sermons', value: '500+' },
-        { icon: <Calendar className="w-8 h-8" />, label: 'Events', value: '10+' },
-        { icon: <Heart className="w-8 h-8" />, label: 'Ministries', value: '5+' },
-      ].map((stat, index) => (
-        <div key={index} className="text-center p-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 group">
-          <div className="text-church-gold flex justify-center mb-2 transform group-hover:scale-110 transition-transform duration-300">
-            <span className="text-4xl">{stat.icon}</span>
+    {/* Mobile - Horizontal Scroll (No Overflow) */}
+    <div className="md:hidden overflow-x-auto pb-4 -mx-4 px-4">
+      <div className="flex gap-4 w-max">
+        {[
+          {
+            id: 1,
+            title: 'Maximize Your Time',
+            image: '/images/maximize-your-time.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
+            color: 'from-amber-500 to-orange-500'
+          },
+          {
+            id: 2,
+            title: 'Relationship',
+            image: '/images/relationship-book.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
+            color: 'from-purple-500 to-pink-500'
+          },
+          {
+            id: 3,
+            title: 'Soul Winning',
+            image: '/images/soul.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
+            color: 'from-red-500 to-rose-500'
+          },
+          {
+            id: 4,
+            title: 'Faith Unleashed',
+            image: '/images/faith-unleashed.jpg',
+            fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
+            color: 'from-blue-500 to-cyan-500'
+          },
+        ].map((book, index) => (
+          <div key={index} className="w-44 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
+            <div className="relative h-52 overflow-hidden">
+              <img 
+                src={book.image} 
+                alt={book.title}
+                className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = book.fallbackImage; }}
+                loading="lazy"
+              />
+              <div className={`absolute top-2 right-2 bg-gradient-to-r ${book.color} text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg`}>
+                #{book.id}
+              </div>
+            </div>
+            <div className="p-3 text-white">
+              <h4 className="text-sm font-bold truncate">{book.title}</h4>
+              <button className="text-church-gold text-xs font-semibold mt-1">
+                Learn More →
+              </button>
+            </div>
           </div>
-          <div className="text-xl font-bold text-white">{stat.value}</div>
-          <div className="text-gray-400 text-xs">{stat.label}</div>
-        </div>
-      ))}
+        ))}
+      </div>
+    </div>
+
+    {/* View All Books Button */}
+    <div className="text-center mt-12">
+      <a 
+        href="/resources/books"
+        className="inline-flex items-center gap-2 bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30"
+      >
+        View All Books
+        <ChevronRight className="w-5 h-5" />
+      </a>
     </div>
   </div>
 
-  {/* Inline keyframes via style tag */}
   <style>{`
     @keyframes scrollInfinite {
       0% { transform: translateX(0); }
@@ -881,155 +1082,351 @@ const testimonies = [
               </div>
             </section>
       
-            {/* ===== BOOKS SECTION ===== */}
-            <section className="py-20 bg-white">
-              <div className="container-custom">
-                <div className="text-center mb-16">
-                  <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Books</span>
-                  <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mt-2">
-                    Books by <span className="text-church-gold">Pastor Osalor</span>
-                  </h2>
-                  <p className="text-gray-500 mt-2 max-w-2xl mx-auto">
-                    Life-changing books that will transform your faith, relationships, and understanding of soul winning
-                  </p>
-                </div>
+           {/* ===== BOOKS SECTION - NEW RELEASE ===== */}
+<section className="py-20 bg-white">
+  <div className="container-custom">
+    {/* 🔥 ATTENTION-GRABBING HEADER */}
+    <div className="text-center mb-16">
+      <div className="inline-flex items-center gap-3 mb-4">
+        <span className="w-12 h-px bg-church-gold/40"></span>
+        <span className="text-church-gold font-semibold text-sm uppercase tracking-wider bg-church-gold/10 px-5 py-2 rounded-full border border-church-gold/20">
+          🎉 Birthday Launch
+        </span>
+        <span className="w-12 h-px bg-church-gold/40"></span>
+      </div>
       
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {/* Book 1 - Maximize Your Time */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -10 }}
-                    className="bg-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group"
-                  >
-                    <div className="relative h-80 overflow-hidden">
-                      <img 
-                        // src="images/maximize-your-time.jpg" 
-                        alt="Maximize Your Time"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                        <p className="text-white text-sm leading-relaxed">Learn to redeem your time for God's glory</p>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <BookOpen className="w-5 h-5 text-church-gold" />
-                        <span className="text-xs text-church-gold font-semibold">Book 1</span>
-                      </div>
-                      <h3 className="text-2xl font-display font-bold text-church-navy mb-2">Maximize Your Time</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed mb-4">
-                        Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity.
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-church-gold font-medium">Paperback • 256 pages</span>
-                        <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1">
-                          Learn More <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
+      <h2 className="text-3xl md:text-5xl font-display font-bold text-church-navy mt-4 mb-3">
+        Powerful Books. <br />
+        <span className="text-church-gold">One Life-Changing Day.</span>
+      </h2>
       
-                  {/* Book 2 - Soul Winning */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -10 }}
-                    className="bg-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group"
-                  >
-                    <div className="relative h-80 overflow-hidden">
-                      <img 
-                        src="images/soul.jpg" 
-                        alt="Soul Winning"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                        <p className="text-white text-sm leading-relaxed">Master the art of winning souls for Christ</p>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Heart className="w-5 h-5 text-church-gold" />
-                        <span className="text-xs text-church-gold font-semibold">Book 2</span>
-                      </div>
-                      <h3 className="text-2xl font-display font-bold text-church-navy mb-2">Soul Winning</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed mb-4">
-                        A practical guide to sharing your faith with boldness and love. Learn how to lead people to Christ and disciple them effectively.
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-church-gold font-medium">Paperback • 320 pages</span>
-                        <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1">
-                          Learn More <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
+      <div className="w-24 h-1 bg-gradient-to-r from-church-gold to-amber-400 mx-auto rounded-full"></div>
       
-                  {/* Book 3 - Relationship */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -10 }}
-                    className="bg-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group"
-                  >
-                    <div className="relative h-80 overflow-hidden">
-                      <img 
-                        src="images/relationship.jpg" 
-                        alt="Relationship"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                        <p className="text-white text-sm leading-relaxed">Building godly relationships that honor God</p>
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Users className="w-5 h-5 text-church-gold" />
-                        <span className="text-xs text-church-gold font-semibold">Book 3</span>
-                      </div>
-                      <h3 className="text-2xl font-display font-bold text-church-navy mb-2">Relationship</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed mb-4">
-                        Building healthy, godly relationships that honor God and bless others. Discover the principles for lasting and fulfilling connections.
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-church-gold font-medium">Paperback • 288 pages</span>
-                        <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1">
-                          Learn More <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                </div>
-      
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  viewport={{ once: true }}
-                  className="text-center mt-12"
-                >
-                  <p className="text-gray-500 text-sm max-w-2xl mx-auto">
-                    "These books are written to equip and empower you for Kingdom impact. Get your copies today and start your journey of transformation."
-                  </p>
-                  <p className="text-church-gold font-medium mt-2">— Pastor Andrew Osalor</p>
-                </motion.div>
+      <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-base">
+        Pastor Andrew Osalor's long-awaited trilogy is finally here — released on his birthday, 
+        these three books are designed to equip, empower, and transform your walk with God.
+      </p>
+    </div>
+
+        {/* 🔥 NEW RELEASE - Birthday Book (Featured) */}
+    <div className="mb-16">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        viewport={{ once: true }}
+        whileHover={{ y: -8 }}
+        className="relative overflow-hidden rounded-2xl shadow-2xl border-2 border-church-gold/30 bg-gradient-to-br from-church-gold/10 via-white to-amber-50/30"
+      >
+        {/* "NEW RELEASE" Badge */}
+        <div className="absolute top-4 right-4 z-20">
+          <span className="inline-flex items-center gap-2 bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg animate-pulse">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-300"></span>
+            </span>
+            NEW RELEASE
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
+          {/* Book Image */}
+          <div className="relative h-80 md:h-auto rounded-xl overflow-hidden shadow-lg">
+            <img 
+              src="images/maximize-your-time.jpg" 
+              alt="Maximize Your Time - New Release"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.src = 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600&h=800&fit=crop';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-church-navy/60 to-transparent"></div>
+            <div className="absolute bottom-4 left-4">
+              <span className="bg-church-gold text-church-navy text-xs font-bold px-3 py-1 rounded-full">
+                📖 New Release
+              </span>
+            </div>
+          </div>
+
+          {/* Book Details */}
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-3 py-1 rounded-full">
+                Book 1
+              </span>
+              <span className="text-red-500 text-xs font-bold uppercase tracking-wider bg-red-50 px-3 py-1 rounded-full">
+                🔥 Just Launched
+              </span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-2">
+              Maximize Your Time
+            </h3>
+            <p className="text-church-gold font-medium mb-4">Redeeming Your Time for Kingdom Impact</p>
+            <p className="text-gray-600 leading-relaxed mb-6">
+              Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity. This life-changing book will transform how you view and use your time.
+            </p>
+            
+            {/* Book Details Grid */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <p className="text-xs text-gray-400">Pages</p>
+                <p className="text-sm font-bold text-church-navy">256</p>
               </div>
-            </section>
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <p className="text-xs text-gray-400">Format</p>
+                <p className="text-sm font-bold text-church-navy">Paperback</p>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <p className="text-xs text-gray-400">Release Date</p>
+                <p className="text-sm font-bold text-church-gold">August 2026</p>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-3 text-center">
+                <p className="text-xs text-gray-400">Category</p>
+                <p className="text-sm font-bold text-church-navy">Christian Living</p>
+              </div>
+            </div>
+
+            {/* Call to Action Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center gap-2"
+              >
+                <BookOpen className="w-5 h-5" />
+                Get Your Copy
+                <ChevronRight className="w-4 h-4" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="border-2 border-church-gold/30 text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
+              >
+                <Heart className="w-5 h-5" />
+                Share
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+
+    {/* 🔥 ALL THREE BOOKS - SAME LAUNCH DAY */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      {/* Book 1 - Maximize Your Time */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        viewport={{ once: true }}
+        whileHover={{ y: -12 }}
+        className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-church-gold/20 hover:border-church-gold/50"
+      >
+        {/* "NEW RELEASE" Badge */}
+        <div className="absolute top-3 right-3 z-20">
+          <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-300"></span>
+            </span>
+            NEW
+          </span>
+        </div>
+
+        <div className="relative h-64 overflow-hidden bg-gray-200">
+          <img 
+            src="images/maximize-your-time.jpg" 
+            alt="Maximize Your Time"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              e.target.src = 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+            <p className="text-white text-sm leading-relaxed">Learn to redeem your time for God's glory</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-2 py-0.5 rounded">
+              Book 1
+            </span>
+            <span className="text-xs text-gray-400">•</span>
+            <span className="text-xs text-gray-400">256 pages</span>
+          </div>
+          <h3 className="text-2xl font-display font-bold text-church-navy mb-2 group-hover:text-church-gold transition-colors">
+            Maximize Your Time
+          </h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-4">
+            Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity.
+          </p>
+          <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1 group-hover:gap-2">
+            Get Your Copy <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Book 2 - Soul Winning */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        viewport={{ once: true }}
+        whileHover={{ y: -12 }}
+        className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-church-gold/20 hover:border-church-gold/50"
+      >
+        <div className="absolute top-3 right-3 z-20">
+          <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-300"></span>
+            </span>
+            NEW
+          </span>
+        </div>
+
+        <div className="relative h-64 overflow-hidden bg-gray-200">
+          <img 
+            src="images/soul.jpg" 
+            alt="Soul Winning"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              e.target.src = 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+            <p className="text-white text-sm leading-relaxed">Master the art of winning souls for Christ</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-2 py-0.5 rounded">
+              Book 2
+            </span>
+            <span className="text-xs text-gray-400">•</span>
+            <span className="text-xs text-gray-400">320 pages</span>
+          </div>
+          <h3 className="text-2xl font-display font-bold text-church-navy mb-2 group-hover:text-church-gold transition-colors">
+            Soul Winning
+          </h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-4">
+            A practical guide to sharing your faith with boldness and love. Learn how to lead people to Christ and disciple them effectively.
+          </p>
+          <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1 group-hover:gap-2">
+            Get Your Copy <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Book 3 - Relationship */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        viewport={{ once: true }}
+        whileHover={{ y: -12 }}
+        className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-church-gold/20 hover:border-church-gold/50"
+      >
+        <div className="absolute top-3 right-3 z-20">
+          <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-300"></span>
+            </span>
+            NEW
+          </span>
+        </div>
+
+        <div className="relative h-64 overflow-hidden bg-gray-200">
+          <img 
+            src="images/relationship-book.jpg" 
+            alt="Relationship"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              e.target.src = 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+            <p className="text-white text-sm leading-relaxed">Building godly relationships that honor God</p>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-2 py-0.5 rounded">
+              Book 3
+            </span>
+            <span className="text-xs text-gray-400">•</span>
+            <span className="text-xs text-gray-400">288 pages</span>
+          </div>
+          <h3 className="text-2xl font-display font-bold text-church-navy mb-2 group-hover:text-church-gold transition-colors">
+            Relationship
+          </h3>
+          <p className="text-gray-500 text-sm leading-relaxed mb-4">
+            Building healthy, godly relationships that honor God and bless others. Discover the principles for lasting and fulfilling connections.
+          </p>
+          <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1 group-hover:gap-2">
+            Get Your Copy <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </motion.div>
+    </div>
+
+    {/* 📅 Birthday Launch Announcement */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+      viewport={{ once: true }}
+      className="text-center bg-gradient-to-r from-church-gold/10 via-white to-church-gold/10 rounded-2xl p-8 md:p-12 border border-church-gold/20 max-w-4xl mx-auto"
+    >
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <span className="text-3xl">🎂</span>
+        <span className="text-church-gold font-bold text-sm uppercase tracking-wider">Special Birthday Launch</span>
+        <span className="text-3xl">🎉</span>
+      </div>
+      <h3 className="text-2xl md:text-3xl font-display font-bold text-church-navy mb-3">
+        All Three Books Released on <span className="text-church-gold">August</span>
+      </h3>
+      <p className="text-gray-500 max-w-2xl mx-auto">
+        Pastor Andrew Osalor celebrates his birthday by releasing these three powerful books — 
+        a gift to the body of Christ that will equip, empower, and transform generations.
+      </p>
+      <div className="mt-6 flex flex-wrap justify-center gap-4">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center gap-2"
+        >
+          <Gift className="w-5 h-5" />
+          Get the Trilogy
+          <ChevronRight className="w-4 h-4" />
+        </motion.button>
+        <motion.a
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          href="#books"
+          className="border-2 border-church-gold/30 text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
+        >
+          <Heart className="w-5 h-5" />
+          Learn More
+        </motion.a>
+      </div>
+    </motion.div>
+
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5 }}
+      viewport={{ once: true }}
+      className="text-center mt-12"
+    >
+      <p className="text-gray-500 text-sm max-w-2xl mx-auto italic">
+        "These books are written to equip and empower you for Kingdom impact. Get your copies today and start your journey of transformation."
+      </p>
+      <p className="text-church-gold font-medium mt-2">— Pastor Andrew Osalor</p>
+    </motion.div>
+  </div>
+</section>
 
       {/* ==================== TESTIMONIES SECTION ====================
       <section className="py-16 bg-gradient-to-br from-amber-50 to-white">

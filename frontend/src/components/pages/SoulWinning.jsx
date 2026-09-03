@@ -749,7 +749,7 @@ function SoulWinning() {
             >
               <div className="relative h-80 overflow-hidden">
                 <img
-                  // src="images/maximize-your-time.jpg"
+                  src="images/maximize-your-time.jpg"
                   alt="Maximize Your Time"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
@@ -829,7 +829,7 @@ function SoulWinning() {
             >
               <div className="relative h-80 overflow-hidden">
                 <img
-                  src="/images/relationship.jpg"
+                  src="/images/relationship-book.jpg"
                   alt="Relationship"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => {
