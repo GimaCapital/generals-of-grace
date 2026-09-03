@@ -244,62 +244,43 @@ const testimonies = [
           {
             id: 1,
             title: 'Maximize Your Time',
-            subtitle: 'Redeeming Your Time for Kingdom Impact',
             image: '/images/maximize-your-time.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
-            description: 'Learn to prioritize what truly matters and make every moment count for eternity.',
-            pages: '256',
             color: 'from-amber-500 to-orange-500'
           },
           {
             id: 2,
             title: 'Relationship',
-            subtitle: 'Building Godly Relationships That Honor God',
             image: '/images/relationship-book.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
-            description: 'Discover the principles for lasting and fulfilling connections that honor God.',
-            pages: '288',
             color: 'from-purple-500 to-pink-500'
           },
           {
             id: 3,
             title: 'Soul Winning',
-            subtitle: 'Sharing Your Faith with Boldness and Love',
             image: '/images/soul.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
-            description: 'A practical guide to leading people to Christ and discipling them effectively.',
-            pages: '320',
             color: 'from-red-500 to-rose-500'
           },
-          
           {
             id: 4,
             title: 'Faith Unleashed',
-            subtitle: 'Unlocking the Power of God in Your Life',
             image: '/images/faith-unleashed.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
-            description: 'Discover how to activate your faith and see God move in supernatural ways.',
-            pages: '312',
             color: 'from-blue-500 to-cyan-500'
           },
           {
             id: 5,
             title: 'Kingdom Finances',
-            subtitle: 'Biblical Principles for Financial Breakthrough',
             image: '/images/kingdom-finances.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
-            description: 'Learn God\'s principles for financial freedom and kingdom generosity.',
-            pages: '280',
             color: 'from-green-500 to-emerald-500'
           },
           {
             id: 6,
             title: 'Prayer Warriors',
-            subtitle: 'Becoming a Powerful Intercessor',
             image: '/images/prayer-warriors.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1511632765486-325841a54eb7?w=400&h=500&fit=crop',
-            description: 'Develop a powerful prayer life that moves mountains and transforms nations.',
-            pages: '344',
             color: 'from-indigo-500 to-purple-500'
           },
         ].map((book, index) => (
@@ -318,11 +299,20 @@ const testimonies = [
             </div>
             <div className="p-5 text-white">
               <h3 className="text-xl font-display font-bold text-white mb-1 truncate">{book.title}</h3>
-              <p className="text-sm text-church-gold mb-2 truncate">{book.subtitle}</p>
-              <p className="text-gray-300 text-sm leading-relaxed mb-3 line-clamp-2">{book.description}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-400">{book.pages} pages</span>
-                <button className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1">
+              <div className="flex items-center justify-between mt-2">
+                {/* ✅ Learn More button with scroll to launch section */}
+                <button 
+                  onClick={() => {
+                    const element = document.getElementById('birthday-launch');
+                    if (element) {
+                      element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }
+                  }}
+                  className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1"
+                >
                   Learn More →
                 </button>
               </div>
@@ -335,61 +325,43 @@ const testimonies = [
           {
             id: 1,
             title: 'Maximize Your Time',
-            subtitle: 'Redeeming Your Time for Kingdom Impact',
             image: '/images/maximize-your-time.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
-            description: 'Learn to prioritize what truly matters and make every moment count for eternity.',
-            pages: '256',
             color: 'from-amber-500 to-orange-500'
           },
           {
             id: 2,
             title: 'Relationship',
-            subtitle: 'Building Godly Relationships That Honor God',
             image: '/images/relationship-book.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
-            description: 'Discover the principles for lasting and fulfilling connections that honor God.',
-            pages: '288',
             color: 'from-purple-500 to-pink-500'
           },
           {
             id: 3,
             title: 'Soul Winning',
-            subtitle: 'Sharing Your Faith with Boldness and Love',
             image: '/images/soul.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
-            description: 'A practical guide to leading people to Christ and discipling them effectively.',
-            pages: '320',
             color: 'from-red-500 to-rose-500'
           },
           {
             id: 4,
             title: 'Faith Unleashed',
-            subtitle: 'Unlocking the Power of God in Your Life',
             image: '/images/faith-unleashed.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
-            description: 'Discover how to activate your faith and see God move in supernatural ways.',
-            pages: '312',
             color: 'from-blue-500 to-cyan-500'
           },
           {
             id: 5,
             title: 'Kingdom Finances',
-            subtitle: 'Biblical Principles for Financial Breakthrough',
             image: '/images/kingdom-finances.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
-            description: 'Learn God\'s principles for financial freedom and kingdom generosity.',
-            pages: '280',
             color: 'from-green-500 to-emerald-500'
           },
           {
             id: 6,
             title: 'Prayer Warriors',
-            subtitle: 'Becoming a Powerful Intercessor',
             image: '/images/prayer-warriors.jpg',
             fallbackImage: 'https://images.unsplash.com/photo-1511632765486-325841a54eb7?w=400&h=500&fit=crop',
-            description: 'Develop a powerful prayer life that moves mountains and transforms nations.',
-            pages: '344',
             color: 'from-indigo-500 to-purple-500'
           },
         ].map((book, index) => (
@@ -408,11 +380,20 @@ const testimonies = [
             </div>
             <div className="p-5 text-white">
               <h3 className="text-xl font-display font-bold text-white mb-1 truncate">{book.title}</h3>
-              <p className="text-sm text-church-gold mb-2 truncate">{book.subtitle}</p>
-              <p className="text-gray-300 text-sm leading-relaxed mb-3 line-clamp-2">{book.description}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-400">{book.pages} pages</span>
-                <button className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1">
+              <div className="flex items-center justify-between mt-2">
+                {/* ✅ Learn More button with scroll to launch section */}
+                <button 
+                  onClick={() => {
+                    const element = document.getElementById('birthday-launch');
+                    if (element) {
+                      element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }
+                  }}
+                  className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1"
+                >
                   Learn More →
                 </button>
               </div>
@@ -470,7 +451,18 @@ const testimonies = [
             </div>
             <div className="p-3 text-white">
               <h4 className="text-sm font-bold truncate">{book.title}</h4>
-              <button className="text-church-gold text-xs font-semibold mt-1">
+              <button 
+                onClick={() => {
+                  const element = document.getElementById('birthday-launch');
+                  if (element) {
+                    element.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }
+                }}
+                className="text-church-gold text-xs font-semibold mt-1"
+              >
                 Learn More →
               </button>
             </div>
@@ -481,13 +473,38 @@ const testimonies = [
 
     {/* View All Books Button */}
     <div className="text-center mt-12">
-      <a 
-        href="/resources/books"
+      {/* <a 
+      onClick={() => {
+                  const element = document.getElementById('birthday-launch');
+                  if (element) {
+                    element.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }
+                }}
+        href="#birthday-launch"
         className="inline-flex items-center gap-2 bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30"
       >
         View All Books
         <ChevronRight className="w-5 h-5" />
-      </a>
+      </a> */}
+
+       <button 
+                onClick={() => {
+                  const element = document.getElementById('birthday-launch');
+                  if (element) {
+                    element.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }
+                }}
+                  className="inline-flex items-center gap-2 bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30"
+              >
+                 View All Books
+                <ChevronRight className="w-5 h-5" />
+              </button>
     </div>
   </div>
 
@@ -1081,9 +1098,8 @@ const testimonies = [
                 </div>
               </div>
             </section>
-      
-           {/* ===== BOOKS SECTION - NEW RELEASE ===== */}
-<section className="py-20 bg-white">
+{/* ===== BOOKS SECTION - NEW RELEASE ===== */}
+<section id="birthday-launch" className="py-20 bg-white scroll-mt-20">
   <div className="container-custom">
     {/* 🔥 ATTENTION-GRABBING HEADER */}
     <div className="text-center mb-16">
@@ -1108,7 +1124,7 @@ const testimonies = [
       </p>
     </div>
 
-        {/* 🔥 NEW RELEASE - Birthday Book (Featured) */}
+    {/* 🔥 NEW RELEASE - Birthday Book (Featured) */}
     <div className="mb-16">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -1186,25 +1202,31 @@ const testimonies = [
               </div>
             </div>
 
-            {/* Call to Action Buttons */}
+            {/* Call to Action Buttons - Updated with Links */}
             <div className="flex flex-wrap gap-4">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <Link
+                to="/books/maximize-your-time"
                 className="bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center gap-2"
               >
                 <BookOpen className="w-5 h-5" />
                 Get Your Copy
                 <ChevronRight className="w-4 h-4" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              </Link>
+              <button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'Maximize Your Time',
+                      text: 'Check out this amazing book by Pastor Andrew Osalor!',
+                      url: window.location.href,
+                    });
+                  }
+                }}
                 className="border-2 border-church-gold/30 text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
               >
                 <Heart className="w-5 h-5" />
                 Share
-              </motion.button>
+              </button>
             </div>
           </div>
         </div>
@@ -1260,9 +1282,14 @@ const testimonies = [
           <p className="text-gray-500 text-sm leading-relaxed mb-4">
             Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity.
           </p>
-          <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1 group-hover:gap-2">
-            Get Your Copy <ChevronRight className="w-4 h-4" />
-          </button>
+          <Link
+            to="/books/maximize-your-time"
+            className="inline-flex bg-church-gold text-church-navy px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all items-center gap-2 text-sm"
+          >
+            <BookOpen className="w-4 h-4" />
+            Get Your Copy
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </motion.div>
 
@@ -1312,9 +1339,14 @@ const testimonies = [
           <p className="text-gray-500 text-sm leading-relaxed mb-4">
             A practical guide to sharing your faith with boldness and love. Learn how to lead people to Christ and disciple them effectively.
           </p>
-          <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1 group-hover:gap-2">
-            Get Your Copy <ChevronRight className="w-4 h-4" />
-          </button>
+          <Link
+            to="/books/soul-winning"
+            className="inline-flex bg-church-gold text-church-navy px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all items-center gap-2 text-sm"
+          >
+            <BookOpen className="w-4 h-4" />
+            Get Your Copy
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </motion.div>
 
@@ -1364,9 +1396,14 @@ const testimonies = [
           <p className="text-gray-500 text-sm leading-relaxed mb-4">
             Building healthy, godly relationships that honor God and bless others. Discover the principles for lasting and fulfilling connections.
           </p>
-          <button className="text-church-gold hover:text-church-navy transition-colors text-sm font-semibold flex items-center gap-1 group-hover:gap-2">
-            Get Your Copy <ChevronRight className="w-4 h-4" />
-          </button>
+          <Link
+            to="/books/relationship"
+            className="inline-flex bg-church-gold text-church-navy px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all items-center gap-2 text-sm"
+          >
+            <BookOpen className="w-4 h-4" />
+            Get Your Copy
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </motion.div>
     </div>
@@ -1392,24 +1429,21 @@ const testimonies = [
         a gift to the body of Christ that will equip, empower, and transform generations.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-4">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <Link
+          to="/books"
           className="bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center gap-2"
         >
           <Gift className="w-5 h-5" />
           Get the Trilogy
           <ChevronRight className="w-4 h-4" />
-        </motion.button>
-        <motion.a
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          href="#books"
+        </Link>
+        <a
+          href="#books-carousel"
           className="border-2 border-church-gold/30 text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
         >
           <Heart className="w-5 h-5" />
           Learn More
-        </motion.a>
+        </a>
       </div>
     </motion.div>
 

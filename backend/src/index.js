@@ -16,7 +16,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", process.env.FRONTEND_URL || 'https://gog-frontend-2bq2.onrender.com'],
+      connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:5173'],
     },
   },
 }));
@@ -25,6 +25,8 @@ app.use(helmet({
 // PRODUCTION-ONLY CORS
 // ============================================
 const allowedOrigins = [
+  'http://localhost:5173',
+  'https://gog-frontend.onrender.com',
   'https://gog-frontend.onrender.com',
   'https://gog-frontend-2bq2.onrender.com'
 ].filter(Boolean);
@@ -140,6 +142,7 @@ const userRoutes = require('./routes/users');
 const ministryRoutes = require('./routes/ministries');
 const dashboardRoutes = require('./routes/dashboard');
 const settingsRoutes = require('./routes/settings');
+const orderRoutes = require('./routes/orders');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sermons', sermonRoutes);
@@ -149,6 +152,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/ministries', ministryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/orders', orderRoutes);
 
 // ============================================
 // 404 HANDLER

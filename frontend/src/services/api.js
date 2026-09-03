@@ -197,4 +197,18 @@ export const settingsAPI = {
   updateSettings: (data) => api.put('/settings', data),
 };
 
+// Orders API
+export const orderAPI = {
+  create: (data) => api.post('/orders', data),
+  initializePayment: (data) => api.post('/orders/initialize-payment', data),
+  verifyPayment: (tx_ref) => api.get(`/orders/verify-payment/${tx_ref}`),
+  getAll: (params) => api.get('/orders', { params }),
+  getById: (id) => api.get(`/orders/${id}`),
+  getUserOrders: (userId) => api.get(`/orders/user/${userId}`),
+  updateStatus: (id, data) => api.put(`/orders/${id}/status`, data),
+  updateCashPayment: (id, data) => api.put(`/orders/${id}/cash-payment`, data),
+  cancelOrder: (id, data) => api.post(`/orders/${id}/cancel`, data),
+  getStats: () => api.get('/orders/stats/overview'),
+};
+
 export default api;
