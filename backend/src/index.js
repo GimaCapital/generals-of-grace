@@ -8,7 +8,14 @@ const { logger } = require('./utils/logger');
 
 const app = express();
 
-// Security middleware
+// ============================================
+// ENVIRONMENT VARIABLES
+// ============================================
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+// ============================================
+// SECURITY MIDDLEWARE
+// ============================================
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -16,19 +23,21 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:5173'],
+      connectSrc: ["'self'", FRONTEND_URL],
     },
   },
 }));
 
 // ============================================
-// PRODUCTION-ONLY CORS
+// CORS CONFIGURATION
 // ============================================
 const allowedOrigins = [
   'http://localhost:5173',
   'https://gog-frontend.onrender.com',
-  'https://gog-frontend.onrender.com',
-  'https://gog-frontend-2bq2.onrender.com'
+  'https://gog-frontend-2bq2.onrender.com',
+  FRONTEND_URL,
+  'https://gogintlchurch.org',
+  'https://www.gogintlchurch.org'
 ].filter(Boolean);
 
 app.use(cors({
@@ -49,6 +58,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
+// ============================================
+// STANDARD MIDDLEWARE
+// ============================================
 app.use(compression());
 app.use(express.json({ limit: process.env.MAX_REQUEST_SIZE || '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: process.env.MAX_REQUEST_SIZE || '10mb' }));
@@ -107,6 +119,7 @@ app.get('/health', (req, res) => {
     uptime: process.uptime(),
     memory: process.memoryUsage(),
     environment: process.env.NODE_ENV || 'production',
+    frontend: FRONTEND_URL,
   });
 });
 
