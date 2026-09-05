@@ -236,7 +236,9 @@ function Header({ onMenuToggle }) {
               <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-church-gold to-amber-400 rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
                 {/* <span className="text-white font-display font-bold text-base md:text-xl">GOG</span> */}
                 <img 
-                  src="images/general_grace_logo.jpg"
+                  // src="images/general_grace_logo.jpg"
+                  //  src="images/general_grace_logo.jpg"
+                  src="images/gog-new-logo.png"
                   alt="church logo"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"

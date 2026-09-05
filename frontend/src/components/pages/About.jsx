@@ -185,7 +185,7 @@ function About() {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="images/general_grace_logo.jpg"
+                  src="images/gog-new-logo.png"
                   alt="Generals of Grace"
                   className="w-full h-[420px] object-cover"
                 />
@@ -314,7 +314,7 @@ function About() {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img 
-                  src="images/general_grace_logo.jpg"
+                  src="images/gog-new-logo.png"
                   alt="Church gathering"
                   className="w-full h-[450px] object-cover"
                 />
