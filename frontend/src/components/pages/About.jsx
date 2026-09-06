@@ -8,7 +8,7 @@ import {
   Award, Star, Crown, ChevronRight,
   Mail, Phone, MapPin, Clock, Quote,
   ArrowRight, Play, Sparkles, TrendingUp,
-  Coffee, Music, Hand, Footprints,
+  Coffee, Music, Hand, Facebook, Footprints,
   Sun, Moon, Cloud, Flower, Home, Video
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,8 +18,8 @@ function About() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   const stats = [
-    { icon: <Users className="w-7 h-7" />, label: 'Members Worldwide', value: '5,000+', color: 'from-blue-600 to-cyan-500' },
-    { icon: <Church className="w-7 h-7" />, label: 'Years of Ministry', value: '12+', color: 'from-amber-600 to-yellow-500' },
+    // { icon: <Users className="w-7 h-7" />, label: 'Members Worldwide', value: '5,000+', color: 'from-blue-600 to-cyan-500' },
+    { icon: <Church className="w-7 h-7" />, label: 'Years of Ministry', value: '10+', color: 'from-amber-600 to-yellow-500' },
     { icon: <Cross className="w-7 h-7" />, label: 'Souls Won', value: '1,000+', color: 'from-green-600 to-emerald-500' },
     { icon: <Globe className="w-7 h-7" />, label: 'Nations Reached', value: '1+', color: 'from-purple-600 to-pink-500' },
   ];
@@ -141,7 +141,7 @@ function About() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                 </span>
-                Since 2016 — Raising Generals of Grace
+                Since 2017 — Raising Generals of Grace
               </motion.div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-white leading-tight mb-6">
@@ -203,7 +203,7 @@ function About() {
                         <TrendingUp className="w-7 h-7 text-white" />
                       </div>
                       <div>
-                        <p className="text-white font-semibold text-lg">12+ Years of Impact</p>
+                        <p className="text-white font-semibold text-lg">10+ Years of Impact</p>
                         <p className="text-white/60 text-sm">Join our growing community</p>
                       </div>
                     </div>
@@ -221,305 +221,317 @@ function About() {
         </div>
       </section>
 
-      {/* Stats Section - Animated */}
-      <section className="py-16 bg-white relative">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy">Our Impact in Numbers</h2>
-            <p className="text-gray-500 mt-2">God's faithfulness through the years</p>
-          </motion.div>
+     {/* Stats Section - Animated */}
+<section className="py-16 bg-white relative w-full">
+  <div className="container-custom mx-auto px-4 sm:px-6 lg:px-8">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="text-center mb-12"
+    >
+      <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy">Our Impact in Numbers</h2>
+      <p className="text-gray-500 mt-2">God's faithfulness through the years</p>
+    </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1, type: "spring" }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8 }}
-                className="group relative"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-xl transition-all duration-500`}></div>
-                <div className="relative text-center p-6 rounded-xl hover:shadow-xl transition-all duration-300 bg-white border border-gray-100">
-                  <div className={`text-4xl mb-2 text-church-gold group-hover:scale-110 transition-transform duration-300`}>
-                    {stat.icon}
-                  </div>
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 100, delay: index * 0.1 + 0.3 }}
-                    className="text-3xl md:text-4xl font-bold text-church-navy"
-                  >
-                    {stat.value}
-                  </motion.div>
-                  <div className="text-gray-500 text-sm font-medium">{stat.label}</div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story - Enhanced */}
-      <section className="py-20 bg-gray-50">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Our Story</span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-church-navy mt-2 mb-4">
-                A Journey of <span className="text-church-gold">Faith</span> and <span className="text-church-gold">Impact</span>
-              </h2>
-              <div className="w-24 h-1.5 bg-gradient-to-r from-church-gold to-amber-400 rounded-full mb-8"></div>
-              
-              <p className="text-gray-600 leading-relaxed mb-5 text-lg">
-                {settings?.siteName || 'Generals of Grace Intl Church'} was founded in 2016 with a divine mandate 
-                to raise generals of grace who will impact their generation with the love and power of God.
-              </p>
-              <p className="text-gray-600 leading-relaxed mb-5">
-                From humble beginnings, God has grown our ministry into a global movement reaching nations 
-                with the message of salvation, healing, and deliverance. We are committed to making disciples 
-                of all nations and establishing the Kingdom of God here on earth.
-              </p>
-              <p className="text-gray-600 leading-relaxed">
-                Today, we continue to fulfill our vision of raising generals of grace who will lead, serve, 
-                and transform their communities and nations for Christ.
-              </p>
-
-              <motion.div
-                whileHover={{ x: 5 }}
-                className="mt-8 inline-flex items-center gap-2 text-church-gold font-semibold"
-              >
-                <Link to="/contact">Learn More About Us</Link>
-                <ChevronRight className="w-4 h-4" />
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img 
-                  src="images/gog-new-logo.png"
-                  alt="Church gathering"
-                  className="w-full h-[450px] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-church-navy/50 to-transparent"></div>
-              </div>
-              
-              <motion.div
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -bottom-4 -right-4 bg-gradient-to-br from-church-gold to-amber-500 text-white p-6 rounded-xl shadow-2xl max-w-xs"
-              >
-                <p className="font-display text-2xl font-bold">12+ Years</p>
-                <p className="text-sm opacity-90">Serving God's people globally</p>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission & Vision - Enhanced */}
-      <section className="py-20 bg-white">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-              className="bg-gradient-to-br from-church-navy to-church-navy/95 text-white p-10 rounded-2xl shadow-2xl group relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 w-48 h-48 bg-church-gold/5 rounded-full blur-2xl"></div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-16 h-16 bg-church-gold/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Target className="w-8 h-8 text-church-gold" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-display font-bold">Our Mission</h3>
-                    <p className="text-church-gold text-sm">What We Do</p>
-                  </div>
-                </div>
-                <p className="text-gray-300 leading-relaxed text-lg">
-                  To raise generals of grace who will impact their generation with the love 
-                  and power of God through worship, discipleship, and global evangelism.
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-church-gold group-hover:gap-4 transition-all">
-                  <span className="text-sm font-medium">Learn More</span>
-                  <ChevronRight className="w-4 h-4" />
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-              className="bg-gradient-to-br from-church-gold to-amber-500 text-white p-10 rounded-2xl shadow-2xl group relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Globe className="w-8 h-8 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-display font-bold">Our Vision</h3>
-                    <p className="text-white/80 text-sm">Where We're Going</p>
-                  </div>
-                </div>
-                <p className="text-white/90 leading-relaxed text-lg">
-                  To see every member become a general of grace, equipped to serve and 
-                  lead in their sphere of influence, impacting nations for Christ.
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-white group-hover:gap-4 transition-all">
-                  <span className="text-sm font-medium">Learn More</span>
-                  <ChevronRight className="w-4 h-4" />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Pastor Section - Enhanced */}
-      <section className="py-20 bg-gray-50">
-        <div className="container-custom">
-          <div className="text-center mb-14">
-            <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Our Leadership</span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-church-navy mt-2">
-              Meet Our <span className="text-church-gold">Lead Pastor</span>
-            </h2>
-            <p className="text-gray-500 mt-2">Called to lead, equipped to serve</p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            whileHover={{ y: -6 }}
-            className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 transition-all duration-500"
-          >
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-              <div className="lg:col-span-1 h-[450px] lg:h-auto relative overflow-hidden group">
-                <img 
-                  src="images/aday.jpg"
-                  alt="Pastor Andrew Osalor"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-church-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              </div>
-              
-              <div className="lg:col-span-2 p-8 md:p-12">
-                <div className="flex items-center gap-2 text-church-gold mb-3">
-                  <Quote className="w-5 h-5" />
-                  <span className="text-sm font-semibold uppercase tracking-wider">Lead Pastor</span>
-                </div>
-                <h3 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-1">
-                  Pastor Andrew Osalor
-                </h3>
-                <p className="text-church-gold font-medium mb-5">Founder & Lead Pastor</p>
-                
-                <div className="w-20 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full mb-6"></div>
-                
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  Pastor Andrew Osalor is the founder and lead pastor of {settings?.siteName || 'Generals of Grace Intl Church'}. 
-                  He is a passionate preacher, teacher, and leader with a burning desire to see souls saved and lives transformed 
-                  by the power of the Holy Spirit.
-                </p>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  With over 12 years of ministry experience, Pastor Andrew has preached the Gospel across nations, 
-                  impacting thousands with the message of salvation, healing, and deliverance. His teachings are 
-                  characterized by deep biblical insight, practical application, and a strong emphasis on the Holy Spirit.
-                </p>
-                <p className="text-gray-600 leading-relaxed">
-                  He is committed to raising generals of grace who will carry the fire of God's presence and 
-                  transform their generation.
-                </p>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  viewport={{ once: true }}
-                  className="flex gap-4 mt-6"
-                >
-                  {[
-                    { icon: 'facebook', color: 'hover:bg-[#1877F2]', link: '/pastor-social' },
-                    { icon: 'twitter', color: 'hover:bg-[#1DA1F2]', link: '/pastor-social' },
-                    { icon: 'instagram', color: 'hover:bg-gradient-to-br from-[#E4405F] to-[#F58529]', link: '/pastor-social' },
-                    { icon: 'youtube', color: 'hover:bg-[#FF0000]', link: '/pastor-social' },
-                  ].map((social, idx) => (
-                    <motion.a
-                      key={idx}
-                      whileHover={{ scale: 1.2, y: -3 }}
-                      whileTap={{ scale: 0.9 }}
-                      href={social.link}
-                      className={`w-11 h-11 bg-church-gold/10 rounded-full flex items-center justify-center text-church-gold ${social.color} transition-all duration-300`}
-                    >
-                      <span className="sr-only">{social.icon}</span>
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        {social.icon === 'facebook' && <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>}
-                        {social.icon === 'twitter' && <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>}
-                        {social.icon === 'instagram' && <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>}
-                        {social.icon === 'youtube' && <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>}
-                      </svg>
-                    </motion.a>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Our Values - Enhanced */}
-      {/* <section className="py-20 bg-white">
-  <div className="container-custom">
-    <div className="text-center mb-14">
-      <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Our Foundation</span>
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-church-navy mt-2">
-        Our Core <span className="text-church-gold">Values</span>
-      </h2>
-      <p className="text-gray-500 mt-2">The principles that guide everything we do</p>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {values.map((value, index) => (
-        <div
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      {stats.map((stat, index) => (
+        <motion.div
           key={index}
-          className="bg-gray-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 group"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ delay: index * 0.1, type: "spring" }}
+          viewport={{ once: true }}
+          whileHover={{ y: -8 }}
+          className="group relative"
         >
-          <div className="w-16 h-16 bg-church-gold/10 rounded-2xl flex items-center justify-center text-church-gold mb-5 group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
-            {value.icon}
+          <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-xl transition-all duration-500`}></div>
+          <div className="relative text-center p-6 rounded-xl hover:shadow-xl transition-all duration-300 bg-white border border-gray-100">
+            <div className={`text-4xl mb-2 text-church-gold group-hover:scale-110 transition-transform duration-300`}>
+              {stat.icon}
+            </div>
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 100, delay: index * 0.1 + 0.3 }}
+              className="text-3xl md:text-4xl font-bold text-church-navy"
+            >
+              {stat.value}
+            </motion.div>
+            <div className="text-gray-500 text-sm font-medium">{stat.label}</div>
           </div>
-          <h4 className="text-xl font-display font-bold text-church-navy mb-2">{value.title}</h4>
-          <p className="text-gray-500 text-sm leading-relaxed">{value.description}</p>
-        </div>
+        </motion.div>
       ))}
     </div>
   </div>
-</section> */}
+</section>
+
+{/* ==================== ABOUT US SECTION ==================== */}
+{/* ==================== ABOUT US & OUR STORY - COMBINED ==================== */}
+<section className="py-20 bg-gray-50 relative overflow-hidden">
+  {/* Decorative background elements */}
+  <div className="absolute top-0 right-0 w-96 h-96 bg-church-gold/5 rounded-full blur-3xl"></div>
+  <div className="absolute bottom-0 left-0 w-96 h-96 bg-church-navy/5 rounded-full blur-3xl"></div>
+  
+  {/* Subtle pattern overlay */}
+  <div className="absolute inset-0 opacity-[0.02]">
+    <div className="w-full h-full" style={{
+      backgroundImage: `radial-gradient(circle at 20% 50%, #C9A84C 1px, transparent 1px)`,
+      backgroundSize: '40px 40px'
+    }}></div>
+  </div>
+
+  <div className="container-custom relative z-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {/* Left Column - About Text & Story */}
+      <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <span className="text-church-gold font-semibold text-sm uppercase tracking-wider bg-church-gold/10 px-4 py-2 rounded-full border border-church-gold/20 inline-block mb-4">
+            About Us
+          </span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-church-navy mt-2 mb-4">
+            A Church with a <br />
+            <span className="text-church-gold">Divine Mandate</span>
+          </h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full mb-6"></div>
+          
+          <p className="text-gray-600 leading-relaxed mb-4 text-lg">
+            {settings?.siteName || 'Generals of Grace Intl Church'} was founded with a divine mandate to raise
+            generals of grace who will impact their generation with the love and power of God.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-4 text-lg">
+            We are committed to worship, discipleship, and global evangelism, reaching nations with the
+            message of salvation, healing, and deliverance.
+          </p>
+          
+          {/* Story Section - Integrated */}
+          <div className="mt-6 p-6 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <h3 className="text-lg font-display font-bold text-church-navy mb-3 flex items-center gap-2">
+              <span className="text-church-gold">📖</span> Our Journey
+            </h3>
+            <p className="text-gray-600 leading-relaxed text-sm mb-3">
+              Founded in 2017 with a small group of believers passionate about seeing lives transformed 
+              by the power of God.
+            </p>
+            <p className="text-gray-600 leading-relaxed text-sm">
+              From humble beginnings, God has grown our ministry into a global movement, reaching nations 
+              and transforming communities worldwide.
+            </p>
+            <div className="flex flex-wrap gap-3 mt-4">
+              <span className="inline-flex items-center gap-1.5 bg-church-gold/10 text-church-navy text-xs font-medium px-3 py-1.5 rounded-full">
+                <Clock className="w-3.5 h-3.5" />
+                Founded 2017
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-church-gold/10 text-church-navy text-xs font-medium px-3 py-1.5 rounded-full">
+                <Globe className="w-3.5 h-3.5" />
+                Global Reach
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-church-gold/10 text-church-navy text-xs font-medium px-3 py-1.5 rounded-full">
+                <Users className="w-3.5 h-3.5" />
+                10+ Years
+              </span>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mt-6">
+            <Link to="/about" className="group inline-flex items-center gap-2 bg-church-gold text-church-navy px-6 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30">
+              <span>Learn More</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            
+            <Link to="/soul-winning" className="group inline-flex items-center gap-2 text-church-navy font-semibold hover:text-church-gold transition-colors">
+              <Heart className="w-5 h-5 text-church-gold" />
+              <span>Soul Winning</span>
+              <TrendingUp className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right Column - Image + Mission & Vision Cards */}
+      <div className="space-y-6">
+        {/* Image */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="relative rounded-2xl overflow-hidden shadow-2xl"
+        >
+          <img 
+            src="images/gog-new-logo.png"
+            alt="Generals of Grace Church"
+            className="w-full h-[250px] object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/50 to-transparent"></div>
+        </motion.div>
+
+        {/* Mission & Vision Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Mission Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -8 }}
+            className="group bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:border-church-gold/30 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 group-hover:scale-110 group-hover:bg-amber-200 transition-all duration-300">
+                <Target className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-church-navy text-lg">Our Mission</h3>
+            </div>
+            
+            <div className="w-12 h-0.5 bg-gradient-to-r from-amber-400 to-amber-200 rounded-full mb-4"></div>
+            
+            <ul className="space-y-3">
+              {[
+                'Reach men with the gospel of Christ.',
+                'Raise them to fulfil their call in Him.',
+                'Help them to explore their potentials.',
+                'Fulfil their purpose in the earth.'
+              ].map((item, index) => (
+                <li key={index} className="flex items-start gap-2 group/item hover:pl-1 transition-all duration-300">
+                  <span className="text-amber-500 font-bold text-lg mt-0.5 flex-shrink-0">✦</span>
+                  <span className="text-sm text-gray-600 group-hover/item:text-church-navy transition-colors">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Vision Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -8 }}
+            className="group bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:border-church-gold/30 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-110 group-hover:bg-blue-200 transition-all duration-300">
+                <Globe className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-church-navy text-lg">Our Vision</h3>
+            </div>
+            
+            <div className="w-12 h-0.5 bg-gradient-to-r from-blue-400 to-blue-200 rounded-full mb-4"></div>
+            
+            <p className="text-xs text-gray-400 font-medium mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+              What we are called to be:
+            </p>
+            
+            <ul className="space-y-3">
+              {[
+                'Take the gospel of Christ around the world.',
+                'Raise World changers, Influential people.',
+                'Build institutions of learning.',
+                'Reach and disciple 100 million souls.'
+              ].map((item, index) => (
+                <li key={index} className="flex items-start gap-2 group/item hover:pl-1 transition-all duration-300">
+                  <span className="text-blue-500 font-bold text-lg mt-0.5 flex-shrink-0">✦</span>
+                  <span className="text-sm text-gray-600 group-hover/item:text-church-navy transition-colors">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* Main Pastor Section - Enhanced */}
+<section className="py-20 bg-gray-50">
+  <div className="container-custom">
+    <div className="text-center mb-14">
+      <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Our Leadership</span>
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-church-navy mt-2">
+        Meet Our <span className="text-church-gold">President Pastor</span>
+      </h2>
+      <p className="text-gray-500 mt-2">Called to lead, equipped to serve</p>
+    </div>
+
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -6 }}
+      className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 transition-all duration-500"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+        <div className="lg:col-span-1 h-[450px] lg:h-auto relative overflow-hidden group">
+          <img 
+            src="images/aday.jpg"
+            alt="Pastor Andrew Osalor"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        </div>
+        
+        <div className="lg:col-span-2 p-8 md:p-12">
+          <div className="flex items-center gap-2 text-church-gold mb-3">
+            <Quote className="w-5 h-5" />
+            <span className="text-sm font-semibold uppercase tracking-wider">Pastor & President</span>
+          </div>
+          <h3 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-1">
+            Pastor Andrew Osalor
+          </h3>
+          <p className="text-church-gold font-medium mb-5">Founder, Pastor & President</p>
+          
+          <div className="w-20 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full mb-6"></div>
+          
+          <p className="text-gray-600 leading-relaxed mb-4">
+            Pastor Andrew Osalor is the Pastor and President of Generals of Grace International Church, 
+            a dynamic, global, multifaceted, and generational ministry located in Port Harcourt, Nigeria.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            He is a pastor, teacher, healing minister, and author with an undying passion for souls 
+            and to cover the earth with the gospel.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            He holds Miracle Crusades every month which bless and transform the lives of countless 
+            people in the city of Port Harcourt and around the world.
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            Pastor Andrew is happily married and blessed with children.
+          </p>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap items-center gap-4 mt-6"
+          >
+            <p className="text-sm font-semibold text-church-navy">Connect with Pastor Andrew:</p>
+              <Link
+                to="/pastor-social"
+                className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-all"
+              >
+                Pst Andrew OSALOR
+              </Link>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  </div>
+</section>
+
+
       {/* Our Beliefs - Enhanced */}
       <section className="py-20 bg-church-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">

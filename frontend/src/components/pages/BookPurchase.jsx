@@ -218,11 +218,11 @@ function BookPurchase() {
       <div className="container-custom max-w-5xl">
         {/* Back Button */}
         <Link 
-          to="/" 
+          to="/books" 
           className="inline-flex items-center gap-2 text-church-gold hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Home
+          Back to books store
         </Link>
 
         {/* Book Details */}

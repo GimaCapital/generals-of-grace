@@ -39,6 +39,7 @@ import AdminUsers from './components/admin/Users';
 import AdminSettings from './components/admin/Settings';
 import { SettingsProvider } from './context/SettingsContext';
 import BookPurchase from './components/pages/BookPurchase';
+import Books from './components/pages/Books';
 
 function App() {
   return (
@@ -89,9 +90,11 @@ function App() {
               <Route path="reset-password" element={<ResetPassword />} />
               <Route path="pastor-social" element={<PastorSocial />} />
               <Route path="church-social" element={<ChurchSocial />} />
+              <Route path="give/success" element={<GiveSuccess />} />
+              <Route path="books/:bookSlug" element={<BookPurchase />} />
+              <Route path="/books" element={<Books />} />
             </Route>
-            <Route path="give/success" element={<GiveSuccess />} />
-            <Route path="books/:bookSlug" element={<BookPurchase />} />
+          
 
             {/* Admin Routes with AdminLayout */}
             <Route path="/admin" element={

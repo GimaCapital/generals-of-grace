@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { 
-  Play, Calendar, Users, Heart, ChevronRight, 
+import {
+  Play, Calendar, Users, Heart, ChevronRight,
   Clock, MapPin, ArrowRight, Church, Cross,
   Shield, BookOpen, Music, Hand, Globe,
   Sparkles, Star, Crown, Target, Flame,
@@ -22,13 +22,13 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   // Auto-play effect
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex(prev => prev === testimonies.length - 1 ? 0 : prev + 1);
     }, 5000); // Change slide every 5 seconds
-    
+
     return () => clearInterval(timer);
   }, []);
 
@@ -39,7 +39,7 @@ function Home() {
           sermonAPI.getAll({ limit: 3, featured: true }),
           eventAPI.getAll({ limit: 6 })
         ]);
-        
+
         // console.log('📊 Events data:', eventsRes.data);
         setFeaturedSermons(sermonsRes.data.data || []);
         setAllEvents(eventsRes.data.data || []);
@@ -54,67 +54,68 @@ function Home() {
 
   // Core Values - Enhanced with more detail
   const coreValues = [
-    { 
-      icon: <Cross className="w-6 h-6" />, 
-      title: 'Faith', 
-      description: 'Unwavering trust in God and His Word',
-      scripture: 'Hebrews 11:1',
+    {
+      icon: <Cross className="w-6 h-6" />,
+      title: 'Soul Winning',
+      description: 'Passionately reaching the lost with the gospel of Christ',
+      scripture: 'Matthew 28:19-20',
       color: 'from-amber-400 to-yellow-500',
       bgColor: 'bg-amber-50',
       borderColor: 'border-amber-200',
       textColor: 'text-amber-600'
     },
-    { 
-      icon: <Heart className="w-6 h-6" />, 
-      title: 'Love', 
-      description: 'Loving God and loving others unconditionally',
-      scripture: '1 Corinthians 13:13',
-      color: 'from-rose-400 to-red-500',
-      bgColor: 'bg-rose-50',
-      borderColor: 'border-rose-200',
-      textColor: 'text-rose-600'
-    },
-    { 
-      icon: <Shield className="w-6 h-6" />, 
-      title: 'Integrity', 
-      description: 'Walking in truth and righteousness',
-      scripture: 'Proverbs 10:9',
-      color: 'from-emerald-400 to-teal-500',
-      bgColor: 'bg-emerald-50',
-      borderColor: 'border-emerald-200',
-      textColor: 'text-emerald-600'
-    },
-    { 
-      icon: <Target className="w-6 h-6" />, 
-      title: 'Excellence', 
-      description: 'Doing everything with excellence for God\'s glory',
-      scripture: 'Colossians 3:23',
+    {
+      icon: <Users className="w-6 h-6" />,
+      title: 'Leadership Development',
+      description: 'Raising leaders who will impact their generation for Christ',
+      scripture: '2 Timothy 2:2',
       color: 'from-blue-400 to-indigo-500',
       bgColor: 'bg-blue-50',
       borderColor: 'border-blue-200',
       textColor: 'text-blue-600'
     },
-    { 
-      icon: <Users className="w-6 h-6" />, 
-      title: 'Community', 
-      description: 'Building a family of believers in unity',
-      scripture: 'Acts 2:44-47',
+    {
+      icon: <Heart className="w-6 h-6" />,
+      title: 'Love & Sacrifice',
+      description: 'Loving God and others unconditionally, giving our best for His kingdom',
+      scripture: 'John 15:13',
+      color: 'from-rose-400 to-red-500',
+      bgColor: 'bg-rose-50',
+      borderColor: 'border-rose-200',
+      textColor: 'text-rose-600'
+    },
+    {
+      icon: <Shield className="w-6 h-6" />,
+      title: 'Team Ministry',
+      description: 'Working together in unity to fulfill God\'s purpose',
+      scripture: 'Ecclesiastes 4:9-10',
+      color: 'from-emerald-400 to-teal-500',
+      bgColor: 'bg-emerald-50',
+      borderColor: 'border-emerald-200',
+      textColor: 'text-emerald-600'
+    },
+    {
+      icon: <Award className="w-6 h-6" />,
+      title: 'Spiritual Maturity',
+      description: 'Growing in Christ and becoming fully devoted followers of Him',
+      scripture: 'Ephesians 4:13-15',
       color: 'from-purple-400 to-pink-500',
       bgColor: 'bg-purple-50',
       borderColor: 'border-purple-200',
       textColor: 'text-purple-600'
     },
-    { 
-      icon: <Award className="w-6 h-6" />, 
-      title: 'Discipleship', 
-      description: 'Raising generals of grace for the Kingdom',
-      scripture: 'Matthew 28:19-20',
+    {
+      icon: <Target className="w-6 h-6" />,
+      title: 'Excellence',
+      description: 'Doing everything with excellence for God\'s glory',
+      scripture: 'Colossians 3:23',
       color: 'from-orange-400 to-amber-500',
       bgColor: 'bg-orange-50',
       borderColor: 'border-orange-200',
       textColor: 'text-orange-600'
     },
   ];
+
 
   // Ministries
   const ministries = [
@@ -127,388 +128,377 @@ function Home() {
   ];
 
   // Testimonials
-const testimonies = [
-  { 
-    quote: "This church has transformed my life! The preaching is powerful and the fellowship is like family.", 
-    name: "Sister Grace" 
-  },
-  { 
-    quote: "I found Christ here! The love and acceptance I received changed everything.", 
-    name: "Brother Emmanuel" 
-  },
-  { 
-    quote: "The teachings have deepened my faith. This is more than a church - it's a family.", 
-    name: "Sister Esther" 
-  },
-  { 
-    quote: "My business received a divine turnaround after I joined this church. God is faithful!", 
-    name: "Brother Michael" 
-  },
-  { 
-    quote: "The prayer sessions here have brought healing to my family. I'm forever grateful.", 
-    name: "Sister Rebecca" 
-  },
-];
+  const testimonies = [
+    {
+      quote: "This church has transformed my life! The preaching is powerful and the fellowship is like family.",
+      name: "Sister Grace"
+    },
+    {
+      quote: "I found Christ here! The love and acceptance I received changed everything.",
+      name: "Brother Emmanuel"
+    },
+    {
+      quote: "The teachings have deepened my faith. This is more than a church - it's a family.",
+      name: "Sister Esther"
+    },
+    {
+      quote: "My business received a divine turnaround after I joined this church. God is faithful!",
+      name: "Brother Michael"
+    },
+    {
+      quote: "The prayer sessions here have brought healing to my family. I'm forever grateful.",
+      name: "Sister Rebecca"
+    },
+  ];
 
   return (
     <div>
-{/* ==================== HERO SECTION - WITH IMG TAG ==================== */}
-<section className="relative min-h-[90vh] flex items-center overflow-hidden">
-  {/* Background Image as <img> */}
-  <div className="absolute inset-0 overflow-hidden">
-    <img 
-      src="/images/main_image_2026.jpg" 
-      alt="Generals of Grace Church"
-      className="w-full h-full object-cover md:object-cover object-center"
-      style={{
-        animation: 'dramaticZoom 18s ease-in-out infinite alternate',
-      }}
-    />
-    {/* Dark overlay for readability */}
-    <div className="absolute inset-0 bg-church-navy/60"></div>
-    <div className="absolute inset-0 bg-gradient-to-r from-church-navy/80 via-church-navy/40 to-transparent"></div>
-  </div>
-  
-  <div className="container-custom relative z-10 py-20">
-    <div className="max-w-3xl">
-      <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight animate-fade-in-up animation-delay-200">
-        <span className="gradient-text">{settings?.siteName || 'Generals of Grace Intl Church'}</span>
-      </h1>
-      <div className="flex flex-wrap gap-4 animate-fade-in-up animation-delay-600">
-        <Link to="/sermons" className="bg-church-gold text-church-navy px-8 py-3.5 rounded-lg font-semibold hover:bg-opacity-90 transition-all hover:shadow-lg hover:shadow-church-gold/30 inline-flex items-center gap-2">
-          <Play className="w-5 h-5" />
-          Watch Sermons
-        </Link>
-        <Link to="/give" className="border-2 border-white/50 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-white/10 transition-all hover:border-white inline-flex items-center gap-2">
-          <Heart className="w-5 h-5" />
-          Give Online
-        </Link>
-      </div>
+      {/* ==================== HERO SECTION - WITH IMG TAG ==================== */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Background Image as <img> */}
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src="/images/main_image_2026.jpg"
+            alt="Generals of Grace Church"
+            className="w-full h-full object-cover md:object-cover object-center"
+            style={{
+              animation: 'dramaticZoom 18s ease-in-out infinite alternate',
+            }}
+          />
+          {/* Dark overlay for readability */}
+          <div className="absolute inset-0 bg-church-navy/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-church-navy/80 via-church-navy/40 to-transparent"></div>
+        </div>
+
+       <div className="container-custom text-center relative z-10 py-20">
+  <div className="max-w-3xl mx-auto">
+    <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 leading-tight animate-fade-in-up animation-delay-200">
+      <span className="block text-center text-white text-xl md:text-2xl lg:text-3xl font-medium tracking-wider mb-2">
+        Welcome to
+      </span>
+      <span className="gradient-text">{settings?.siteName || 'Generals of Grace Intl Church'}</span>
+    </h1>
+    <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up animation-delay-600">
+      <Link to="/sermons" className="bg-church-gold text-church-navy px-8 py-3.5 rounded-lg font-semibold hover:bg-opacity-90 transition-all hover:shadow-lg hover:shadow-church-gold/30 inline-flex items-center gap-2">
+        <Play className="w-5 h-5" />
+        Watch Sermons
+      </Link>
+      <Link to="/give" className="border-2 border-white/50 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-white/10 transition-all hover:border-white inline-flex items-center gap-2">
+        <Heart className="w-5 h-5" />
+        Give Online
+      </Link>
     </div>
   </div>
+</div>
 
-  {/* Scroll Indicator */}
-  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce-slow">
-    <span className="text-white/40 text-xs uppercase tracking-widest font-medium">Scroll</span>
-    <ChevronDown className="w-5 h-5 text-white/30" />
-  </div>
-</section>
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce-slow">
+          <span className="text-white/40 text-xs uppercase tracking-widest font-medium">Scroll</span>
+          <ChevronDown className="w-5 h-5 text-white/30" />
+        </div>
+      </section>
 
-{/* ==================== BOOKS SECTION - INFINITE CAROUSEL ==================== */}
-<section className="py-16 bg-church-navy relative overflow-hidden">
-  {/* Gold accent line at top */}
-  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-church-gold/50 to-transparent"></div>
-  
-  {/* Subtle pattern */}
-  <div className="absolute inset-0 opacity-5">
-    <div className="w-full h-full" style={{
-      backgroundImage: `radial-gradient(circle at 20% 50%, #FFD700 1px, transparent 1px)`,
-      backgroundSize: '30px 30px'
-    }}></div>
-  </div>
+      {/* ==================== BOOKS SECTION - INFINITE CAROUSEL ==================== */}
+      <section className="py-16 bg-church-navy relative overflow-hidden">
+        {/* Gold accent line at top */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-church-gold/50 to-transparent"></div>
 
-  {/* Animated gradient orbs */}
-  <div className="absolute top-0 right-0 w-64 h-64 bg-church-gold/10 rounded-full blur-3xl" style={{
-    animation: 'pulseSlow 6s ease-in-out infinite'
-  }}></div>
-  <div className="absolute bottom-0 left-0 w-64 h-64 bg-church-gold/5 rounded-full blur-3xl" style={{
-    animation: 'pulseSlow 6s ease-in-out infinite 1s'
-  }}></div>
-  
-  <div className="container-custom relative z-10">
-    {/* Section Header */}
-    <div className="text-center mb-12">
-      <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Books</span>
-      <h2 className="text-3xl md:text-4xl font-display font-bold text-white mt-2">
-        Books by <span className="text-church-gold">Pastor Osalor</span>
-      </h2>
-      <div className="w-20 h-1 bg-church-gold mx-auto rounded-full mt-3"></div>
-      <p className="text-gray-400 mt-3 max-w-2xl mx-auto text-sm md:text-base">
-        Life-changing books that will transform your faith, relationships, and understanding of soul winning
-      </p>
-    </div>
+        {/* Subtle pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="w-full h-full" style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, #FFD700 1px, transparent 1px)`,
+            backgroundSize: '30px 30px'
+          }}></div>
+        </div>
 
-    {/* Desktop - Infinite Carousel */}
-    <div className="hidden md:block overflow-hidden">
-      <div 
-        className="flex"
-        style={{
-          animation: 'scrollInfinite 25s linear infinite',
-          width: 'max-content'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.animationPlayState = 'paused'}
-        onMouseLeave={(e) => e.currentTarget.style.animationPlayState = 'running'}
-      >
-        {/* First set of books */}
-        {[
-          {
-            id: 1,
-            title: 'Maximize Your Time',
-            image: '/images/maximize-your-time.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
-            color: 'from-amber-500 to-orange-500'
-          },
-          {
-            id: 2,
-            title: 'Relationship',
-            image: '/images/relationship-book.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
-            color: 'from-purple-500 to-pink-500'
-          },
-          {
-            id: 3,
-            title: 'Soul Winning',
-            image: '/images/soul.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
-            color: 'from-red-500 to-rose-500'
-          },
-          {
-            id: 4,
-            title: 'Faith Unleashed',
-            image: '/images/faith-unleashed.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
-            color: 'from-blue-500 to-cyan-500'
-          },
-          {
-            id: 5,
-            title: 'Kingdom Finances',
-            image: '/images/kingdom-finances.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
-            color: 'from-green-500 to-emerald-500'
-          },
-          {
-            id: 6,
-            title: 'Prayer Warriors',
-            image: '/images/prayer-warriors.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1511632765486-325841a54eb7?w=400&h=500&fit=crop',
-            color: 'from-indigo-500 to-purple-500'
-          },
-        ].map((book, index) => (
-          <div key={index} className="flex-shrink-0 w-72 mx-4 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-            <div className="relative h-64 overflow-hidden">
-              <img 
-                src={book.image} 
-                alt={book.title}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={(e) => { e.target.src = book.fallbackImage; }}
-                loading="lazy"
-              />
-              <div className={`absolute top-3 right-3 bg-gradient-to-r ${book.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
-                Book {book.id}
-              </div>
-            </div>
-            <div className="p-5 text-white">
-              <h3 className="text-xl font-display font-bold text-white mb-1 truncate">{book.title}</h3>
-              <div className="flex items-center justify-between mt-2">
-                {/* ✅ Learn More button with scroll to launch section */}
-                <button 
-                  onClick={() => {
-                    const element = document.getElementById('birthday-launch');
-                    if (element) {
-                      element.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                      });
-                    }
-                  }}
-                  className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1"
-                >
-                  Learn More →
-                </button>
-              </div>
-            </div>
+        {/* Animated gradient orbs */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-church-gold/10 rounded-full blur-3xl" style={{
+          animation: 'pulseSlow 6s ease-in-out infinite'
+        }}></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-church-gold/5 rounded-full blur-3xl" style={{
+          animation: 'pulseSlow 6s ease-in-out infinite 1s'
+        }}></div>
+
+        <div className="container-custom relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Books</span>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mt-2">
+              Books by <span className="text-church-gold">Pastor Osalor</span>
+            </h2>
+            <div className="w-20 h-1 bg-church-gold mx-auto rounded-full mt-3"></div>
+            <p className="text-gray-400 mt-3 max-w-2xl mx-auto text-sm md:text-base">
+              Life-changing books that will transform your faith, relationships, and understanding of soul winning
+            </p>
           </div>
-        ))}
-        
-        {/* Duplicate for infinite effect */}
-        {[
-          {
-            id: 1,
-            title: 'Maximize Your Time',
-            image: '/images/maximize-your-time.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
-            color: 'from-amber-500 to-orange-500'
-          },
-          {
-            id: 2,
-            title: 'Relationship',
-            image: '/images/relationship-book.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
-            color: 'from-purple-500 to-pink-500'
-          },
-          {
-            id: 3,
-            title: 'Soul Winning',
-            image: '/images/soul.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
-            color: 'from-red-500 to-rose-500'
-          },
-          {
-            id: 4,
-            title: 'Faith Unleashed',
-            image: '/images/faith-unleashed.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
-            color: 'from-blue-500 to-cyan-500'
-          },
-          {
-            id: 5,
-            title: 'Kingdom Finances',
-            image: '/images/kingdom-finances.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
-            color: 'from-green-500 to-emerald-500'
-          },
-          {
-            id: 6,
-            title: 'Prayer Warriors',
-            image: '/images/prayer-warriors.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1511632765486-325841a54eb7?w=400&h=500&fit=crop',
-            color: 'from-indigo-500 to-purple-500'
-          },
-        ].map((book, index) => (
-          <div key={`dup-${index}`} className="flex-shrink-0 w-72 mx-4 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-            <div className="relative h-64 overflow-hidden">
-              <img 
-                src={book.image} 
-                alt={book.title}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                onError={(e) => { e.target.src = book.fallbackImage; }}
-                loading="lazy"
-              />
-              <div className={`absolute top-3 right-3 bg-gradient-to-r ${book.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
-                Book {book.id}
-              </div>
-            </div>
-            <div className="p-5 text-white">
-              <h3 className="text-xl font-display font-bold text-white mb-1 truncate">{book.title}</h3>
-              <div className="flex items-center justify-between mt-2">
-                {/* ✅ Learn More button with scroll to launch section */}
-                <button 
-                  onClick={() => {
-                    const element = document.getElementById('birthday-launch');
-                    if (element) {
-                      element.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                      });
-                    }
-                  }}
-                  className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1"
-                >
-                  Learn More →
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
 
-    {/* Mobile - Horizontal Scroll (No Overflow) */}
-    <div className="md:hidden overflow-x-auto pb-4 -mx-4 px-4">
-      <div className="flex gap-4 w-max">
-        {[
-          {
-            id: 1,
-            title: 'Maximize Your Time',
-            image: '/images/maximize-your-time.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
-            color: 'from-amber-500 to-orange-500'
-          },
-          {
-            id: 2,
-            title: 'Relationship',
-            image: '/images/relationship-book.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
-            color: 'from-purple-500 to-pink-500'
-          },
-          {
-            id: 3,
-            title: 'Soul Winning',
-            image: '/images/soul.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
-            color: 'from-red-500 to-rose-500'
-          },
-          {
-            id: 4,
-            title: 'Faith Unleashed',
-            image: '/images/faith-unleashed.jpg',
-            fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
-            color: 'from-blue-500 to-cyan-500'
-          },
-        ].map((book, index) => (
-          <div key={index} className="w-44 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10">
-            <div className="relative h-52 overflow-hidden">
-              <img 
-                src={book.image} 
-                alt={book.title}
-                className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = book.fallbackImage; }}
-                loading="lazy"
-              />
-              <div className={`absolute top-2 right-2 bg-gradient-to-r ${book.color} text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg`}>
-                #{book.id}
-              </div>
+          {/* ═══════════════════════════════════════════ */}
+          {/* LIVE BOOKS - CAROUSEL */}
+          {/* ═══════════════════════════════════════════ */}
+          <div className="mb-12">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="h-px flex-1 max-w-20 bg-green-500/30"></div>
+              <span className="text-green-400 font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Available Now
+              </span>
+              <div className="h-px flex-1 max-w-20 bg-green-500/30"></div>
             </div>
-            <div className="p-3 text-white">
-              <h4 className="text-sm font-bold truncate">{book.title}</h4>
-              <button 
-                onClick={() => {
-                  const element = document.getElementById('birthday-launch');
-                  if (element) {
-                    element.scrollIntoView({ 
-                      behavior: 'smooth',
-                      block: 'start'
-                    });
-                  }
+
+            {/* Desktop - Infinite Carousel */}
+            <div className="hidden md:block overflow-hidden relative">
+              {/* Left Arrow - Points to Live Books Start */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20 flex items-center gap-1 bg-green-500/20 backdrop-blur-sm px-3 py-2 rounded-r-xl border-l-0 border border-green-500/30">
+                <ChevronLeft className="w-5 h-5 text-green-400" />
+                <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Live</span>
+              </div>
+
+              {/* Right Arrow - Points to Live Books End */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 z-20 flex items-center gap-1 bg-green-500/20 backdrop-blur-sm px-3 py-2 rounded-l-xl border-r-0 border border-green-500/30">
+                <span className="text-green-400 text-xs font-bold uppercase tracking-wider">Live</span>
+                <ChevronRight className="w-5 h-5 text-green-400" />
+              </div>
+
+              <div
+                className="flex"
+                style={{
+                  animation: 'scrollInfinite 25s linear infinite',
+                  width: 'max-content'
                 }}
-                className="text-church-gold text-xs font-semibold mt-1"
+                onMouseEnter={(e) => e.currentTarget.style.animationPlayState = 'paused'}
+                onMouseLeave={(e) => e.currentTarget.style.animationPlayState = 'running'}
               >
-                Learn More →
-              </button>
+                {/* First set of Live books */}
+                {[
+                  {
+                    title: 'Maximize Your Time',
+                    slug: 'maximize-your-time',
+                    image: '/images/maximize-your-time.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
+                    color: 'from-amber-500 to-orange-500',
+                  },
+                  {
+                    title: 'Relationship',
+                    slug: 'relationship',
+                    image: '/images/relationship-book.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
+                    color: 'from-purple-500 to-pink-500',
+                  },
+                  {
+                    title: 'Soul Winning',
+                    slug: 'soul-winning',
+                    image: '/images/soul.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
+                    color: 'from-red-500 to-rose-500',
+                  },
+                ].map((book, index) => (
+                  <div key={index} className="flex-shrink-0 w-72 mx-4 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-green-500/20 hover:border-green-500/50">
+                    <div className="relative h-64 overflow-hidden">
+                      <img
+                        src={book.image}
+                        alt={book.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        onError={(e) => { e.target.src = book.fallbackImage; }}
+                        loading="lazy"
+                      />
+                      <div className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                        ● LIVE
+                      </div>
+                    </div>
+                    <div className="p-5 text-white">
+                      <h3 className="text-xl font-display font-bold text-white mb-1">{book.title}</h3>
+                      <Link
+                        to={`/books/${book.slug}`}
+                        className="text-church-gold hover:text-white transition-colors text-sm font-semibold flex items-center gap-1 mt-2"
+                      >
+                        Learn More →
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Duplicate for infinite effect */}
+                {[
+                  {
+                    title: 'Maximize Your Time',
+                    slug: 'maximize-your-time',
+                    image: '/images/maximize-your-time.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
+                    color: 'from-amber-500 to-orange-500',
+                  },
+                  {
+                    title: 'Relationship',
+                    slug: 'relationship',
+                    image: '/images/relationship-book.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
+                    color: 'from-purple-500 to-pink-500',
+                  },
+                  {
+                    title: 'Soul Winning',
+                    slug: 'soul-winning',
+                    image: '/images/soul.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
+                    color: 'from-red-500 to-rose-500',
+                  },
+                ].map((book, index) => (
+                  <div key={`dup-${index}`} className="flex-shrink-0 w-72 mx-4 bg-white/10 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-green-500/20 hover:border-green-500/50">
+                    <div className="relative h-64 overflow-hidden">
+                      <img
+                        src={book.image}
+                        alt={book.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        onError={(e) => { e.target.src = book.fallbackImage; }}
+                        loading="lazy"
+                      />
+                      <div className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                        ● LIVE
+                      </div>
+                    </div>
+                    <div className="p-5 text-white">
+                      <h3 className="text-xl font-display font-bold text-white mb-1">{book.title}</h3>
+                      <Link
+                        to={`/books/${book.slug}`}
+                        className="text-church-gold hover:text-white transition-colors text-sm font-semibol flex items-center gap-1 mt-2"
+                      >
+                        Learn More →
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile - Horizontal Scroll */}
+            <div className="md:hidden overflow-x-auto pb-4 -mx-4 px-4">
+              <div className="flex gap-4 w-max">
+                {[
+                  {
+                    title: 'Maximize Your Time',
+                    slug: 'maximize-your-time',
+                    image: '/images/maximize-your-time.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop',
+                  },
+                  {
+                    title: 'Relationship',
+                    slug: 'relationship',
+                    image: '/images/relationship-book.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop',
+                  },
+                  {
+                    title: 'Soul Winning',
+                    slug: 'soul-winning',
+                    image: '/images/soul.jpg',
+                    fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop',
+                  },
+                ].map((book, index) => (
+                  <div key={index} className="w-44 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-green-500/20">
+                    <div className="relative h-52 overflow-hidden">
+                      <img
+                        src={book.image}
+                        alt={book.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { e.target.src = book.fallbackImage; }}
+                        loading="lazy"
+                      />
+                      <div className="absolute top-2 left-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg">
+                        LIVE
+                      </div>
+                    </div>
+                    <div className="p-3 text-white">
+                      <h4 className="text-sm font-bold truncate">{book.title}</h4>
+                      <Link
+                        to={`/books/${book.slug}`}
+                        className="text-church-gold text-xs font-semibold mt-1 inline-block"
+                      >
+                        Learn More →
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
 
-    {/* View All Books Button */}
-    <div className="text-center mt-12">
-      {/* <a 
-      onClick={() => {
-                  const element = document.getElementById('birthday-launch');
-                  if (element) {
-                    element.scrollIntoView({ 
-                      behavior: 'smooth',
-                      block: 'start'
-                    });
-                  }
-                }}
-        href="#birthday-launch"
-        className="inline-flex items-center gap-2 bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30"
-      >
-        View All Books
-        <ChevronRight className="w-5 h-5" />
-      </a> */}
+          {/* ═══════════════════════════════════════════ */}
+          {/* DIVIDER */}
+          {/* ═══════════════════════════════════════════ */}
+          <div className="relative my-12">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/10"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-church-navy px-6 text-gray-500 text-sm font-medium tracking-wider">
+                ─── COMING SOON ───
+              </span>
+            </div>
+          </div>
 
-       <button 
-                onClick={() => {
-                  const element = document.getElementById('birthday-launch');
-                  if (element) {
-                    element.scrollIntoView({ 
-                      behavior: 'smooth',
-                      block: 'start'
-                    });
-                  }
-                }}
-                  className="inline-flex items-center gap-2 bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30"
-              >
-                 View All Books
-                <ChevronRight className="w-5 h-5" />
-              </button>
-    </div>
-  </div>
+          {/* ═══════════════════════════════════════════ */}
+          {/* UPCOMING BOOKS - GRID */}
+          {/* ═══════════════════════════════════════════ */}
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-70">
+              {[
+                {
+                  title: 'Faith Unleashed',
+                  slug: 'faith-unleashed',
+                  image: '/images/faith-unleashed.jpg',
+                  fallbackImage: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=500&fit=crop',
+                },
+                {
+                  title: 'Kingdom Finances',
+                  slug: 'kingdom-finances',
+                  image: '/images/kingdom-finances.jpg',
+                  fallbackImage: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=500&fit=crop',
+                },
+                {
+                  title: 'Prayer Warriors',
+                  slug: 'prayer-warriors',
+                  image: '/images/prayer-warriors.jpg',
+                  fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=600&h=500&fit=crop&crop=center',
+                },
+              ].map((book, index) => (
+                <div key={index} className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/5 relative">
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center">
+                    <span className="bg-amber-500/90 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg backdrop-blur-sm">
+                      ⌛ Coming Soon
+                    </span>
+                  </div>
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={book.image}
+                      alt={book.title}
+                      className="w-full h-full object-cover grayscale"
+                      onError={(e) => { e.target.src = book.fallbackImage; }}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-5 text-white/70">
+                    <h3 className="text-xl font-display font-bold text-white/70 mb-1">{book.title}</h3>
+                    <span className="text-gray-500 text-sm font-medium flex items-center gap-1">
+                      <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                      Coming Soon
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-  <style>{`
+          {/* View All Books Button - Navigates to Books Page */}
+          <div className="text-center mt-12">
+            <Link
+              to="/books"
+              className="inline-flex items-center gap-2 bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30"
+            >
+              View All Books
+              <ChevronRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+
+        <style>{`
     @keyframes scrollInfinite {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
@@ -518,7 +508,7 @@ const testimonies = [
       50% { opacity: 0.6; transform: scale(1.1); }
     }
   `}</style>
-</section>
+      </section>
 
       {/* ==================== ABOUT US SECTION ==================== */}
       <section className="py-20 bg-gray-50">
@@ -531,70 +521,98 @@ const testimonies = [
               </h2>
               <div className="w-20 h-1 bg-church-gold rounded-full mb-6"></div>
               <p className="text-gray-600 leading-relaxed mb-4">
-                {settings?.siteName || 'Generals of Grace Intl Church'} was founded with a divine mandate to raise 
+                {settings?.siteName || 'Generals of Grace Intl Church'} was founded with a divine mandate to raise
                 generals of grace who will impact their generation with the love and power of God.
               </p>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                We are committed to worship, discipleship, and global evangelism, reaching nations with the 
+              {/* <p className="text-gray-600 leading-relaxed mb-6">
+                We are committed to worship, discipleship, and global evangelism, reaching nations with the
                 message of salvation, healing, and deliverance.
-              </p>
-             <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
-  <Link to="/about" className="inline-flex items-center gap-3 text-church-gold font-semibold hover:gap-4 transition-all group">
-    <div>
-      <span className="text-xs text-gray-400 font-normal block group-hover:text-church-gold/70 transition-colors">📖 Discover Our Story</span>
-      <span className="text-base flex items-center gap-2">
-        Learn More 
-        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-      </span>
-    </div>
-  </Link>
-  
-  {/* Separator */}
-  <span className="w-px h-10 bg-church-gold/20 hidden sm:block"></span>
-  
-  <Link to="/soul-winning" className="inline-flex items-center gap-3 text-church-gold font-semibold hover:gap-4 transition-all group">
-    <div>
-      <span className="text-xs text-gray-400 font-normal block group-hover:text-church-gold/70 transition-colors">❤️ Win Souls for the Kingdom</span>
-      <span className="text-base flex items-center gap-2">
-        Soul Winning 
-        <TrendingUp className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-      </span>
-    </div>
-  </Link>
-</div>
+              </p> */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+                <Link to="/about" className="inline-flex items-center gap-3 text-church-gold font-semibold hover:gap-4 transition-all group">
+                  <div>
+                    <span className="text-xs text-gray-400 font-normal block group-hover:text-church-gold/70 transition-colors">📖 Discover Our Story</span>
+                    <span className="text-base flex items-center gap-2">
+                      Learn More
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </Link>
+
+                {/* Separator */}
+                <span className="w-px h-10 bg-church-gold/20 hidden sm:block"></span>
+
+                <Link to="/soul-winning" className="inline-flex items-center gap-3 text-church-gold font-semibold hover:gap-4 transition-all group">
+                  <div>
+                    <span className="text-xs text-gray-400 font-normal block group-hover:text-church-gold/70 transition-colors">❤️ Win Souls for the Kingdom</span>
+                    <span className="text-base flex items-center gap-2">
+                      Soul Winning
+                      <TrendingUp className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </Link>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Mission Column */}
               <div className="space-y-4">
                 <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow group">
-                  <div className="w-12 h-12 bg-church-gold/10 rounded-xl flex items-center justify-center text-church-gold mb-3 group-hover:scale-110 transition-transform">
-                    <Cross className="w-6 h-6" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform">
+                      <Target className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-church-navy text-lg">Our Mission</h3>
                   </div>
-                  <h3 className="font-bold text-church-navy">Our Mission</h3>
-                  <p className="text-sm text-gray-500 mt-1">Raising generals of grace for Kingdom impact</p>
-                </div>
-                <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow group">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-3 group-hover:scale-110 transition-transform">
-                    <Globe className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-bold text-church-navy">Global Reach</h3>
-                  <p className="text-sm text-gray-500 mt-1">Reaching nations with the Gospel</p>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-500 font-bold">✦</span>
+                      Reach men with the gospel of Christ.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-500 font-bold">✦</span>
+                      Raise them to fulfil their call in Him.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-500 font-bold">✦</span>
+                      Help them to explore their potentials.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-500 font-bold">✦</span>
+                      Fulfil their purpose in the earth.
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <div className="space-y-4 mt-8">
+
+              {/* Vision Column */}
+              <div className="space-y-4">
                 <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow group">
-                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 mb-3 group-hover:scale-110 transition-transform">
-                    <Heart className="w-6 h-6" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
+                      <Globe className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-church-navy text-lg">Our Vision</h3>
                   </div>
-                  <h3 className="font-bold text-church-navy">Our Vision</h3>
-                  <p className="text-sm text-gray-500 mt-1">Every member a general of grace</p>
-                </div>
-                <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow group">
-                  <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 mb-3 group-hover:scale-110 transition-transform">
-                    <Target className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-bold text-church-navy">Discipleship</h3>
-                  <p className="text-sm text-gray-500 mt-1">Equipping saints for ministry</p>
+                  <p className="text-xs text-gray-400 italic mb-3">What we are called to be:</p>
+                  <ul className="space-y-2 text-sm text-gray-600">
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 font-bold">✦</span>
+                      <span className="text-amber-500 font-bold">Take the gospel of Christ around the world;</span> every community, cities, campuses and nations.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 font-bold">✦</span>
+                      Raise World changers, Influential people, Owners of conglomerates that would shape the world for Jesus.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 font-bold">✦</span>
+                      <span className="text-amber-500 font-bold">Build institutions of learning; from primary,</span> secondary and Tertiary; also partner with companies, build industries, and make the world a better place for God's children.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 font-bold">✦</span>
+                      Reach and disciple One Hundred million (100 million) souls till Christ comes.
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -602,7 +620,7 @@ const testimonies = [
         </div>
       </section>
 
-         {/* ==================== FEATURED SERMONS ==================== */}
+      {/* ==================== FEATURED SERMONS ==================== */}
       <section className="py-16 bg-gray-50">
         <div className="container-custom">
           <div className="flex justify-between items-center mb-8">
@@ -625,8 +643,8 @@ const testimonies = [
               {featuredSermons.map((sermon) => (
                 <div key={sermon.id} className="card group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
                   <div className="relative pb-[56.25%] bg-gray-200">
-                    <img 
-                      src={sermon.thumbnailUrl || '/images/sermon-placeholder.jpg'} 
+                    <img
+                      src={sermon.thumbnailUrl || '/images/sermon-placeholder.jpg'}
                       alt={sermon.title}
                       className="absolute h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -638,7 +656,7 @@ const testimonies = [
                     <h3 className="font-semibold text-lg mb-1 text-church-navy">{truncateText(sermon.title, 30)}</h3>
                     <p className="text-gray-600 text-sm">{sermon.speaker}</p>
                     <p className="text-xs text-gray-400">{formatDate(sermon.date)}</p>
-                    <Link 
+                    <Link
                       to={`/sermons/${sermon.id}`}
                       className="mt-3 inline-block text-church-gold font-medium text-sm hover:text-opacity-80 group"
                     >
@@ -652,164 +670,164 @@ const testimonies = [
         </div>
       </section>
 
-{/* ==================== CORE VALUES SECTION - PREMIUM (MATCHES HOME) ==================== */}
-<section className="py-20 bg-gradient-to-b from-gray-600 via-white to-gray-500 relative overflow-hidden">
-  
-  {/* Subtle background pattern */}
-  <div className="absolute inset-0 opacity-[0.02]">
-    <div className="w-full h-full" style={{
-      backgroundImage: `radial-gradient(circle at 20% 50%, #C9A84C 1px, transparent 1px)`,
-      backgroundSize: '40px 40px'
-    }}></div>
-  </div>
-  
-  {/* Decorative elements */}
-  <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-church-gold/8 rounded-full blur-3xl"></div>
-  <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-church-gold/8 rounded-full blur-3xl"></div>
-  
-  <div className="container-custom relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-    {/* ===== SECTION HEADER - RIGHT ALIGNED ===== */}
-    <div className="mb-16 text-right">
-      {/* Badge - Square corners, right aligned */}
-      <div className="inline-block">
-        <span className="text-church-gold font-bold text-sm uppercase tracking-wider bg-church-navy/90 px-6 py-2.5 border-2 border-church-gold/40 shadow-lg shadow-church-gold/10">
-          Our Foundation
-        </span>
-      </div>
-      
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mt-4 mb-3">
-        Our Core <span className="text-church-gold">Values</span>
-      </h2>
-      
-      <div className="w-24 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full ml-auto"></div>
-      
-      {/* Quote - Right aligned */}
-      <div className="relative max-w-3xl ml-auto mt-6">
-        <div className="bg-gradient-to-r from-church-gold/5 via-white to-church-gold/5 rounded-2xl p-6 border border-church-gold/10 shadow-sm">
-          {/* Decorative elements - Right aligned */}
-          <div className="flex items-center justify-end gap-4 mb-3">
-            <span className="w-12 h-px bg-church-gold/40"></span>
-            <span className="text-church-gold/50 text-xl font-serif">❧</span>
-            <span className="w-12 h-px bg-church-gold/40"></span>
-          </div>
-          
-          {/* Quote */}
-          <div className="relative text-right">
-            <span className="absolute -top-1 -right-1 text-2xl text-church-gold/20 font-serif">"</span>
-            <p className="text-gray-700 text-base italic font-light leading-relaxed px-4 py-1">
-              Biblical truths that anchor our souls, guide our walk with Christ, and unite us as one body in Him
-            </p>
-            <span className="absolute -bottom-1 -left-1 text-2xl text-church-gold/20 font-serif">"</span>
-          </div>
-          
-          {/* Attribution - Right aligned */}
-          <div className="flex items-center justify-end gap-3 mt-4">
-            <span className="w-10 h-px bg-church-gold/40"></span>
-            <span className="text-church-gold/80 text-xs font-semibold tracking-[0.2em] uppercase">
-              — Established in Truth —
-            </span>
-            <span className="w-10 h-px bg-church-gold/40"></span>
-          </div>
-        </div>
-      </div>
-    </div>
+      {/* ==================== CORE VALUES SECTION - PREMIUM ==================== */}
+      <section className="py-20 bg-gradient-to-b from-gray-600 via-white to-gray-500 relative overflow-hidden">
 
-    {/* ===== VALUES GRID - PREMIUM CARDS ===== */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {coreValues.map((value, index) => (
-        <div 
-          key={index} 
-          className="group relative bg-white rounded-2xl p-8 lg:p-10 border border-gray-200 shadow-lg hover:shadow-2xl hover:shadow-church-gold/20 transition-all duration-500 hover:-translate-y-3 hover:border-church-gold/40"
-        >
-          {/* Top accent bar - color coded */}
-          <div className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl bg-gradient-to-r from-church-gold to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-          
-          {/* Premium corner accents */}
-          <div className="absolute top-0 left-0 w-12 h-12 border-t-[2.5px] border-l-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-tl-xl"></div>
-          <div className="absolute top-0 right-0 w-12 h-12 border-t-[2.5px] border-r-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-tr-xl"></div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[2.5px] border-l-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-bl-xl"></div>
-          <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[2.5px] border-r-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-br-xl"></div>
-          
-          {/* Number indicator - prominent */}
-          <div className="absolute -top-3.5 -right-3.5 w-9 h-9 rounded-full bg-gradient-to-br from-church-gold/30 to-church-gold/10 border-2 border-church-gold/40 flex items-center justify-center text-xs font-bold text-church-gold shadow-md group-hover:bg-church-gold group-hover:border-church-gold group-hover:text-white group-hover:shadow-church-gold/30 transition-all duration-300">
-            {String(index + 1).padStart(2, '0')}
-          </div>
-
-          {/* Icon - prominent */}
-          <div className="relative w-16 h-16 rounded-2xl bg-church-gold/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-500 shadow-sm group-hover:shadow-md">
-            <div className="text-church-gold">
-              {value.icon}
-            </div>
-          </div>
-          
-          {/* Title */}
-          <h3 className="text-xl font-display font-bold text-church-navy mb-2.5 group-hover:text-church-gold transition-colors duration-300">
-            {value.title}
-          </h3>
-          
-          {/* Description */}
-          <p className="text-gray-600 text-sm leading-relaxed mb-4 font-light">
-            {value.description}
-          </p>
-          
-          {/* Elegant divider */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-church-gold/30"></div>
-            <span className="text-church-gold/50 text-[10px]">◆</span>
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-church-gold/30"></div>
-          </div>
-          
-          {/* Scripture badge - prominent */}
-          <div className="inline-flex items-center gap-2.5 text-xs font-medium text-church-gold bg-church-gold/10 px-4 py-2 rounded-full border border-church-gold/20 group-hover:border-church-gold/50 group-hover:bg-church-gold/20 transition-all duration-300 shadow-sm group-hover:shadow-md">
-            <span className="w-1.5 h-1.5 bg-church-gold rounded-full"></span>
-            {value.scripture || 'Scripture Reference'}
-            <span className="w-px h-3 bg-church-gold/20"></span>
-            <span className="text-[10px] text-church-gold/50 font-normal">✦</span>
-          </div>
-          
-          {/* Hover glow */}
-          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-            boxShadow: 'inset 0 0 60px rgba(201, 168, 76, 0.06)'
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="w-full h-full" style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, #C9A84C 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
           }}></div>
         </div>
-      ))}
-    </div>
-    
-    {/* ===== FOOTER QUOTE - CLEAR & VISIBLE (Kept original) ===== */}
-    <div className="mt-16 text-center">
-      <div className="relative max-w-3xl mx-auto bg-gradient-to-r from-church-gold/5 via-white to-church-gold/5 rounded-2xl p-8 border border-church-gold/10 shadow-sm">
+
         {/* Decorative elements */}
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-white px-4">
-          <span className="w-12 h-px bg-church-gold/40"></span>
-          <span className="text-church-gold/50 text-xl font-serif">❧</span>
-          <span className="w-12 h-px bg-church-gold/40"></span>
-        </div>
-        
-        {/* Quote */}
-        <div className="pt-4">
-          <div className="relative">
-            <span className="absolute -top-2 -left-2 text-3xl text-church-gold/20 font-serif">"</span>
-            <p className="text-gray-700 text-base italic font-light leading-relaxed px-4 py-2">
-              These values are not just words — they are the foundation of our faith 
-              and the heartbeat of our church.
-            </p>
-            <span className="absolute -bottom-2 -right-2 text-3xl text-church-gold/20 font-serif">"</span>
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-church-gold/8 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-church-gold/8 rounded-full blur-3xl"></div>
+
+        <div className="container-custom relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* ===== SECTION HEADER - RIGHT ALIGNED ===== */}
+          <div className="mb-16 text-right">
+            {/* Badge - Square corners, right aligned */}
+            <div className="inline-block">
+              <span className="text-church-gold font-bold text-sm uppercase tracking-wider bg-church-navy/90 px-6 py-2.5 border-2 border-church-gold/40 shadow-lg shadow-church-gold/10">
+                Our Foundation
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white mt-4 mb-3">
+              Our Core <span className="text-church-gold">Values</span>
+            </h2>
+
+            <div className="w-24 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full ml-auto"></div>
+
+            {/* Quote - Right aligned */}
+            <div className="relative max-w-3xl ml-auto mt-6">
+              <div className="bg-gradient-to-r from-church-gold/5 via-white to-church-gold/5 rounded-2xl p-6 border border-church-gold/10 shadow-sm">
+                {/* Decorative elements - Right aligned */}
+                <div className="flex items-center justify-end gap-4 mb-3">
+                  <span className="w-12 h-px bg-church-gold/40"></span>
+                  <span className="text-church-gold/50 text-xl font-serif">❧</span>
+                  <span className="w-12 h-px bg-church-gold/40"></span>
+                </div>
+
+                {/* Quote */}
+                <div className="relative text-right">
+                  <span className="absolute -top-1 -right-1 text-2xl text-church-gold/20 font-serif">"</span>
+                  <p className="text-gray-700 text-base italic font-light leading-relaxed px-4 py-1">
+                    Biblical truths that anchor our souls, guide our walk with Christ, and unite us as one body in Him
+                  </p>
+                  <span className="absolute -bottom-1 -left-1 text-2xl text-church-gold/20 font-serif">"</span>
+                </div>
+
+                {/* Attribution - Right aligned */}
+                <div className="flex items-center justify-end gap-3 mt-4">
+                  <span className="w-10 h-px bg-church-gold/40"></span>
+                  <span className="text-church-gold/80 text-xs font-semibold tracking-[0.2em] uppercase">
+                    — Established in Truth —
+                  </span>
+                  <span className="w-10 h-px bg-church-gold/40"></span>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          {/* Attribution */}
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <span className="w-10 h-px bg-church-gold/40"></span>
-            <span className="text-church-gold/80 text-xs font-semibold tracking-[0.2em] uppercase">
-              — Established in Truth —
-            </span>
-            <span className="w-10 h-px bg-church-gold/40"></span>
+
+          {/* ===== VALUES GRID - PREMIUM CARDS ===== */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {coreValues.map((value, index) => (
+              <div
+                key={index}
+                className="group relative bg-white rounded-2xl p-8 lg:p-10 border border-gray-200 shadow-lg hover:shadow-2xl hover:shadow-church-gold/20 transition-all duration-500 hover:-translate-y-3 hover:border-church-gold/40"
+              >
+                {/* Top accent bar - color coded */}
+                <div className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl bg-gradient-to-r from-church-gold to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+
+                {/* Premium corner accents */}
+                <div className="absolute top-0 left-0 w-12 h-12 border-t-[2.5px] border-l-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-tl-xl"></div>
+                <div className="absolute top-0 right-0 w-12 h-12 border-t-[2.5px] border-r-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-tr-xl"></div>
+                <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[2.5px] border-l-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-bl-xl"></div>
+                <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[2.5px] border-r-[2.5px] border-church-gold/30 group-hover:border-church-gold/80 transition-all duration-500 rounded-br-xl"></div>
+
+                {/* Number indicator - prominent */}
+                <div className="absolute -top-3.5 -right-3.5 w-9 h-9 rounded-full bg-gradient-to-br from-church-gold/30 to-church-gold/10 border-2 border-church-gold/40 flex items-center justify-center text-xs font-bold text-church-gold shadow-md group-hover:bg-church-gold group-hover:border-church-gold group-hover:text-white group-hover:shadow-church-gold/30 transition-all duration-300">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+
+                {/* Icon - prominent */}
+                <div className="relative w-16 h-16 rounded-2xl bg-church-gold/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-500 shadow-sm group-hover:shadow-md">
+                  <div className="text-church-gold">
+                    {value.icon}
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-display font-bold text-church-navy mb-2.5 group-hover:text-church-gold transition-colors duration-300">
+                  {value.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-600 text-sm leading-relaxed mb-4 font-light">
+                  {value.description}
+                </p>
+
+                {/* Elegant divider */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex-1 h-px bg-gradient-to-r from-transparent to-church-gold/30"></div>
+                  <span className="text-church-gold/50 text-[10px]">◆</span>
+                  <div className="flex-1 h-px bg-gradient-to-l from-transparent to-church-gold/30"></div>
+                </div>
+
+                {/* Scripture badge - prominent */}
+                <div className="inline-flex items-center gap-2.5 text-xs font-medium text-church-gold bg-church-gold/10 px-4 py-2 rounded-full border border-church-gold/20 group-hover:border-church-gold/50 group-hover:bg-church-gold/20 transition-all duration-300 shadow-sm group-hover:shadow-md">
+                  <span className="w-1.5 h-1.5 bg-church-gold rounded-full"></span>
+                  {value.scripture || 'Scripture Reference'}
+                  <span className="w-px h-3 bg-church-gold/20"></span>
+                  <span className="text-[10px] text-church-gold/50 font-normal">✦</span>
+                </div>
+
+                {/* Hover glow */}
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                  boxShadow: 'inset 0 0 60px rgba(201, 168, 76, 0.06)'
+                }}></div>
+              </div>
+            ))}
+          </div>
+
+          {/* ===== FOOTER QUOTE - CLEAR & VISIBLE (Kept original) ===== */}
+          <div className="mt-16 text-center">
+            <div className="relative max-w-3xl mx-auto bg-gradient-to-r from-church-gold/5 via-white to-church-gold/5 rounded-2xl p-8 border border-church-gold/10 shadow-sm">
+              {/* Decorative elements */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-white px-4">
+                <span className="w-12 h-px bg-church-gold/40"></span>
+                <span className="text-church-gold/50 text-xl font-serif">❧</span>
+                <span className="w-12 h-px bg-church-gold/40"></span>
+              </div>
+
+              {/* Quote */}
+              <div className="pt-4">
+                <div className="relative">
+                  <span className="absolute -top-2 -left-2 text-3xl text-church-gold/20 font-serif">"</span>
+                  <p className="text-gray-700 text-base italic font-light leading-relaxed px-4 py-2">
+                    These values are not just words — they are the foundation of our faith
+                    and the heartbeat of our church.
+                  </p>
+                  <span className="absolute -bottom-2 -right-2 text-3xl text-church-gold/20 font-serif">"</span>
+                </div>
+
+                {/* Attribution */}
+                <div className="flex items-center justify-center gap-3 mt-4">
+                  <span className="w-10 h-px bg-church-gold/40"></span>
+                  <span className="text-church-gold/80 text-xs font-semibold tracking-[0.2em] uppercase">
+                    — Established in Truth —
+                  </span>
+                  <span className="w-10 h-px bg-church-gold/40"></span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ==================== MINISTRIES SECTION ==================== */}
       {/* <section className="py-16 bg-white">
@@ -835,130 +853,130 @@ const testimonies = [
           </div>
         </div>
       </section> */}
-    
+
 
       {/* ==================== MINISTRIES SECTION - SALVATION MINISTRIES EXACT MATCH ==================== */}
-<section className="py-16 bg-white">
-  <div className="container-custom">
-    {/* Section Header - LEFT ALIGNED like Salvation Ministries */}
-    <div className="mb-12">
-      <p className="text-red-600 text-xs md:text-sm font-semibold uppercase tracking-widest">GET INVOLVED</p>
-      <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-church-navy">
-        Ministries
-      </h2>
-      <p className="text-gray-400 text-xs md:text-sm mt-1">TO LEADING LIGHT</p>
-    </div>
+      <section className="py-16 bg-white">
+        <div className="container-custom">
+          {/* Section Header - LEFT ALIGNED like Salvation Ministries */}
+          <div className="mb-12">
+            <p className="text-red-600 text-xs md:text-sm font-semibold uppercase tracking-widest">GET INVOLVED</p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-church-navy">
+              Ministries
+            </h2>
+            <p className="text-gray-400 text-xs md:text-sm mt-1">TO LEADING LIGHT</p>
+          </div>
 
-    {/* Ministries Grid - Images with overlay text */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      
-      {/* Ministry 1 - Leading Lights */}
-      <Link to="/ministries/children" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
-        <div className="relative h-72 overflow-hidden bg-gray-200">
-          <img 
-            src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=500&fit=crop&crop=center"
-            alt="Leading Lights"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-2xl font-bold text-white mb-1">Leading Lights</h3>
-            <p className="text-white/80 text-sm">Path to Faith filled with Laughter</p>
+          {/* Ministries Grid - Images with overlay text */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/* Ministry 1 - Leading Lights */}
+            <Link to="/ministries/children" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
+              <div className="relative h-72 overflow-hidden bg-gray-200">
+                <img
+                  src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=500&fit=crop&crop=center"
+                  alt="Leading Lights"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">Leading Lights</h3>
+                  <p className="text-white/80 text-sm">Path to Faith filled with Laughter</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Ministry 2 - Campus Ministry */}
+            <Link to="/ministries/campus" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
+              <div className="relative h-72 overflow-hidden bg-gray-200">
+                <img
+                  src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600&h=500&fit=crop&crop=center"
+                  alt="Campus Ministry"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">Campus Ministry</h3>
+                  <p className="text-white/80 text-sm">Reaching students with the Gospel</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Ministry 3 - Worship Ministry */}
+            <Link to="/ministries/worship" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
+              <div className="relative h-72 overflow-hidden bg-gray-200">
+                <img
+                  src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=500&fit=crop&crop=center"
+                  alt="Worship Ministry"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">Worship Ministry</h3>
+                  <p className="text-white/80 text-sm">Leading the church in praise</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Ministry 4 - Outreach Ministry */}
+            <Link to="/ministries/outreach" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
+              <div className="relative h-72 overflow-hidden bg-gray-200">
+                <img
+                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=500&fit=crop&crop=center"
+                  alt="Outreach Ministry"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">Outreach Ministry</h3>
+                  <p className="text-white/80 text-sm">Sharing God's love worldwide</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Ministry 5 - Prayer Ministry */}
+            <Link to="/ministries/prayer" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
+              <div className="relative h-72 overflow-hidden bg-gray-200">
+                <img
+                  src="/images/prayer.jpg"
+                  alt="Prayer Ministry"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=600&h=500&fit=crop&crop=center';
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">Prayer Ministry</h3>
+                  <p className="text-white/80 text-sm">Dedicated intercessory prayer</p>
+                </div>
+              </div>
+            </Link>
+
+            {/* Ministry 6 - Discipleship Ministry */}
+            <Link to="/ministries/discipleship" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
+              <div className="relative h-72 overflow-hidden bg-gray-200">
+                <img
+                  src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=500&fit=crop&crop=center"
+                  alt="Discipleship Ministry"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold text-white mb-1">Discipleship Ministry</h3>
+                  <p className="text-white/80 text-sm">Making disciples for Christ</p>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
-      </Link>
-
-      {/* Ministry 2 - Campus Ministry */}
-      <Link to="/ministries/campus" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
-        <div className="relative h-72 overflow-hidden bg-gray-200">
-          <img 
-            src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600&h=500&fit=crop&crop=center"
-            alt="Campus Ministry"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-2xl font-bold text-white mb-1">Campus Ministry</h3>
-            <p className="text-white/80 text-sm">Reaching students with the Gospel</p>
-          </div>
-        </div>
-      </Link>
-
-      {/* Ministry 3 - Worship Ministry */}
-      <Link to="/ministries/worship" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
-        <div className="relative h-72 overflow-hidden bg-gray-200">
-          <img 
-            src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=500&fit=crop&crop=center"
-            alt="Worship Ministry"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-2xl font-bold text-white mb-1">Worship Ministry</h3>
-            <p className="text-white/80 text-sm">Leading the church in praise</p>
-          </div>
-        </div>
-      </Link>
-
-      {/* Ministry 4 - Outreach Ministry */}
-      <Link to="/ministries/outreach" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
-        <div className="relative h-72 overflow-hidden bg-gray-200">
-          <img 
-            src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=500&fit=crop&crop=center"
-            alt="Outreach Ministry"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-2xl font-bold text-white mb-1">Outreach Ministry</h3>
-            <p className="text-white/80 text-sm">Sharing God's love worldwide</p>
-          </div>
-        </div>
-      </Link>
-
-      {/* Ministry 5 - Prayer Ministry (FIXED) */}
-      <Link to="/ministries/prayer" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
-        <div className="relative h-72 overflow-hidden bg-gray-200">
-          <img 
-            src="/images/prayer.jpg"
-            alt="Prayer Ministry"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-            onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=600&h=500&fit=crop&crop=center';
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-2xl font-bold text-white mb-1">Prayer Ministry</h3>
-            <p className="text-white/80 text-sm">Dedicated intercessory prayer</p>
-          </div>
-        </div>
-      </Link>
-
-      {/* Ministry 6 - Discipleship Ministry */}
-      <Link to="/ministries/discipleship" className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 block">
-        <div className="relative h-72 overflow-hidden bg-gray-200">
-          <img 
-            src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=500&fit=crop&crop=center"
-            alt="Discipleship Ministry"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <h3 className="text-2xl font-bold text-white mb-1">Discipleship Ministry</h3>
-            <p className="text-white/80 text-sm">Making disciples for Christ</p>
-          </div>
-        </div>
-      </Link>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ==================== EVENTS SECTION ==================== */}
       <section className="py-16 bg-gray-50">
@@ -985,18 +1003,17 @@ const testimonies = [
               {allEvents.map((event) => (
                 <div key={event.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 group">
                   <div className="relative h-48 bg-gray-200">
-                    <img 
-                      src={event.imageUrl || event.thumbnailUrl || '/images/event-placeholder.jpg'} 
+                    <img
+                      src={event.imageUrl || event.thumbnailUrl || '/images/event-placeholder.jpg'}
                       alt={event.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => { e.target.src = '/images/event-placeholder.jpg'; }}
                     />
                     <div className="absolute top-3 right-3">
-                      <span className={`px-3 py-1 text-white text-xs font-semibold rounded-full capitalize ${
-                        event.status === 'upcoming' ? 'bg-green-500' : 
-                        event.status === 'ongoing' ? 'bg-yellow-500' : 
-                        'bg-gray-500'
-                      }`}>
+                      <span className={`px-3 py-1 text-white text-xs font-semibold rounded-full capitalize ${event.status === 'upcoming' ? 'bg-green-500' :
+                        event.status === 'ongoing' ? 'bg-yellow-500' :
+                          'bg-gray-500'
+                        }`}>
                         {event.status || 'Event'}
                       </span>
                     </div>
@@ -1026,7 +1043,7 @@ const testimonies = [
                         </div>
                       )}
                     </div>
-                    <Link 
+                    <Link
                       to={`/events/${event.id}`}
                       className="mt-4 inline-block w-full text-center bg-church-gold text-white py-2.5 rounded-lg font-semibold hover:bg-opacity-90 transition-all hover:shadow-lg hover:shadow-church-gold/30"
                     >
@@ -1040,425 +1057,174 @@ const testimonies = [
         </div>
       </section>
 
-         {/* ===== PASTOR'S MESSAGE SECTION ===== */}
-            <section className="py-20 bg-gradient-to-br from-amber-50 to-white">
-              <div className="container-custom">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                  <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <Quote className="w-8 h-8 text-church-gold" />
-                      <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Pastor's Heart</span>
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-4">
-                      The Heart of <span className="text-church-gold">Soul Winning</span>
-                    </h2>
-                    <div className="w-20 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full mb-6"></div>
-                    
-                    <div className="space-y-4">
-                      <p className="text-gray-700 leading-relaxed text-lg">
-                        "Soul winning is not just an assignment—it's the heartbeat of God. Every soul matters to Him, and 
-                        every soul you win is a treasure stored in heaven."
-                      </p>
-                      <p className="text-gray-600 leading-relaxed">
-                        — Pastor Andrew Osalor
-                      </p>
-                    </div>
-      
-                    <div className="mt-6 p-6 bg-church-gold/10 rounded-xl border-l-4 border-church-gold">
-                      <p className="text-gray-700 italic leading-relaxed">
-                        "The greatest joy in ministry is seeing a soul come to Christ. It's the reward that surpasses 
-                        all earthly treasures."
-                      </p>
-                      <p className="text-sm text-church-gold font-semibold mt-2">— Pastor Andrew Osalor</p>
-                    </div>
-                  </motion.div>
-      
-                  <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    viewport={{ once: true }}
-                    className="relative"
-                  >
-                    <img 
-                      src="/images/aday.jpg" 
-                      alt="Pastor Andrew Osalor"
-                      className="rounded-2xl shadow-2xl w-full h-[450px] object-cover"
-                    />
-                    <div className="absolute -bottom-6 -right-6 bg-church-gold text-white p-6 rounded-xl shadow-xl max-w-xs">
-                      <p className="font-display text-lg font-bold">"Every Soul Counts"</p>
-                      <p className="text-sm opacity-90">Pastor Andrew Osalor</p>
-                    </div>
-                  </motion.div>
-                </div>
+      {/* ===== PASTOR'S MESSAGE SECTION ===== */}
+      <section className="py-20 bg-gradient-to-br from-amber-50 to-white">
+        <div className="container-custom">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <Quote className="w-8 h-8 text-church-gold" />
+                <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Pastor's Heart</span>
               </div>
-            </section>
-{/* ===== BOOKS SECTION - NEW RELEASE ===== */}
-<section id="birthday-launch" className="py-20 bg-white scroll-mt-20">
-  <div className="container-custom">
-    {/* 🔥 ATTENTION-GRABBING HEADER */}
-    <div className="text-center mb-16">
-      <div className="inline-flex items-center gap-3 mb-4">
-        <span className="w-12 h-px bg-church-gold/40"></span>
-        <span className="text-church-gold font-semibold text-sm uppercase tracking-wider bg-church-gold/10 px-5 py-2 rounded-full border border-church-gold/20">
-          🎉 Birthday Launch
-        </span>
-        <span className="w-12 h-px bg-church-gold/40"></span>
-      </div>
-      
-      <h2 className="text-3xl md:text-5xl font-display font-bold text-church-navy mt-4 mb-3">
-        Powerful Books. <br />
-        <span className="text-church-gold">One Life-Changing Day.</span>
-      </h2>
-      
-      <div className="w-24 h-1 bg-gradient-to-r from-church-gold to-amber-400 mx-auto rounded-full"></div>
-      
-      <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-base">
-        Pastor Andrew Osalor's long-awaited trilogy is finally here — released on his birthday, 
-        these three books are designed to equip, empower, and transform your walk with God.
-      </p>
-    </div>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-4">
+                The Heart of <span className="text-church-gold">Soul Winning</span>
+              </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-church-gold to-amber-400 rounded-full mb-6"></div>
 
-    {/* 🔥 NEW RELEASE - Birthday Book (Featured) */}
-    <div className="mb-16">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -8 }}
-        className="relative overflow-hidden rounded-2xl shadow-2xl border-2 border-church-gold/30 bg-gradient-to-br from-church-gold/10 via-white to-amber-50/30"
-      >
-        {/* "NEW RELEASE" Badge */}
-        <div className="absolute top-4 right-4 z-20">
-          <span className="inline-flex items-center gap-2 bg-red-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg animate-pulse">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-300"></span>
-            </span>
-            NEW RELEASE
-          </span>
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed text-lg">
+                  "Soul winning is not just an assignment—it's the heartbeat of God. Every soul matters to Him, and
+                  every soul you win is a treasure stored in heaven."
+                </p>
+                <p className="text-gray-600 leading-relaxed">
+                  — Pastor Andrew Osalor
+                </p>
+              </div>
+
+              <div className="mt-6 p-6 bg-church-gold/10 rounded-xl border-l-4 border-church-gold">
+                <p className="text-gray-700 italic leading-relaxed">
+                  "The greatest joy in ministry is seeing a soul come to Christ. It's the reward that surpasses
+                  all earthly treasures."
+                </p>
+                <p className="text-sm text-church-gold font-semibold mt-2">— Pastor Andrew Osalor</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <img
+                src="/images/aday.jpg"
+                // src="/images/pastor_quort.jpg"
+                // src="/images/pastor_quort.jpg"
+                // src="/images/pastor_bio_2.jpg"
+                alt="Pastor Andrew Osalor"
+                className="rounded-2xl shadow-2xl w-full h-[450px] object-cover"
+              />
+              <div className="absolute -bottom-6 -right-6 bg-church-gold text-white p-6 rounded-xl shadow-xl max-w-xs">
+                <p className="font-display text-lg font-bold">"Every Soul Counts"</p>
+                <p className="text-sm opacity-90">Pastor Andrew Osalor</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
-          {/* Book Image */}
-          <div className="relative h-80 md:h-auto rounded-xl overflow-hidden shadow-lg">
-            <img 
-              src="images/maximize-your-time.jpg" 
-              alt="Maximize Your Time - New Release"
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.src = 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600&h=800&fit=crop';
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-church-navy/60 to-transparent"></div>
-            <div className="absolute bottom-4 left-4">
-              <span className="bg-church-gold text-church-navy text-xs font-bold px-3 py-1 rounded-full">
-                📖 New Release
-              </span>
+      
+  {/* ===== PRAYER & PARTNERSHIP SECTION ===== */}
+<section className="py-20 bg-gradient-to-br from-amber-50/50 via-white to-red-50/30 relative overflow-hidden">
+  <div className="absolute top-0 right-0 w-96 h-96 bg-church-gold/5 rounded-full blur-3xl"></div>
+  <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl"></div>
+  
+  <div className="container-custom relative z-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {/* Left Column - Prayer Requests */}
+      <div>
+        <div className="inline-flex items-center gap-2 bg-church-gold/10 px-4 py-2 rounded-full border border-church-gold/20 mb-4">
+          <span className="text-church-gold text-lg">🙏</span>
+          <span className="text-church-gold text-xs font-bold uppercase tracking-wider">Prayer & Partnership</span>
+        </div>
+        
+        <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-4">
+          We Are Here to <br />
+          <span className="text-church-gold">Pray With You</span>
+        </h2>
+        
+        <div className="w-20 h-1 bg-church-gold rounded-full mb-6"></div>
+        
+        <p className="text-gray-600 leading-relaxed mb-6">
+          At Generals of Grace, we believe in the power of prayer. Whatever you're going through, 
+          our prayer team is ready to stand with you in faith.
+        </p>
+        
+        <div className="space-y-4 mb-8">
+          <div className="flex items-start gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-church-gold/10 rounded-full flex items-center justify-center text-church-gold flex-shrink-0">
+              <Heart className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-church-navy">Submit a Prayer Request</h4>
+              <p className="text-sm text-gray-500">Share your burden with us. We'll pray with you.</p>
             </div>
           </div>
-
-          {/* Book Details */}
-          <div className="flex flex-col justify-center">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-3 py-1 rounded-full">
-                Book 1
-              </span>
-              <span className="text-red-500 text-xs font-bold uppercase tracking-wider bg-red-50 px-3 py-1 rounded-full">
-                🔥 Just Launched
-              </span>
+          
+          <div className="flex items-start gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-church-gold/10 rounded-full flex items-center justify-center text-church-gold flex-shrink-0">
+              <Users className="w-5 h-5" />
             </div>
-            <h3 className="text-3xl md:text-4xl font-display font-bold text-church-navy mb-2">
-              Maximize Your Time
-            </h3>
-            <p className="text-church-gold font-medium mb-4">Redeeming Your Time for Kingdom Impact</p>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity. This life-changing book will transform how you view and use your time.
-            </p>
-            
-            {/* Book Details Grid */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400">Pages</p>
-                <p className="text-sm font-bold text-church-navy">256</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400">Format</p>
-                <p className="text-sm font-bold text-church-navy">Paperback</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400">Release Date</p>
-                <p className="text-sm font-bold text-church-gold">August 2026</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-center">
-                <p className="text-xs text-gray-400">Category</p>
-                <p className="text-sm font-bold text-church-navy">Christian Living</p>
-              </div>
+            <div>
+              <h4 className="font-semibold text-church-navy">Become a Partner</h4>
+              <p className="text-sm text-gray-500">Join our mission to reach the world with the Gospel.</p>
             </div>
-
-            {/* Call to Action Buttons - Updated with Links */}
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/books/maximize-your-time"
-                className="bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center gap-2"
-              >
-                <BookOpen className="w-5 h-5" />
-                Get Your Copy
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-              <button
-                onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({
-                      title: 'Maximize Your Time',
-                      text: 'Check out this amazing book by Pastor Andrew Osalor!',
-                      url: window.location.href,
-                    });
-                  }
-                }}
-                className="border-2 border-church-gold/30 text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
-              >
-                <Heart className="w-5 h-5" />
-                Share
-              </button>
+          </div>
+          
+          <div className="flex items-start gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+            <div className="w-10 h-10 bg-church-gold/10 rounded-full flex items-center justify-center text-church-gold flex-shrink-0">
+              <MessageSquare className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-church-navy">Need Counseling?</h4>
+              <p className="text-sm text-gray-500">Our pastoral team is here to support you.</p>
             </div>
           </div>
         </div>
-      </motion.div>
-    </div>
-
-    {/* 🔥 ALL THREE BOOKS - SAME LAUNCH DAY */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-      {/* Book 1 - Maximize Your Time */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -12 }}
-        className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-church-gold/20 hover:border-church-gold/50"
-      >
-        {/* "NEW RELEASE" Badge */}
-        <div className="absolute top-3 right-3 z-20">
-          <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-300"></span>
-            </span>
-            NEW
-          </span>
-        </div>
-
-        <div className="relative h-64 overflow-hidden bg-gray-200">
-          <img 
-            src="images/maximize-your-time.jpg" 
-            alt="Maximize Your Time"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=500&fit=crop';
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-            <p className="text-white text-sm leading-relaxed">Learn to redeem your time for God's glory</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-2 py-0.5 rounded">
-              Book 1
-            </span>
-            <span className="text-xs text-gray-400">•</span>
-            <span className="text-xs text-gray-400">256 pages</span>
-          </div>
-          <h3 className="text-2xl font-display font-bold text-church-navy mb-2 group-hover:text-church-gold transition-colors">
-            Maximize Your Time
-          </h3>
-          <p className="text-gray-500 text-sm leading-relaxed mb-4">
-            Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity.
-          </p>
+        
+        <div className="flex flex-wrap gap-4">
           <Link
-            to="/books/maximize-your-time"
-            className="inline-flex bg-church-gold text-church-navy px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all items-center gap-2 text-sm"
+            to="/contact"
+            className="bg-church-gold text-church-navy px-8 py-3.5 rounded-xl font-semibold hover:bg-opacity-90 transition-all shadow-lg hover:shadow-church-gold/30 inline-flex items-center gap-2"
           >
-            <BookOpen className="w-4 h-4" />
-            Get Your Copy
+            Submit Prayer Request
             <ChevronRight className="w-4 h-4" />
           </Link>
-        </div>
-      </motion.div>
-
-      {/* Book 2 - Soul Winning */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -12 }}
-        className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-church-gold/20 hover:border-church-gold/50"
-      >
-        <div className="absolute top-3 right-3 z-20">
-          <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-300"></span>
-            </span>
-            NEW
-          </span>
-        </div>
-
-        <div className="relative h-64 overflow-hidden bg-gray-200">
-          <img 
-            src="images/soul.jpg" 
-            alt="Soul Winning"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=400&h=500&fit=crop';
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-            <p className="text-white text-sm leading-relaxed">Master the art of winning souls for Christ</p>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-2 py-0.5 rounded">
-              Book 2
-            </span>
-            <span className="text-xs text-gray-400">•</span>
-            <span className="text-xs text-gray-400">320 pages</span>
-          </div>
-          <h3 className="text-2xl font-display font-bold text-church-navy mb-2 group-hover:text-church-gold transition-colors">
-            Soul Winning
-          </h3>
-          <p className="text-gray-500 text-sm leading-relaxed mb-4">
-            A practical guide to sharing your faith with boldness and love. Learn how to lead people to Christ and disciple them effectively.
-          </p>
           <Link
-            to="/books/soul-winning"
-            className="inline-flex bg-church-gold text-church-navy px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all items-center gap-2 text-sm"
+            to="/give"
+            className="border-2 border-church-gold/30 text-church-navy px-8 py-3.5 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
           >
-            <BookOpen className="w-4 h-4" />
-            Get Your Copy
-            <ChevronRight className="w-4 h-4" />
+            <Gift className="w-5 h-5" />
+            Partner With Us
           </Link>
         </div>
-      </motion.div>
-
-      {/* Book 3 - Relationship */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        viewport={{ once: true }}
-        whileHover={{ y: -12 }}
-        className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-church-gold/20 hover:border-church-gold/50"
-      >
-        <div className="absolute top-3 right-3 z-20">
-          <span className="inline-flex items-center gap-1.5 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-300"></span>
-            </span>
-            NEW
-          </span>
-        </div>
-
-        <div className="relative h-64 overflow-hidden bg-gray-200">
-          <img 
-            src="images/relationship-book.jpg" 
-            alt="Relationship"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      </div>
+      
+      {/* Right Column - Image with Quote */}
+      <div className="relative">
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+          <img
+            src="/images/prayer.jpg"
+            alt="Prayer at Generals of Grace"
+            className="w-full h-[400px] object-cover"
             onError={(e) => {
-              e.target.src = 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=500&fit=crop';
+              e.target.src = 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=600&h=500&fit=crop';
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-            <p className="text-white text-sm leading-relaxed">Building godly relationships that honor God</p>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-church-navy/80 to-transparent"></div>
         </div>
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-2 py-0.5 rounded">
-              Book 3
-            </span>
-            <span className="text-xs text-gray-400">•</span>
-            <span className="text-xs text-gray-400">288 pages</span>
-          </div>
-          <h3 className="text-2xl font-display font-bold text-church-navy mb-2 group-hover:text-church-gold transition-colors">
-            Relationship
-          </h3>
-          <p className="text-gray-500 text-sm leading-relaxed mb-4">
-            Building healthy, godly relationships that honor God and bless others. Discover the principles for lasting and fulfilling connections.
+        
+        {/* Quote Overlay */}
+        <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl max-w-xs border-l-4 border-church-gold">
+          <p className="text-gray-700 text-sm italic leading-relaxed">
+            "The effective, fervent prayer of a righteous man avails much."
           </p>
-          <Link
-            to="/books/relationship"
-            className="inline-flex bg-church-gold text-church-navy px-6 py-2.5 rounded-lg font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all items-center gap-2 text-sm"
-          >
-            <BookOpen className="w-4 h-4" />
-            Get Your Copy
-            <ChevronRight className="w-4 h-4" />
-          </Link>
+          <p className="text-church-gold font-semibold text-sm mt-2">James 5:16</p>
         </div>
-      </motion.div>
+        
+        {/* Stats */}
+        <div className="absolute -top-4 -right-4 bg-church-gold text-church-navy p-4 rounded-xl shadow-xl text-center">
+          <p className="text-2xl font-bold">24/7</p>
+          <p className="text-xs font-medium">Prayer Support</p>
+        </div>
+      </div>
     </div>
-
-    {/* 📅 Birthday Launch Announcement */}
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-      viewport={{ once: true }}
-      className="text-center bg-gradient-to-r from-church-gold/10 via-white to-church-gold/10 rounded-2xl p-8 md:p-12 border border-church-gold/20 max-w-4xl mx-auto"
-    >
-      <div className="flex items-center justify-center gap-3 mb-4">
-        <span className="text-3xl">🎂</span>
-        <span className="text-church-gold font-bold text-sm uppercase tracking-wider">Special Birthday Launch</span>
-        <span className="text-3xl">🎉</span>
-      </div>
-      <h3 className="text-2xl md:text-3xl font-display font-bold text-church-navy mb-3">
-        All Three Books Released on <span className="text-church-gold">August</span>
-      </h3>
-      <p className="text-gray-500 max-w-2xl mx-auto">
-        Pastor Andrew Osalor celebrates his birthday by releasing these three powerful books — 
-        a gift to the body of Christ that will equip, empower, and transform generations.
-      </p>
-      <div className="mt-6 flex flex-wrap justify-center gap-4">
-        <Link
-          to="/books"
-          className="bg-church-gold text-church-navy px-8 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center gap-2"
-        >
-          <Gift className="w-5 h-5" />
-          Get the Trilogy
-          <ChevronRight className="w-4 h-4" />
-        </Link>
-        <a
-          href="#books-carousel"
-          className="border-2 border-church-gold/30 text-church-navy px-8 py-3 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center gap-2"
-        >
-          <Heart className="w-5 h-5" />
-          Learn More
-        </a>
-      </div>
-    </motion.div>
-
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 }}
-      viewport={{ once: true }}
-      className="text-center mt-12"
-    >
-      <p className="text-gray-500 text-sm max-w-2xl mx-auto italic">
-        "These books are written to equip and empower you for Kingdom impact. Get your copies today and start your journey of transformation."
-      </p>
-      <p className="text-church-gold font-medium mt-2">— Pastor Andrew Osalor</p>
-    </motion.div>
   </div>
 </section>
 
@@ -1488,206 +1254,205 @@ const testimonies = [
       </section> */}
 
       {/* ==================== TESTIMONIES SECTION - CAROUSEL ==================== */}
-<section className="py-16 bg-gradient-to-br from-amber-50 to-white relative overflow-hidden">
-  {/* Decorative elements */}
-  <div className="absolute top-20 right-10 opacity-10">
-    <Quote className="w-32 h-32 text-church-gold" />
-  </div>
-  <div className="absolute bottom-20 left-10 opacity-10">
-    <Quote className="w-32 h-32 text-church-gold" />
-  </div>
-  
-  <div className="container-custom">
-    <div className="text-start mb-12">
-      <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Testimonies</span>
-      <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mt-2">
-        What GOD Is <span className="text-church-gold">Doing</span>
-      </h2>
-      <p className="text-gray-500 mt-1">Real stories of transformation</p>
-    </div>
+      <section className="py-16 bg-gradient-to-br from-amber-50 to-white relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-20 right-10 opacity-10">
+          <Quote className="w-32 h-32 text-church-gold" />
+        </div>
+        <div className="absolute bottom-20 left-10 opacity-10">
+          <Quote className="w-32 h-32 text-church-gold" />
+        </div>
 
-    {/* Carousel Container */}
-    <div className="relative max-w-5xl mx-auto">
-      {/* Main Carousel */}
-      <div className="overflow-hidden rounded-2xl">
-        <div 
-          className="flex transition-transform duration-700 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {testimonies.map((testimony, index) => (
-            <div 
-              key={index} 
-              className="min-w-full px-4"
-            >
-              <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
-                {/* Quote icon */}
-                <div className="flex items-center gap-2 text-church-gold mb-4">
-                  <Quote className="w-8 h-8 fill-church-gold/10" />
-                  <span className="text-sm font-medium text-church-gold/70">Testimony {index + 1}</span>
-                </div>
-                
-                {/* Quote text */}
-                <p className="text-gray-700 text-lg md:text-xl italic leading-relaxed mb-6">
-                  "{testimony.quote}"
-                </p>
-                
-                {/* Author info */}
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-church-gold to-amber-400 flex items-center justify-center text-white font-bold text-lg">
-                    {testimony.name.charAt(0)}
+        <div className="container-custom">
+          <div className="text-start mb-12">
+            <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Testimonies</span>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mt-2">
+              What GOD Is <span className="text-church-gold">Doing</span>
+            </h2>
+            <p className="text-gray-500 mt-1">Real stories of transformation</p>
+          </div>
+
+          {/* Carousel Container */}
+          <div className="relative max-w-5xl mx-auto">
+            {/* Main Carousel */}
+            <div className="overflow-hidden rounded-2xl">
+              <div
+                className="flex transition-transform duration-700 ease-in-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {testimonies.map((testimony, index) => (
+                  <div
+                    key={index}
+                    className="min-w-full px-4"
+                  >
+                    <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300">
+                      {/* Quote icon */}
+                      <div className="flex items-center gap-2 text-church-gold mb-4">
+                        <Quote className="w-8 h-8 fill-church-gold/10" />
+                        <span className="text-sm font-medium text-church-gold/70">Testimony {index + 1}</span>
+                      </div>
+
+                      {/* Quote text */}
+                      <p className="text-gray-700 text-lg md:text-xl italic leading-relaxed mb-6">
+                        "{testimony.quote}"
+                      </p>
+
+                      {/* Author info */}
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-church-gold to-amber-400 flex items-center justify-center text-white font-bold text-lg">
+                          {testimony.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-church-navy text-lg">{testimony.name}</p>
+                          <p className="text-sm text-gray-400">Soul Winner</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-church-navy text-lg">{testimony.name}</p>
-                    <p className="text-sm text-gray-400">Soul Winner</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-          ))}
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={() => setCurrentIndex(prev => prev === 0 ? testimonies.length - 1 : prev - 1)}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg hover:shadow-xl border border-gray-200 flex items-center justify-center text-church-navy hover:text-church-gold transition-all duration-300 z-10 hover:scale-110"
+              aria-label="Previous testimony"
+            >
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+            </button>
+
+            <button
+              onClick={() => setCurrentIndex(prev => prev === testimonies.length - 1 ? 0 : prev + 1)}
+              className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg hover:shadow-xl border border-gray-200 flex items-center justify-center text-church-navy hover:text-church-gold transition-all duration-300 z-10 hover:scale-110"
+              aria-label="Next testimony"
+            >
+              <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+            </button>
+
+            {/* Dot Indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {testimonies.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`transition-all duration-300 rounded-full ${currentIndex === index
+                    ? 'w-10 h-2.5 bg-church-gold'
+                    : 'w-2.5 h-2.5 bg-gray-300 hover:bg-church-gold/50'
+                    }`}
+                  aria-label={`Go to testimony ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+      {/* ==================== GALLERY SECTION - CHURCH IMAGES ==================== */}
+      <section className="py-16 bg-white relative overflow-hidden">
+        {/* Decorative gold accent line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-church-gold/30 to-transparent"></div>
 
-      {/* Navigation Buttons */}
-      <button
-        onClick={() => setCurrentIndex(prev => prev === 0 ? testimonies.length - 1 : prev - 1)}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg hover:shadow-xl border border-gray-200 flex items-center justify-center text-church-navy hover:text-church-gold transition-all duration-300 z-10 hover:scale-110"
-        aria-label="Previous testimony"
-      >
-        <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
-      </button>
-      
-      <button
-        onClick={() => setCurrentIndex(prev => prev === testimonies.length - 1 ? 0 : prev + 1)}
-        className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg hover:shadow-xl border border-gray-200 flex items-center justify-center text-church-navy hover:text-church-gold transition-all duration-300 z-10 hover:scale-110"
-        aria-label="Next testimony"
-      >
-        <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
-      </button>
+        <div className="container-custom">
+          {/* Section Header - RIGHT ALIGNED */}
+          <div className="text-end mb-12">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy">
+              From Our <span className="text-church-gold">Gallery</span>
+            </h2>
+            <div className="w-20 h-1 bg-church-gold rounded-full mt-3 ms-auto"></div>
+            <p className="text-gray-500 mt-3 max-w-2xl ms-auto">
+              Capturing moments of worship, fellowship, and God's goodness in our community
+            </p>
+          </div>
 
-      {/* Dot Indicators */}
-      <div className="flex justify-center gap-2 mt-8">
-        {testimonies.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`transition-all duration-300 rounded-full ${
-              currentIndex === index 
-                ? 'w-10 h-2.5 bg-church-gold' 
-                : 'w-2.5 h-2.5 bg-gray-300 hover:bg-church-gold/50'
-            }`}
-            aria-label={`Go to testimony ${index + 1}`}
-          />
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-{/* ==================== GALLERY SECTION - CHURCH IMAGES ==================== */}
-<section className="py-16 bg-white relative overflow-hidden">
-  {/* Decorative gold accent line */}
-  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-church-gold/30 to-transparent"></div>
-  
-  <div className="container-custom">
-    {/* Section Header - RIGHT ALIGNED */}
-    <div className="text-end mb-12">
-      <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy">
-        From Our <span className="text-church-gold">Gallery</span>
-      </h2>
-      <div className="w-20 h-1 bg-church-gold rounded-full mt-3 ms-auto"></div>
-      <p className="text-gray-500 mt-3 max-w-2xl ms-auto">
-        Capturing moments of worship, fellowship, and God's goodness in our community
-      </p>
-    </div>
+          {/* Image Grid - 5 Images with proper grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {/* Image 1 */}
+            <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+              <img
+                src="images/waship.jpg"
+                alt="Church worship"
+                className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <p className="text-sm font-semibold">Worship Service</p>
+              </div>
+            </div>
 
-    {/* Image Grid - 5 Images with proper grid */}
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-      {/* Image 1 */}
-      <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-        <img 
-          src="images/waship.jpg"
-          alt="Church worship"
-          className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-sm font-semibold">Worship Service</p>
+            {/* Image 2 */}
+            <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+              <img
+                src="images/pastor_pray_for_blink_person.jpg"
+                alt="pastor minister healing"
+                className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <p className="text-sm font-semibold">Pastor Ministering Healing</p>
+              </div>
+            </div>
+
+            {/* Image 3 */}
+            <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+              <img
+                src="images/congregation.jpg"
+                alt="congregation"
+                className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <p className="text-sm font-semibold">Congregation Worship</p>
+              </div>
+            </div>
+
+            {/* Image 4 */}
+            <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+              <img
+                src="images/pastor_need_down.jpg"
+                alt="Prayer Ministry"
+                className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <p className="text-sm font-semibold">Prayer & Worship</p>
+              </div>
+            </div>
+
+            {/* Image 5 */}
+            <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
+              <img
+                src="images/pastor_demostraste.jpg"
+                alt="pastor demostrate"
+                className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <p className="text-sm font-semibold">Demonstrating God's Power</p>
+              </div>
+            </div>
+          </div>
+
+          {/* View More Button - Links to Facebook */}
+          <div className="text-center mt-10">
+            <a
+              href="https://web.facebook.com/gogintlchurch"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-church-navy to-church-navy/90 text-white px-8 py-3.5 rounded-xl font-semibold hover:shadow-xl hover:shadow-church-navy/30 transition-all duration-300 hover:-translate-y-1"
+            >
+              <span>View More Photos</span>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+            </a>
+          </div>
         </div>
-      </div>
-
-      {/* Image 2 */}
-      <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-        <img 
-          src="images/pastor_pray_for_blink_person.jpg"
-          alt="pastor minister healing"
-          className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-sm font-semibold">Pastor Ministering Healing</p>
-        </div>
-      </div>
-
-      {/* Image 3 */}
-      <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-        <img 
-          src="images/congregation.jpg"
-          alt="congregation"
-          className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-sm font-semibold">Congregation Worship</p>
-        </div>
-      </div>
-
-      {/* Image 4 */}
-      <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-        <img 
-          src="images/pastor_need_down.jpg"
-          alt="Prayer Ministry"
-          className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-sm font-semibold">Prayer & Worship</p>
-        </div>
-      </div>
-
-      {/* Image 5 */}
-      <div className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500">
-        <img 
-          src="images/pastor_demostraste.jpg"
-          alt="pastor demostrate"
-          className="w-full h-56 md:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-sm font-semibold">Demonstrating God's Power</p>
-        </div>
-      </div>
-    </div>
-
-    {/* View More Button - Links to Facebook */}
-    <div className="text-center mt-10">
-      <a 
-        href="https://web.facebook.com/gogintlchurch"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-3 bg-gradient-to-r from-church-navy to-church-navy/90 text-white px-8 py-3.5 rounded-xl font-semibold hover:shadow-xl hover:shadow-church-navy/30 transition-all duration-300 hover:-translate-y-1"
-      >
-        <span>View More Photos</span>
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-      </a>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ==================== SOUL WINNING CTA SECTION ==================== */}
       <section className="py-20 bg-gradient-to-br from-church-navy via-church-navy/95 to-church-gold/90 text-white relative overflow-hidden">
@@ -1697,10 +1462,10 @@ const testimonies = [
             backgroundSize: '30px 30px'
           }}></div>
         </div>
-        
+
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-church-gold/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-church-gold/5 rounded-full blur-3xl"></div>
-        
+
         <div className="container-custom relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-2.5 rounded-full text-sm font-medium mb-8 border border-white/20">
@@ -1709,33 +1474,33 @@ const testimonies = [
               <span className="w-1.5 h-1.5 bg-white/30 rounded-full"></span>
               <span className="text-yellow-300">Matthew 9:37</span>
             </div>
-            
+
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
               Win Souls and <br />
               <span className="text-church-gold">Receive Rewards</span>
             </h2>
-            
+
             <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
               Every soul you win brings eternal rewards and unlocks God's abundant blessings in your life.
             </p>
-            
+
             <div className="flex flex-wrap justify-center gap-4">
-              <Link 
-                to="/soul-winning" 
+              <Link
+                to="/soul-winning"
                 className="bg-church-gold text-church-navy px-8 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition-all hover:shadow-2xl hover:shadow-church-gold/30 inline-flex items-center gap-2 text-lg"
               >
                 <Heart className="w-5 h-5" />
                 Join Soul Winning
               </Link>
-              <Link 
-                to="/give" 
+              <Link
+                to="/give"
                 className="border-2 border-white/50 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-all hover:border-white inline-flex items-center gap-2 text-lg"
               >
                 <Gift className="w-5 h-5" />
                 Give Online
               </Link>
             </div>
-            
+
             <div className="mt-12 flex items-center justify-center gap-6 text-sm text-white/40">
               <span>✦ Faith</span>
               <span className="w-px h-4 bg-white/20"></span>
@@ -1751,40 +1516,40 @@ const testimonies = [
       <section className="py-20 bg-gradient-to-br from-church-gold/10 via-white to-church-gold/5 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-church-gold/5 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-church-navy/5 rounded-full blur-3xl"></div>
-        
+
         <div className="container-custom relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-church-navy/5 backdrop-blur-sm px-6 py-2.5 rounded-full text-sm font-medium text-church-navy mb-6 border border-church-navy/10">
               <Crown className="w-4 h-4 text-church-gold" />
               Your Calling Awaits
             </div>
-            
+
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-church-navy mb-6 leading-tight">
               Ready to Be a <br />
               <span className="gradient-text">General of Grace?</span>
             </h2>
-            
+
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
               Join us in our mission to raise generals of grace and impact the world for Christ.
             </p>
-            
+
             <div className="flex flex-wrap justify-center gap-4">
-              <Link 
-                to="/register" 
+              <Link
+                to="/register"
                 className="bg-church-navy text-white px-10 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition-all hover:shadow-2xl hover:shadow-church-navy/30 inline-flex items-center gap-2 text-lg"
               >
                 <Users className="w-5 h-5" />
                 Join Our Church
               </Link>
-              <Link 
-                to="/contact" 
+              <Link
+                to="/contact"
                 className="border-2 border-church-navy/30 text-church-navy px-10 py-4 rounded-lg font-semibold hover:bg-church-navy/5 transition-all hover:border-church-navy inline-flex items-center gap-2 text-lg"
               >
                 <MessageSquare className="w-5 h-5" />
                 Contact Us
               </Link>
             </div>
-            
+
             <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
