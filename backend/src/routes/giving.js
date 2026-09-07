@@ -7,6 +7,12 @@ const givingController = require('../controllers/givingController');
 // Public webhook (no auth)
 router.post('/webhook', givingController.webhook);
 
+// ============================================
+// ✅ PAYMENT PROVIDER ROUTES (Admin only)
+// ============================================
+router.get('/provider', authenticateUser, requireAdmin, givingController.getPaymentProvider);
+router.post('/provider', authenticateUser, requireAdmin, givingController.switchPaymentProvider);
+
 // Protected routes
 router.post('/initialize', authenticateUser, validateGiving, givingController.initializePayment);
 router.get('/history', authenticateUser, givingController.getHistory);

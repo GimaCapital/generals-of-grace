@@ -1,3 +1,4 @@
+// backend/src/config/database.js
 const { db, FieldValue, Timestamp } = require('./firebase');
 const { logger } = require('../utils/logger');
 
@@ -16,7 +17,7 @@ class Database {
       }
       return { id: doc.id, ...doc.data() };
     } catch (error) {
-      logger.error(`Error getting document ${collection}/${id}:`, error);
+      // logger.error(`Error getting document ${collection}/${id}:`, error);
       throw error;
     }
   }
@@ -48,13 +49,13 @@ class Database {
       
       return results;
     } catch (error) {
-      logger.error(`Error getting documents from ${collection}:`, error);
+      // logger.error(`Error getting documents from ${collection}:`, error);
       throw error;
     }
   }
 
   /**
-   * Create a new document
+   * Create a new document with AUTO-GENERATED ID
    */
   static async createDoc(collection, data) {
     try {
@@ -65,7 +66,24 @@ class Database {
       });
       return docRef.id;
     } catch (error) {
-      logger.error(`Error creating document in ${collection}:`, error);
+      // logger.error(`Error creating document in ${collection}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * ✅ NEW: Create a document with CUSTOM ID
+   */
+  static async createDocWithId(collection, id, data) {
+    try {
+      await db.collection(collection).doc(id).set({
+        ...data,
+        createdAt: FieldValue.serverTimestamp(),
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+      return id;
+    } catch (error) {
+      // logger.error(`Error creating document ${collection}/${id}:`, error);
       throw error;
     }
   }
@@ -81,7 +99,7 @@ class Database {
       });
       return true;
     } catch (error) {
-      logger.error(`Error updating document ${collection}/${id}:`, error);
+      // logger.error(`Error updating document ${collection}/${id}:`, error);
       throw error;
     }
   }
@@ -94,7 +112,7 @@ class Database {
       await db.collection(collection).doc(id).delete();
       return true;
     } catch (error) {
-      logger.error(`Error deleting document ${collection}/${id}:`, error);
+      // logger.error(`Error deleting document ${collection}/${id}:`, error);
       throw error;
     }
   }
@@ -109,7 +127,7 @@ class Database {
       });
       return true;
     } catch (error) {
-      logger.error(`Error incrementing field ${collection}/${id}/${field}:`, error);
+      // logger.error(`Error incrementing field ${collection}/${id}/${field}:`, error);
       throw error;
     }
   }
@@ -154,7 +172,7 @@ class Database {
         },
       };
     } catch (error) {
-      logger.error(`Error getting paginated results from ${collection}:`, error);
+      // logger.error(`Error getting paginated results from ${collection}:`, error);
       throw error;
     }
   }
@@ -180,7 +198,7 @@ class Database {
       await batch.commit();
       return true;
     } catch (error) {
-      logger.error('Error performing batch write:', error);
+      // logger.error('Error performing batch write:', error);
       throw error;
     }
   }

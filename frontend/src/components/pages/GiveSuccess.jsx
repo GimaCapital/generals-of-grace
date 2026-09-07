@@ -1,19 +1,28 @@
 // src/components/pages/GiveSuccess.jsx
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 
 function GiveSuccess() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [provider, setProvider] = useState('');
 
   useEffect(() => {
+    // Get provider from URL params or state
+    const params = new URLSearchParams(location.search);
+    const providerParam = params.get('provider');
+    if (providerParam) {
+      setProvider(providerParam);
+    }
+
     // Auto redirect to home after 5 seconds
     const timer = setTimeout(() => {
       navigate('/');
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, location]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
@@ -26,9 +35,14 @@ function GiveSuccess() {
         <h1 className="text-3xl font-display font-bold text-church-navy mb-2">
           Payment Successful! 🎉
         </h1>
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 mb-2">
           Thank you for your generous giving to Generals of Grace Intl Church.
         </p>
+        {provider && (
+          <p className="text-sm text-gray-500 mb-2">
+            Payment processed via <span className="font-semibold capitalize">{provider}</span>
+          </p>
+        )}
         <p className="text-sm text-gray-500 mb-6">
           A receipt has been sent to your email.
         </p>

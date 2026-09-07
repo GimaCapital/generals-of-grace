@@ -1,107 +1,132 @@
 // backend/src/models/Settings.js
 const Database = require('../config/database');
-const { logger } = require('../utils/logger');
+// const { logger } = require('../utils/logger');
 
 const COLLECTION = 'settings';
+const DOCUMENT_ID = 'app_settings'; // ✅ Fixed ID prevents duplicate documents
 
 class Settings {
+  static getBaseStructure() {
+    return {};
+  }
+
+  /**
+   * ✅ Flatten nested data - removes any 'data' field
+   */
+  static flattenData(obj) {
+    if (!obj || typeof obj !== 'object') return obj;
+    
+    const result = { ...obj };
+    
+    // ✅ If there's a 'data' field, flatten it
+    if (result.data && typeof result.data === 'object') {
+      const nested = result.data;
+      delete result.data;
+      const flattenedNested = this.flattenData(nested);
+      Object.assign(result, flattenedNested);
+    }
+    
+    // ✅ Clean up any Firestore timestamp objects
+    for (const key in result) {
+      if (result[key] && typeof result[key] === 'object' && result[key]._seconds !== undefined) {
+        const seconds = result[key]._seconds || 0;
+        const nanos = result[key]._nanoseconds || 0;
+        result[key] = new Date(seconds * 1000 + nanos / 1000000).toISOString();
+      }
+    }
+    
+    return result;
+  }
+
   static async get() {
     try {
-      const snapshot = await Database.getCollection(COLLECTION).limit(1).get();
-      if (snapshot.empty) {
+      // ✅ Get document with fixed ID - prevents duplicates
+      let doc = await Database.getDoc(COLLECTION, DOCUMENT_ID);
+      
+      if (!doc) {
+        // ✅ Only create if it doesn't exist - using createDocWithId
         const defaults = {
-          siteName: 'Generals of Grace Intl Church',
-          siteEmail: 'info@generalsofgrace.org',
-          sitePhone: '+234 800 000 0000',
-          siteAddress: '123 Church Road, Port Harcourt, Rivers State, Nigeria',
-          enableRegistration: true,
-          enableGiving: true,
-          enableLiveStream: true,
-          theme: 'light',
-          notifications: {
-            email: true,
-            sms: false,
-            push: true
-          },
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         };
-        // ✅ Create the default document
-        const id = await Database.createDoc(COLLECTION, defaults);
-        return { id, ...defaults };
+        await Database.createDocWithId(COLLECTION, DOCUMENT_ID, defaults);
+        // logger.info(`✅ Settings document created with ID: ${DOCUMENT_ID}`);
+        return { id: DOCUMENT_ID, ...defaults };
       }
       
-      const doc = snapshot.docs[0];
-      const data = doc.data();
+      // ✅ Flatten any nested data
+      let data = this.flattenData(doc);
       
-      // ✅ Return clean data without duplicates
       return { 
-        id: doc.id, 
-        siteName: data.siteName || 'Generals of Grace Intl Church',
-        siteEmail: data.siteEmail || 'info@generalsofgrace.org',
-        sitePhone: data.sitePhone || '+234 800 000 0000',
-        siteAddress: data.siteAddress || '123 Church Road, Port Harcourt, Rivers State, Nigeria',
-        enableRegistration: data.enableRegistration !== undefined ? data.enableRegistration : true,
-        enableGiving: data.enableGiving !== undefined ? data.enableGiving : true,
-        enableLiveStream: data.enableLiveStream !== undefined ? data.enableLiveStream : true,
-        theme: data.theme || 'light',
-        notifications: {
-          email: data.notifications?.email !== undefined ? data.notifications.email : true,
-          sms: data.notifications?.sms !== undefined ? data.notifications.sms : false,
-          push: data.notifications?.push !== undefined ? data.notifications.push : true
-        },
-        createdAt: data.createdAt || new Date().toISOString(),
-        updatedAt: data.updatedAt || new Date().toISOString()
+        id: DOCUMENT_ID, 
+        ...data
       };
     } catch (error) {
-      logger.error('Error getting settings:', error);
+      // logger.error('Error getting settings:', error);
       throw error;
     }
   }
 
   static async update(data) {
     try {
-      // ✅ Clean the data before saving - remove any duplicate fields
-      const cleanData = {
-        siteName: data.siteName || 'Generals of Grace Intl Church',
-        siteEmail: data.siteEmail || 'info@generalsofgrace.org',
-        sitePhone: data.sitePhone || '+234 800 000 0000',
-        siteAddress: data.siteAddress || '123 Church Road, Port Harcourt, Rivers State, Nigeria',
-        enableRegistration: data.enableRegistration !== undefined ? data.enableRegistration : true,
-        enableGiving: data.enableGiving !== undefined ? data.enableGiving : true,
-        enableLiveStream: data.enableLiveStream !== undefined ? data.enableLiveStream : true,
-        theme: data.theme || 'light',
-        notifications: {
-          email: data.notifications?.email !== undefined ? data.notifications.email : true,
-          sms: data.notifications?.sms !== undefined ? data.notifications.sms : false,
-          push: data.notifications?.push !== undefined ? data.notifications.push : true
-        },
-        updatedAt: new Date().toISOString()
-      };
-
-      const snapshot = await Database.getCollection(COLLECTION).limit(1).get();
-      let id;
+      // ✅ Flatten incoming data first
+      const flattenedData = this.flattenData(data);
       
-      if (snapshot.empty) {
-        // ✅ Create new document with clean data
-        cleanData.createdAt = new Date().toISOString();
-        id = await Database.createDoc(COLLECTION, cleanData);
-      } else {
-        // ✅ Update existing document - completely replace with clean data
-        id = snapshot.docs[0].id;
-        // ✅ Keep the original createdAt
-        const existingData = snapshot.docs[0].data();
-        cleanData.createdAt = existingData.createdAt || new Date().toISOString();
-        
-        // ✅ Use set with merge to override all fields
-        await Database.updateDoc(COLLECTION, id, cleanData);
+      // ✅ Get existing document
+      let existingData = await Database.getDoc(COLLECTION, DOCUMENT_ID);
+      
+      if (!existingData) {
+        // ✅ Create if it doesn't exist - using createDocWithId
+        const defaults = {
+          ...flattenedData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        await Database.createDocWithId(COLLECTION, DOCUMENT_ID, defaults);
+        // logger.info(`✅ Settings document created in update with ID: ${DOCUMENT_ID}`);
+        return { id: DOCUMENT_ID, ...defaults };
       }
       
-      return { id, ...cleanData };
+      // ✅ Flatten existing data
+      existingData = this.flattenData(existingData);
+      
+      // ✅ Merge: Keep ALL fields
+      const mergedData = {
+        ...existingData,
+        ...flattenedData,
+        updatedAt: new Date().toISOString()
+      };
+      
+      // ✅ Preserve createdAt
+      if (!mergedData.createdAt && existingData.createdAt) {
+        mergedData.createdAt = existingData.createdAt;
+      } else if (!mergedData.createdAt) {
+        mergedData.createdAt = new Date().toISOString();
+      }
+      
+      // ✅ Update the document with fixed ID
+      await Database.updateDoc(COLLECTION, DOCUMENT_ID, mergedData);
+      
+      // logger.info(`✅ Settings updated (${Object.keys(flattenedData).length} fields changed)`);
+      return { id: DOCUMENT_ID, ...mergedData };
     } catch (error) {
-      logger.error('Error updating settings:', error);
+      // logger.error('Error updating settings:', error);
       throw error;
     }
+  }
+
+  static deepMerge(target, source) {
+    const result = { ...target };
+    
+    for (const key in source) {
+      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        result[key] = this.deepMerge(target[key] || {}, source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+    
+    return result;
   }
 }
 

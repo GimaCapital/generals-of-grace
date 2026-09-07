@@ -9,10 +9,9 @@ import {
   Event, 
   Payments,
   ArrowUpward,
-  ArrowDownward  
+  ArrowDownward,
+  CreditCard
 } from '@mui/icons-material';
-
-// ✅ Import utility functions
 import { formatCurrency, formatDate } from '../../utils';
 
 function AdminDashboard() {
@@ -25,22 +24,29 @@ function AdminDashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [recentGiving, setRecentGiving] = useState([]);
+  const [paymentProvider, setPaymentProvider] = useState('flutterwave');
 
   useEffect(() => {
     fetchDashboardData();
+    fetchPaymentProvider();
   }, []);
+
+  const fetchPaymentProvider = async () => {
+    try {
+      const response = await givingAPI.getPaymentProvider();
+      if (response.data?.success) {
+        setPaymentProvider(response.data.provider);
+      }
+    } catch (error) {
+      console.error('Error fetching payment provider:', error);
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
       
-      // console.log('🔍 Fetching dashboard data...');
-      
-      // ✅ Fetch users
       const usersRes = await userAPI.getAll();
-      // console.log('📊 Users response:', usersRes.data);
-      
-      // ✅ Get user count
       let userCount = 0;
       if (Array.isArray(usersRes.data)) {
         userCount = usersRes.data.length;
@@ -50,13 +56,11 @@ function AdminDashboard() {
         userCount = usersRes.data.pagination.total;
       }
       
-      // ✅ Fetch sermons and events
       const [sermonsRes, eventsRes] = await Promise.all([
         sermonAPI.getAll({ limit: 1 }),
         eventAPI.getAll({ limit: 1 })
       ]);
 
-      // ✅ Get sermon count
       let sermonCount = 0;
       if (sermonsRes.data?.pagination?.total) {
         sermonCount = sermonsRes.data.pagination.total;
@@ -64,7 +68,6 @@ function AdminDashboard() {
         sermonCount = sermonsRes.data.data.length;
       }
 
-      // ✅ Get event count
       let eventCount = 0;
       if (eventsRes.data?.pagination?.total) {
         eventCount = eventsRes.data.pagination.total;
@@ -72,21 +75,11 @@ function AdminDashboard() {
         eventCount = eventsRes.data.data.length;
       }
 
-      // ✅ Fetch ALL giving records (limit 1000 to get all)
       const historyRes = await givingAPI.getHistory({ limit: 1000 });
-      
-      // console.log('📊 Recent giving response:', historyRes.data);
-      
-      // ✅ Get the data array
       const givingData = historyRes.data?.data || [];
-      
-      // ✅ Show ALL giving records (no slice, show all)
       setRecentGiving(givingData);
       
-      // ✅ Calculate total from ALL giving records
       const totalGiving = givingData.reduce((sum, item) => sum + (item.amount || 0), 0);
-      // console.log('📊 Total giving calculated:', totalGiving);
-      // console.log('📊 Number of records:', givingData.length);
 
       setStats({
         sermons: sermonCount,
@@ -97,7 +90,6 @@ function AdminDashboard() {
       
     } catch (error) {
       console.error('❌ Error fetching dashboard data:', error);
-      console.error('❌ Error details:', error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
@@ -151,6 +143,10 @@ function AdminDashboard() {
       <div className="mb-8">
         <h1 className="text-3xl font-display font-bold text-church-navy">Dashboard</h1>
         <p className="text-gray-600">Welcome back, {userProfile?.displayName || 'Admin'}!</p>
+        <div className="mt-2 inline-flex items-center gap-2 text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+          <CreditCard className="w-4 h-4 text-church-gold" />
+          Payment Provider: <span className="font-semibold capitalize">{paymentProvider}</span>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -176,7 +172,7 @@ function AdminDashboard() {
         ))}
       </div>
 
-      {/* Recent Giving - Shows ALL records */}
+      {/* Recent Giving */}
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-display font-bold text-church-navy mb-4">Recent Giving</h2>
         {recentGiving.length === 0 ? (
@@ -191,6 +187,7 @@ function AdminDashboard() {
                   <th className="pb-2 font-medium">Type</th>
                   <th className="pb-2 font-medium">Date</th>
                   <th className="pb-2 font-medium">Status</th>
+                  <th className="pb-2 font-medium">Provider</th>
                 </tr>
               </thead>
               <tbody>
@@ -209,6 +206,12 @@ function AdminDashboard() {
                           : 'bg-red-100 text-red-800'
                       }`}>
                         {giving.status || 'pending'}
+                      </span>
+                    </td>
+                    <td className="py-3 text-sm">
+                      <span className="text-xs font-medium capitalize flex items-center gap-1">
+                        <CreditCard className="w-3 h-3 text-gray-400" />
+                        {giving.provider || 'flutterwave'}
                       </span>
                     </td>
                   </tr>

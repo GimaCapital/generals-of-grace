@@ -20,4 +20,8 @@ const settingsController = require('../controllers/settingsController');
 router.get('/', settingsController.getSettings);
 router.put('/', settingsController.updateSettings);
 
+// ✅ Payment provider routes
+router.get('/payment-provider', settingsController.getPaymentProvider);
+router.put('/payment-provider', settingsController.updatePaymentProvider);
+
 module.exports = router;

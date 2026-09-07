@@ -6,6 +6,71 @@ const { sendEmail } = require('../services/emailService');
 const { generateReceipt } = require('../services/receiptService');
 const { logger } = require('../utils/logger');
 
+// ============================================
+// ✅ PAYMENT PROVIDER FUNCTIONS
+// ============================================
+
+/**
+ * Get current payment provider
+ */
+exports.getPaymentProvider = async (req, res) => {
+  try {
+    const provider = await paymentService.getProvider();
+    res.json({
+      success: true,
+      provider: provider,
+    });
+  } catch (error) {
+    // logger.error('Error getting payment provider:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error getting payment provider',
+    });
+  }
+};
+
+/**
+ * Switch payment provider (Admin only)
+ */
+exports.switchPaymentProvider = async (req, res) => {
+  try {
+    const { provider } = req.body;
+
+    if (!provider || (provider !== 'paystack' && provider !== 'flutterwave')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid provider. Must be "paystack" or "flutterwave"',
+      });
+    }
+
+    const success = await paymentService.setProvider(provider);
+    
+    if (!success) {
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to switch payment provider',
+      });
+    }
+    
+    res.json({
+      success: true,
+      provider: provider,
+      message: `Payment provider switched to ${provider.charAt(0).toUpperCase() + provider.slice(1)}`,
+    });
+    
+  } catch (error) {
+    // logger.error('Error switching payment provider:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error switching payment provider',
+    });
+  }
+};
+
+// ============================================
+// PAYMENT FUNCTIONS
+// ============================================
+
 /**
  * Initialize payment
  */
@@ -14,7 +79,6 @@ exports.initializePayment = async (req, res) => {
     const { amount, type, currency = 'NGN' } = req.body;
     const userId = req.user.uid;
 
-    // ✅ Validate required fields
     if (!amount || amount < 100) {
       return res.status(400).json({
         success: false,
@@ -29,7 +93,6 @@ exports.initializePayment = async (req, res) => {
       });
     }
 
-    // ✅ Get user from database
     const user = await User.getById(userId);
     if (!user) {
       return res.status(404).json({
@@ -38,10 +101,9 @@ exports.initializePayment = async (req, res) => {
       });
     }
 
-    // ✅ Generate reference BEFORE creating giving record
     const reference = `GOG-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const currentProvider = await paymentService.getProvider();
 
-    // ✅ Create giving record with the generated reference
     const giving = await Giving.create({
       userId,
       amount,
@@ -52,13 +114,14 @@ exports.initializePayment = async (req, res) => {
       reference: reference,
       ip: req.ip,
       userAgent: req.get('user-agent'),
+      provider: currentProvider,
+      // ✅ REMOVED: paymentMethod (duplicate)
     });
 
-    // ✅ Log what we're sending
-    logger.info(`📦 Initializing payment for ${user.email}: ${amount} ${currency}`);
-    logger.info(`📦 Reference: ${reference}`);
+    // logger.info(`📦 Initializing payment for ${user.email}: ${amount} ${currency}`);
+    // logger.info(`📦 Reference: ${reference}`);
+    // logger.info(`📦 Provider: ${currentProvider}`);
 
-    // ✅ Initialize payment with Flutterwave
     const payment = await paymentService.initializePayment({
       amount,
       currency,
@@ -70,24 +133,44 @@ exports.initializePayment = async (req, res) => {
       type,
     });
 
-    // ✅ Update giving record with payment details
-    await Giving.update(giving.id, {
-      flutterwaveRef: payment.data.tx_ref,
-      paymentLink: payment.data.link,
-    });
+    const actualProvider = payment.provider || currentProvider;
 
-    logger.info(`💰 Payment initialized: ${reference}`);
-    
+    const updateData = {
+      provider: actualProvider,
+      // ✅ REMOVED: paymentMethod (duplicate)
+    };
+
+    if (actualProvider === 'paystack') {
+      updateData.paystackRef = payment.data.reference;
+      // ✅ REMOVED: paymentReference (duplicate)
+      updateData.paymentLink = payment.data.authorization_url;
+    } else {
+      updateData.flutterwaveRef = payment.data.tx_ref;
+      // ✅ REMOVED: paymentReference (duplicate)
+      updateData.paymentLink = payment.data.link;
+    }
+
+    await Giving.update(giving.id, updateData);
+
+    // logger.info(`💰 Payment initialized: ${reference} using ${actualProvider}`);
+
+    const responseData = {
+      authorization_url: payment.data.link || payment.data.authorization_url,
+      reference: reference,
+      titheNumber: user.titheNumber,
+      provider: actualProvider,
+    };
+
+    if (actualProvider === 'paystack') {
+      responseData.access_code = payment.data.access_code;
+    }
+
     res.json({
       success: true,
-      data: {
-        authorization_url: payment.data.link,
-        reference: reference,
-        titheNumber: user.titheNumber,
-      },
+      data: responseData,
     });
   } catch (error) {
-    logger.error('Payment initialization error:', error);
+    // logger.error('Payment initialization error:', error);
     console.error('❌ Error details:', error.message);
     
     res.status(500).json({
@@ -98,19 +181,82 @@ exports.initializePayment = async (req, res) => {
 };
 
 /**
- * Verify payment webhook
+ * Verify payment webhook (supports both providers)
  */
 exports.webhook = async (req, res) => {
   try {
     const { event, data } = req.body;
-    const signature = req.headers['verif-hash'];
+    const signature = req.headers['verif-hash'] || req.headers['x-paystack-signature'];
 
-    if (signature !== process.env.FLUTTERWAVE_SECRET_HASH) {
-      logger.warn('Invalid webhook signature');
-      return res.status(401).json({ success: false, message: 'Invalid signature' });
+    let provider = 'flutterwave';
+    let reference = data?.tx_ref || data?.reference;
+
+    if (signature && req.headers['x-paystack-signature']) {
+      provider = 'paystack';
+      const crypto = require('crypto');
+      const hash = crypto
+        .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+        .update(JSON.stringify(req.body))
+        .digest('hex');
+
+      if (hash !== signature) {
+        logger.warn('Invalid Paystack webhook signature');
+        return res.status(401).json({ success: false, message: 'Invalid signature' });
+      }
+    } else if (signature && req.headers['verif-hash']) {
+      provider = 'flutterwave';
+      if (signature !== process.env.FLUTTERWAVE_SECRET_HASH) {
+        logger.warn('Invalid Flutterwave webhook signature');
+        return res.status(401).json({ success: false, message: 'Invalid signature' });
+      }
     }
 
-    if (event === 'charge.completed') {
+    if (provider === 'paystack' && event === 'charge.success') {
+      const { reference, amount, currency, customer, metadata } = data;
+
+      const giving = await Giving.getByPaystackRef(reference);
+      if (!giving) {
+        logger.warn(`Giving record not found for ref: ${reference}`);
+        return res.status(404).json({ success: false, message: 'Record not found' });
+      }
+
+      if (data.status === 'success') {
+        await Giving.markSuccessful(giving.id, {
+          ...data,
+          provider: provider,
+        });
+        await User.updateTotalGiven(giving.userId, giving.amount);
+        // ✅ REMOVED: paymentMethod update (duplicate)
+
+        const receiptUrl = await generateReceipt({
+          ...giving,
+          reference: reference,
+          amount: amount || giving.amount,
+          currency: currency || giving.currency || 'NGN',
+          provider: provider,
+        });
+
+        await Giving.update(giving.id, { receiptUrl });
+
+        await sendEmail({
+          to: customer?.email || giving.email,
+          template: 'receipt',
+          data: {
+            ...giving,
+            reference: reference,
+            receiptUrl,
+            amount: amount || giving.amount,
+            currency: currency || giving.currency || 'NGN',
+            provider: provider,
+          },
+        });
+
+        // logger.info(`✅ Paystack payment successful: ${reference}`);
+      } else {
+        await Giving.markFailed(giving.id, data?.gateway_response || 'Payment failed');
+        logger.warn(`❌ Paystack payment failed: ${reference}`);
+      }
+    } else if (provider === 'flutterwave' && event === 'charge.completed') {
       const { tx_ref, status, amount, currency, customer } = data;
 
       const giving = await Giving.getByFlutterwaveRef(tx_ref);
@@ -120,14 +266,19 @@ exports.webhook = async (req, res) => {
       }
 
       if (status === 'successful') {
-        await Giving.markSuccessful(giving.id, data);
+        await Giving.markSuccessful(giving.id, {
+          ...data,
+          provider: provider,
+        });
         await User.updateTotalGiven(giving.userId, giving.amount);
+        // ✅ REMOVED: paymentMethod update (duplicate)
 
         const receiptUrl = await generateReceipt({
           ...giving,
           reference: giving.reference || tx_ref,
           amount: amount || giving.amount,
           currency: currency || giving.currency || 'NGN',
+          provider: provider,
         });
 
         await Giving.update(giving.id, { receiptUrl });
@@ -141,40 +292,38 @@ exports.webhook = async (req, res) => {
             receiptUrl,
             amount: amount || giving.amount,
             currency: currency || giving.currency || 'NGN',
+            provider: provider,
           },
         });
 
-        logger.info(`✅ Payment successful: ${giving.reference}`);
+        // logger.info(`✅ Flutterwave payment successful: ${giving.reference}`);
       } else {
         await Giving.markFailed(giving.id, data?.failure_reason || 'Payment failed');
-        logger.warn(`❌ Payment failed: ${giving.reference}`);
+        logger.warn(`❌ Flutterwave payment failed: ${giving.reference}`);
       }
     }
 
     res.sendStatus(200);
   } catch (error) {
-    logger.error('Webhook processing error:', error);
+    // logger.error('Webhook processing error:', error);
     res.status(500).json({ success: false, message: 'Webhook processing failed' });
   }
 };
 
 /**
- * ✅ UPDATED: Get giving history - Admins see ALL, users see their own
+ * Get giving history - Admins see ALL, users see their own
  */
 exports.getHistory = async (req, res) => {
   try {
     const userId = req.user.uid;
     const { page = 1, limit = 20 } = req.query;
     
-    // ✅ Check if user is admin
     const user = await User.getById(userId);
     let history;
     
     if (user?.role === 'admin') {
-      // ✅ Admin gets ALL giving records
       history = await Giving.getAllGiving(parseInt(page), parseInt(limit));
     } else {
-      // ✅ Regular user gets only their records
       history = await Giving.getByUserId(userId, parseInt(page), parseInt(limit));
     }
     
@@ -184,7 +333,7 @@ exports.getHistory = async (req, res) => {
       pagination: history.pagination,
     });
   } catch (error) {
-    logger.error('Get history error:', error);
+    // logger.error('Get history error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching giving history',
@@ -193,22 +342,19 @@ exports.getHistory = async (req, res) => {
 };
 
 /**
- * ✅ UPDATED: Get giving stats - Admins see ALL, users see their own
+ * Get giving stats - Admins see ALL, users see their own
  */
 exports.getStats = async (req, res) => {
   try {
     const userId = req.user.uid;
     const { year } = req.query;
     
-    // ✅ Check if user is admin
     const user = await User.getById(userId);
     let stats;
     
     if (user?.role === 'admin') {
-      // ✅ Admin gets ALL giving stats
       stats = await Giving.getAllStats(year ? parseInt(year) : null);
     } else {
-      // ✅ Regular user gets only their stats
       stats = await Giving.getStats(year ? parseInt(year) : null);
     }
     
@@ -217,7 +363,7 @@ exports.getStats = async (req, res) => {
       data: stats,
     });
   } catch (error) {
-    logger.error('Get stats error:', error);
+    // logger.error('Get stats error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching giving stats',
@@ -254,7 +400,7 @@ exports.getTransaction = async (req, res) => {
       data: transaction,
     });
   } catch (error) {
-    logger.error('Get transaction error:', error);
+    // logger.error('Get transaction error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching transaction',
@@ -299,7 +445,7 @@ exports.generateReceipt = async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error('Generate receipt error:', error);
+    // logger.error('Generate receipt error:', error);
     res.status(500).json({
       success: false,
       message: 'Error generating receipt',
@@ -322,7 +468,7 @@ exports.getUserTotal = async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error('Get user total error:', error);
+    // logger.error('Get user total error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching total giving',

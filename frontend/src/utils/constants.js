@@ -4,19 +4,7 @@
 
 // Church Information
 export const CHURCH_INFO = {
-  name: 'Generals of Grace Intl Church',
-  shortName: 'Generals of Grace',
-  acronym: 'GOG',
-  email: 'info@generalsofgrace.org',
-  phone: '+234 800 000 0000',
-  address: '123 Church Road, Port Harcourt, Rivers State, Nigeria',
-  website: 'https://generalsofgrace.org',
-  social: {
-    facebook: 'https://facebook.com/generalsofgrace',
-    twitter: 'https://twitter.com/generalsofgrace',
-    instagram: 'https://instagram.com/generalsofgrace',
-    youtube: 'https://youtube.com/generalsofgrace',
-  },
+ 
 };
 
 // Giving Types
@@ -115,9 +103,9 @@ export const PRESET_AMOUNTS = [1000, 2000, 5000, 10000, 20000, 50000];
 
 // Service Times
 export const SERVICE_TIMES = [
-  { day: 'Sunday', time: '8:00 AM' },
-  { day: 'Sunday', time: '10:00 AM' },
-  { day: 'Wednesday', time: '6:00 PM' },
+  { day: 'Sunday', time: '8:30 AM' },
+  // { day: 'Sunday', time: '10:00 AM' },
+  { day: 'Wednesday', time: '5:00 PM' },
 ];
 
 // Navigation Links

@@ -154,7 +154,7 @@ function Home() {
   return (
     <div>
       {/* ==================== HERO SECTION - WITH IMG TAG ==================== */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center bg-black overflow-hidden">
         {/* Background Image as <img> */}
         <div className="absolute inset-0 overflow-hidden">
           <img
@@ -177,6 +177,10 @@ function Home() {
         Welcome to
       </span>
       <span className="gradient-text">{settings?.siteName || 'Generals of Grace Intl Church'}</span>
+       <span className="block text-center text-gray-100 text-base md:text-lg lg:text-xl font-normal tracking-wide mt-2">
+    (The Global Home)
+  </span>
+      {/* <span className="block text-center text-white text-xl md:text-2xl lg:text-3xl font-medium tracking-wider mb-2">(The Global Home)</span> */}
     </h1>
     <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up animation-delay-600">
       <Link to="/sermons" className="bg-church-gold text-church-navy px-8 py-3.5 rounded-lg font-semibold hover:bg-opacity-90 transition-all hover:shadow-lg hover:shadow-church-gold/30 inline-flex items-center gap-2">
@@ -454,7 +458,7 @@ function Home() {
                 {
                   title: 'Prayer Warriors',
                   slug: 'prayer-warriors',
-                  image: '/images/prayer-warriors.jpg',
+                  image: '/images/prayer.jpg',
                   fallbackImage: 'https://images.unsplash.com/photo-1544717298-f3b15b7c7e3b?w=600&h=500&fit=crop&crop=center',
                 },
               ].map((book, index) => (
@@ -1227,31 +1231,6 @@ function Home() {
     </div>
   </div>
 </section>
-
-      {/* ==================== TESTIMONIES SECTION ====================
-      <section className="py-16 bg-gradient-to-br from-amber-50 to-white">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <span className="text-church-gold font-semibold text-sm uppercase tracking-wider">Testimonies</span>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-church-navy mt-2">
-              What Our <span className="text-church-gold">People Say</span>
-            </h2>
-            <p className="text-gray-500 mt-1">Real stories of transformation</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonies.map((testimony, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-lg transition-all hover:border-church-gold/30 group">
-                <div className="flex items-center gap-2 text-church-gold mb-3">
-                  <Quote className="w-5 h-5" />
-                </div>
-                <p className="text-gray-600 italic">"{testimony.quote}"</p>
-                <p className="font-semibold text-church-navy mt-4">— {testimony.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
 
       {/* ==================== TESTIMONIES SECTION - CAROUSEL ==================== */}
       <section className="py-16 bg-gradient-to-br from-amber-50 to-white relative overflow-hidden">

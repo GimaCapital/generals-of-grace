@@ -19,6 +19,7 @@ import Events from './components/pages/Events';
 import EventDetail from './components/pages/EventDetail';
 import Give from './components/pages/Give';
 import GiveSuccess from './components/pages/GiveSuccess';
+import OrderConfirmation from './components/pages/OrderConfirmation';
 import Ministries from './components/pages/Ministries';
 import MinistryDetail from './components/pages/MinistryDetail';
 import Contact from './components/pages/Contact';
@@ -93,6 +94,7 @@ function App() {
               <Route path="give/success" element={<GiveSuccess />} />
               <Route path="books/:bookSlug" element={<BookPurchase />} />
               <Route path="/books" element={<Books />} />
+              <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
             </Route>
           
 

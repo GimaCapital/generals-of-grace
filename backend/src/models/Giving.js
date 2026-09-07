@@ -1,7 +1,6 @@
-// backend/src/models/Giving.js
 const Database = require('../config/database');
 const { generateTitheNumber } = require('../utils/helpers');
-const { logger } = require('../utils/logger');
+// const { logger } = require('../utils/logger');
 
 const COLLECTION = 'giving';
 
@@ -15,7 +14,8 @@ class Giving {
         ...givingData,
         titheNumber: givingData.titheNumber || generateTitheNumber('GOG'),
         status: givingData.status || 'pending',
-        paymentMethod: givingData.paymentMethod || 'flutterwave',
+        // ✅ Use the actual provider from the request, fallback to 'flutterwave'
+        paymentMethod: givingData.provider || givingData.paymentMethod || 'flutterwave',
         reference: givingData.reference || `GOG-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
         date: new Date().toISOString(),
         createdAt: new Date().toISOString(),
@@ -23,10 +23,10 @@ class Giving {
       };
 
       const id = await Database.createDoc(COLLECTION, data);
-      logger.info(`💰 Giving record created: ${data.reference} (${id})`);
+      // logger.info(`💰 Giving record created: ${data.reference} (${id})`);
       return { id, ...data };
     } catch (error) {
-      logger.error('Error creating giving record:', error);
+      // logger.error('Error creating giving record:', error);
       throw error;
     }
   }
@@ -49,7 +49,7 @@ class Giving {
       );
       return results.length > 0 ? results[0] : null;
     } catch (error) {
-      logger.error('Error getting giving by reference:', error);
+      // logger.error('Error getting giving by reference:', error);
       throw error;
     }
   }
@@ -65,7 +65,23 @@ class Giving {
       );
       return results.length > 0 ? results[0] : null;
     } catch (error) {
-      logger.error('Error getting giving by Flutterwave ref:', error);
+      // logger.error('Error getting giving by Flutterwave ref:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * ✅ NEW: Get giving record by Paystack reference
+   */
+  static async getByPaystackRef(paystackRef) {
+    try {
+      const results = await Database.getDocs(
+        COLLECTION,
+        [{ field: 'paystackRef', operator: '==', value: paystackRef }]
+      );
+      return results.length > 0 ? results[0] : null;
+    } catch (error) {
+      // logger.error('Error getting giving by Paystack ref:', error);
       throw error;
     }
   }
@@ -111,7 +127,7 @@ class Giving {
         }
       };
     } catch (error) {
-      logger.error('Error getting giving by userId:', error);
+      // logger.error('Error getting giving by userId:', error);
       return { 
         data: [], 
         pagination: { page: 1, limit: 20, total: 0, pages: 0 } 
@@ -164,7 +180,7 @@ class Giving {
 
       return stats;
     } catch (error) {
-      logger.error('Error getting giving stats:', error);
+      // logger.error('Error getting giving stats:', error);
       throw error;
     }
   }
@@ -187,7 +203,7 @@ class Giving {
       });
       return total;
     } catch (error) {
-      logger.error('Error getting user total giving:', error);
+      // logger.error('Error getting user total giving:', error);
       throw error;
     }
   }
@@ -206,7 +222,7 @@ class Giving {
       );
       return results;
     } catch (error) {
-      logger.error('Error getting all giving:', error);
+      // logger.error('Error getting all giving:', error);
       return { data: [], pagination: { page: 1, limit: 20, total: 0, pages: 0 } };
     }
   }
@@ -253,7 +269,7 @@ class Giving {
 
       return stats;
     } catch (error) {
-      logger.error('Error getting all stats:', error);
+      // logger.error('Error getting all stats:', error);
       throw error;
     }
   }
@@ -266,6 +282,8 @@ class Giving {
       status: 'successful',
       paidAt: new Date().toISOString(),
       transactionData,
+      // ✅ Also update paymentMethod when successful
+      paymentMethod: transactionData?.provider || 'flutterwave',
     });
   }
 

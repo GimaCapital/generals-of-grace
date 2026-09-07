@@ -1,6 +1,7 @@
 // src/components/pages/Give.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useSettings } from '../../context/SettingsContext';
 import { givingAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { 
@@ -17,6 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 function Give() {
   const { currentUser, userProfile } = useAuth();
+  const { settings } = useSettings();
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('tithe');
   const [loading, setLoading] = useState(false);
@@ -24,8 +26,25 @@ function Give() {
   const [customAmount, setCustomAmount] = useState(false);
   const [customGivingType, setCustomGivingType] = useState('');
   const [showCustomType, setShowCustomType] = useState(false);
+  const [paymentProvider, setPaymentProvider] = useState('flutterwave');
   const scrollContainerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // ✅ Fetch payment provider
+  useEffect(() => {
+    fetchPaymentProvider();
+  }, []);
+
+  const fetchPaymentProvider = async () => {
+    try {
+      const response = await givingAPI.getPaymentProvider();
+      if (response.data?.success) {
+        setPaymentProvider(response.data.provider);
+      }
+    } catch (error) {
+      // console.error('Error fetching payment provider:', error);
+    }
+  };
 
   // Extended giving types with icons
   const givingTypes = [
@@ -196,25 +215,25 @@ function Give() {
         currency: 'NGN'
       };
       
-      console.log('📦 Sending payload:', payload);
+      // console.log('📦 Sending payload:', payload);
       
       const response = await givingAPI.initialize(payload);
-      console.log('✅ Full response:', response);
-      console.log('✅ Response data:', response.data);
+      // console.log('✅ Full response:', response);
+      // console.log('✅ Response data:', response.data);
       
       const authUrl = response.data?.data?.authorization_url || 
                        response.data?.authorization_url;
       
       if (authUrl) {
-        console.log('🔗 Redirecting to:', authUrl);
+        // console.log('🔗 Redirecting to:', authUrl);
         window.location.href = authUrl;
       } else {
-        console.error('❌ No authorization URL found in response');
+        // console.error('❌ No authorization URL found in response');
         toast.error('Payment link not found. Please try again.');
       }
     } catch (error) {
-      console.error('❌ Giving error:', error);
-      console.error('❌ Error response:', error.response?.data);
+      // console.error('❌ Giving error:', error);
+      // console.error('❌ Error response:', error.response?.data);
       
       const errorMessage = error.response?.data?.message || 
                            error.response?.data?.error || 
@@ -294,9 +313,9 @@ function Give() {
       <div className="container-custom max-w-6xl mx-auto px-4 -mt-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: <DollarSign className="w-5 h-5" />, label: 'Total Given', value: '₦50M+' },
-            { icon: <Users className="w-5 h-5" />, label: 'Lives Impacted', value: '10,000+' },
-            { icon: <Globe className="w-5 h-5" />, label: 'Nations Reached', value: '5+' },
+            { icon: <DollarSign className="w-5 h-5" />, label: 'Total Given', value: '₦1M+' },
+            { icon: <Users className="w-5 h-5" />, label: 'Lives Impacted', value: '1,000+' },
+            { icon: <Globe className="w-5 h-5" />, label: 'Nations Reached', value: '1+' },
             { icon: <Heart className="w-5 h-5" />, label: 'Souls Saved', value: '1,000+' },
           ].map((stat, index) => (
             <motion.div
@@ -597,21 +616,28 @@ function Give() {
               <p className="text-white/60 text-xs mt-2">Good measure, pressed down, shaken together, running over</p>
             </div>
 
-            {/* Contact Info */}
+            {/* ✅ Contact Info - From Database with Provider */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
               <h4 className="font-semibold text-church-navy mb-3">Contact Information</h4>
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-church-gold" />
-                  <span>+234 800 000 0000</span>
+                  <span>{settings?.sitePhone || '+234 800 000 0000'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-church-gold" />
-                  <span>info@generalsofgrace.org</span>
+                  <span>{settings?.siteEmail || 'info@generalsofgrace.org'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-church-gold" />
-                  <span>123 Church Road, Port Harcourt</span>
+                  <span>{settings?.siteAddress || '123 Church Road, Port Harcourt'}</span>
+                </div>
+                {/* ✅ Show payment provider */}
+                <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
+                  <CreditCard className="w-4 h-4 text-church-gold" />
+                  <span className="text-xs text-gray-400">
+                    Secure payments via <span className="font-semibold capitalize">{paymentProvider || 'Flutterwave'}</span>
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,94 +1,3 @@
-// import axios from 'axios';
-
-// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-// const api = axios.create({
-//   baseURL: API_URL,
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
-
-// // Request interceptor to add auth token
-// api.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem('authToken');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
-
-// // Response interceptor for error handling
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       localStorage.removeItem('authToken');
-//       window.location.href = '/login';
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
-// // Sermons API
-// export const sermonAPI = {
-//   getAll: (params) => api.get('/sermons', { params }),
-//   getById: (id) => api.get(`/sermons/${id}`),
-//   create: (data) => api.post('/sermons', data),
-//   update: (id, data) => api.put(`/sermons/${id}`, data),
-//   delete: (id) => api.delete(`/sermons/${id}`),
-//   getLive: () => api.get('/sermons/live'),
-// };
-
-// // Events API
-// export const eventAPI = {
-//   getAll: (params) => api.get('/events', { params }),
-//   getById: (id) => api.get(`/events/${id}`),
-//   create: (data) => api.post('/events', data),
-//   update: (id, data) => api.put(`/events/${id}`, data),
-//   delete: (id) => api.delete(`/events/${id}`),
-//   getUpcoming: () => api.get('/events/upcoming'),
-// };
-
-// // Giving API
-// export const givingAPI = {
-//   initialize: (data) => api.post('/giving/initialize', data),
-//   verify: (reference) => api.post('/giving/verify', { reference }),
-//   getHistory: () => api.get('/giving/history'),
-//   getStats: () => api.get('/giving/stats'),
-//   generateReceipt: (id) => api.get(`/giving/receipt/${id}`),
-// };
-
-// // Ministries API
-// export const ministryAPI = {
-//   getAll: () => api.get('/ministries'),
-//   getById: (id) => api.get(`/ministries/${id}`),
-//   create: (data) => api.post('/ministries', data),
-//   update: (id, data) => api.put(`/ministries/${id}`, data),
-//   delete: (id) => api.delete(`/ministries/${id}`),
-// };
-
-// // Users API
-// export const userAPI = {
-//   getProfile: () => api.get('/users/profile'),
-//   updateProfile: (data) => api.put('/users/profile', data),
-//   getAll: () => api.get('/users'),
-//   getById: (id) => api.get(`/users/${id}`),
-//   updateRole: (id, role) => api.put(`/users/${id}/role`, { role }),
-// };
-
-// // Settings API
-// export const settingsAPI = {
-//   getSettings: () => api.get('/settings'),
-//   updateSettings: (data) => api.put('/settings', data),
-// };
-
-// export default api;
-
-
 // src/services/api.js
 import axios from 'axios';
 import { auth } from './firebase';
@@ -171,6 +80,8 @@ export const givingAPI = {
   getHistory: () => api.get('/giving/history'),
   getStats: () => api.get('/giving/stats'),
   generateReceipt: (id) => api.get(`/giving/receipt/${id}`),
+  getPaymentProvider: () => api.get('/giving/provider'),
+  switchPaymentProvider: (provider) => api.post('/giving/provider', { provider }),
 };
 
 // Ministries API
@@ -192,16 +103,47 @@ export const userAPI = {
 };
 
 // ✅ Settings API
+// export const settingsAPI = {
+//   getSettings: () => api.get('/settings'),
+//   updateSettings: (data) => api.put('/settings', data),
+// };
+// src/services/api.js
+// ✅ Settings API - Clean data before sending
 export const settingsAPI = {
   getSettings: () => api.get('/settings'),
-  updateSettings: (data) => api.put('/settings', data),
+  updateSettings: (data) => {
+    // ✅ Remove any nested 'data' field before sending
+    let cleanData = { ...data };
+    
+    // ✅ If there's a 'data' field, flatten it
+    if (cleanData.data && typeof cleanData.data === 'object') {
+      const nested = cleanData.data;
+      delete cleanData.data;
+      Object.assign(cleanData, nested);
+    }
+    
+    // ✅ REMOVE ALL METADATA FIELDS - they should NOT be sent to backend
+    delete cleanData.id;
+    delete cleanData.success;
+    delete cleanData.message;
+    delete cleanData.createdAt;
+    delete cleanData.updatedAt;
+    delete cleanData._id;
+    delete cleanData.__v;
+    
+    // ✅ DO NOT remove empty strings - let the backend handle them
+    // If a user wants to clear a field, it should be saved as empty
+    
+    console.log('📤 API sending clean data:', cleanData);
+    return api.put('/settings', cleanData);
+  },
 };
 
 // Orders API
 export const orderAPI = {
   create: (data) => api.post('/orders', data),
   initializePayment: (data) => api.post('/orders/initialize-payment', data),
-  verifyPayment: (tx_ref) => api.get(`/orders/verify-payment/${tx_ref}`),
+  verifyPayment: (reference) => api.get(`/orders/verify-payment/${reference}`),
   getAll: (params) => api.get('/orders', { params }),
   getById: (id) => api.get(`/orders/${id}`),
   getUserOrders: (userId) => api.get(`/orders/user/${userId}`),
@@ -210,5 +152,4 @@ export const orderAPI = {
   cancelOrder: (id, data) => api.post(`/orders/${id}/cancel`, data),
   getStats: () => api.get('/orders/stats/overview'),
 };
-
 export default api;

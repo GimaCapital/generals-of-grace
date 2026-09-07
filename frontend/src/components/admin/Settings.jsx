@@ -1,30 +1,16 @@
 // src/components/admin/Settings.jsx
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Save, RefreshCw, Mail, Bell, Shield, Palette } from 'lucide-react';
+import { Save, Mail, Bell, Shield, Palette, CreditCard, CheckCircle, Globe } from 'lucide-react';
 import { settingsAPI } from '../../services/api';
 
 function AdminSettings() {
-  const [settings, setSettings] = useState({
-    siteName: '',
-    siteEmail: '',
-    sitePhone: '',
-    siteAddress: '',
-    enableRegistration: true,
-    enableGiving: true,
-    enableLiveStream: true,
-    theme: 'light',
-    notifications: {
-      email: true,
-      sms: false,
-      push: true
-    }
-  });
+  // ✅ Start with empty object - NO hardcoded values
+  const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [saved, setSaved] = useState(false);
 
-  // ✅ Fetch settings from backend
   useEffect(() => {
     fetchSettings();
   }, []);
@@ -32,76 +18,56 @@ function AdminSettings() {
   const fetchSettings = async () => {
     try {
       setFetching(true);
-      // console.log('📥 Fetching settings...');
       const response = await settingsAPI.getSettings();
-      // console.log('📥 Settings response:', response.data);
       
       if (response.data) {
-        // ✅ Override all settings with data from backend
-        setSettings({
-          siteName: response.data.siteName || '',
-          siteEmail: response.data.siteEmail || '',
-          sitePhone: response.data.sitePhone || '',
-          siteAddress: response.data.siteAddress || '',
-          enableRegistration: response.data.enableRegistration !== undefined ? response.data.enableRegistration : true,
-          enableGiving: response.data.enableGiving !== undefined ? response.data.enableGiving : true,
-          enableLiveStream: response.data.enableLiveStream !== undefined ? response.data.enableLiveStream : true,
-          theme: response.data.theme || 'light',
-          notifications: {
-            email: response.data.notifications?.email !== undefined ? response.data.notifications.email : true,
-            sms: response.data.notifications?.sms !== undefined ? response.data.notifications.sms : false,
-            push: response.data.notifications?.push !== undefined ? response.data.notifications.push : true
-          }
-        });
+        // ✅ Store EXACTLY what comes from the database
+        const settingsData = response.data.data || response.data;
+        setSettings(settingsData);
+        // console.log('📥 Settings loaded:', settingsData);
       }
     } catch (error) {
-      console.error('Error fetching settings:', error);
+      // console.error('Error fetching settings:', error);
       toast.error('Error loading settings');
     } finally {
       setFetching(false);
     }
   };
 
-  // ✅ Save settings to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setSaved(false);
     
     try {
-      // ✅ Send the current settings state
-      // console.log('📤 Saving settings:', settings);
+      // ✅ Send EXACTLY what's in the state - NO defaults, NO modifications
+      // Just clean out any metadata that might have sneaked in
+      const dataToSend = { ...settings };
       
-      const response = await settingsAPI.updateSettings(settings);
-      // console.log('📤 Save response:', response.data);
+      // ✅ Remove metadata fields if they exist
+      delete dataToSend.id;
+      delete dataToSend.createdAt;
+      delete dataToSend.updatedAt;
+      delete dataToSend.success;
+      delete dataToSend.message;
       
-      // ✅ Update the form with the saved data
+      // console.log('📤 Sending settings:', dataToSend);
+      
+      const response = await settingsAPI.updateSettings(dataToSend);
+      
       if (response.data) {
-        setSettings({
-          siteName: response.data.siteName || settings.siteName,
-          siteEmail: response.data.siteEmail || settings.siteEmail,
-          sitePhone: response.data.sitePhone || settings.sitePhone,
-          siteAddress: response.data.siteAddress || settings.siteAddress,
-          enableRegistration: response.data.enableRegistration !== undefined ? response.data.enableRegistration : settings.enableRegistration,
-          enableGiving: response.data.enableGiving !== undefined ? response.data.enableGiving : settings.enableGiving,
-          enableLiveStream: response.data.enableLiveStream !== undefined ? response.data.enableLiveStream : settings.enableLiveStream,
-          theme: response.data.theme || settings.theme,
-          notifications: {
-            email: response.data.notifications?.email !== undefined ? response.data.notifications.email : settings.notifications.email,
-            sms: response.data.notifications?.sms !== undefined ? response.data.notifications.sms : settings.notifications.sms,
-            push: response.data.notifications?.push !== undefined ? response.data.notifications.push : settings.notifications.push
-          }
-        });
+        // ✅ Store EXACTLY what comes back
+        const responseData = response.data.data || response.data;
+        setSettings(responseData);
+        // console.log('📥 Response data:', responseData);
       }
       
       setSaved(true);
       toast.success('Settings saved successfully!');
-      
-      // ✅ Reset saved state after 3 seconds
       setTimeout(() => setSaved(false), 3000);
       
     } catch (error) {
-      console.error('Error saving settings:', error);
+      // console.error('Error saving settings:', error);
       toast.error(error.response?.data?.message || 'Error saving settings');
     } finally {
       setLoading(false);
@@ -110,13 +76,18 @@ function AdminSettings() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    // console.log(`🔄 Field changed: ${name} = ${newValue}`);
+    
+    // ✅ Update state with the new value - NO defaults
     setSettings({
       ...settings,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: newValue
     });
   };
 
   const handleNestedChange = (section, field, value) => {
+    // console.log(`🔄 Nested field changed: ${section}.${field} = ${value}`);
     setSettings({
       ...settings,
       [section]: {
@@ -153,6 +124,7 @@ function AdminSettings() {
                 name="siteName"
                 value={settings.siteName || ''}
                 onChange={handleChange}
+                placeholder="Enter site name"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
               />
             </div>
@@ -163,6 +135,7 @@ function AdminSettings() {
                 name="siteEmail"
                 value={settings.siteEmail || ''}
                 onChange={handleChange}
+                placeholder="Enter site email"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
               />
             </div>
@@ -173,6 +146,7 @@ function AdminSettings() {
                 name="sitePhone"
                 value={settings.sitePhone || ''}
                 onChange={handleChange}
+                placeholder="Enter phone number"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
               />
             </div>
@@ -180,10 +154,11 @@ function AdminSettings() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Theme</label>
               <select
                 name="theme"
-                value={settings.theme || 'light'}
+                value={settings.theme || ''}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
               >
+                <option value="">Select theme</option>
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
               </select>
@@ -196,8 +171,101 @@ function AdminSettings() {
               value={settings.siteAddress || ''}
               onChange={handleChange}
               rows="2"
+              placeholder="Enter church address"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
             />
+          </div>
+        </div>
+
+        {/* Payment Provider */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-display font-bold text-church-navy mb-4 flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-church-gold" />
+            Payment Provider
+          </h2>
+          <p className="text-gray-500 text-sm mb-4">
+            Select your preferred payment gateway for online giving
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div
+              className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
+                settings.paymentProvider === 'flutterwave'
+                  ? 'border-church-gold bg-church-gold/5'
+                  : 'border-gray-200 hover:border-church-gold/50'
+              }`}
+              onClick={() => {
+                // console.log('🔄 Switching to Flutterwave');
+                setSettings({
+                  ...settings,
+                  paymentProvider: 'flutterwave'
+                });
+              }}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-bold text-church-navy">Flutterwave</h3>
+                  <p className="text-sm text-gray-500">Pan-African payment solution</p>
+                </div>
+                {settings.paymentProvider === 'flutterwave' && (
+                  <CheckCircle className="w-5 h-5 text-church-gold" />
+                )}
+              </div>
+              <div className="mt-2 text-xs text-gray-500 space-y-1">
+                <div className="flex items-center gap-1">
+                  <Shield className="w-3 h-3 text-church-gold" />
+                  <span>Card, USSD, Bank Transfer, Mobile Money</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Globe className="w-3 h-3 text-church-gold" />
+                  <span>1.4% transaction fee</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
+                settings.paymentProvider === 'paystack'
+                  ? 'border-church-gold bg-church-gold/5'
+                  : 'border-gray-200 hover:border-church-gold/50'
+              }`}
+              onClick={() => {
+                // console.log('🔄 Switching to Paystack');
+                setSettings({
+                  ...settings,
+                  paymentProvider: 'paystack'
+                });
+              }}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-bold text-church-navy">Paystack</h3>
+                  <p className="text-sm text-gray-500">Simple Nigerian payment gateway</p>
+                </div>
+                {settings.paymentProvider === 'paystack' && (
+                  <CheckCircle className="w-5 h-5 text-church-gold" />
+                )}
+              </div>
+              <div className="mt-2 text-xs text-gray-500 space-y-1">
+                <div className="flex items-center gap-1">
+                  <Shield className="w-3 h-3 text-church-gold" />
+                  <span>Card, USSD, Bank Transfer, QR Code</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Globe className="w-3 h-3 text-church-gold" />
+                  <span>1.5% + ₦100 (capped at ₦2,000)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${settings.paymentProvider ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+              <span className="text-sm text-gray-600">
+                Current Provider: <span className="font-semibold capitalize">{settings.paymentProvider || 'Not set'}</span>
+              </span>
+            </div>
           </div>
         </div>
 

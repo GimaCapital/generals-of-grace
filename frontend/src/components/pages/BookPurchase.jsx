@@ -5,29 +5,61 @@ import { motion } from 'framer-motion';
 import { 
   ArrowLeft, BookOpen, Heart, Share2, ChevronRight, 
   Star, ShoppingCart, Gift, X, CheckCircle,
-  CreditCard, Wallet, Building, Phone
+  CreditCard, Wallet, Building, Phone, Shield
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { orderAPI } from '../../services/api';
+import { orderAPI, givingAPI } from '../../services/api';
+import { useSettings } from '../../context/SettingsContext';
 
 function BookPurchase() {
   const { bookSlug } = useParams();
+  const { settings, loading: settingsLoading, paymentProvider: contextProvider, refetch } = useSettings();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showOrderForm, setShowOrderForm] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('flutterwave');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [paymentProvider, setPaymentProvider] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     quantity: 1,
     message: '',
-    // Cash payment details
     cashPaidBy: '',
     cashAmountPaid: 0,
     cashNotes: ''
   });
+
+  // ✅ Set payment method from context when available
+  useEffect(() => {
+    if (contextProvider) {
+      setPaymentProvider(contextProvider);
+      setPaymentMethod(contextProvider);
+      // console.log('📦 Payment provider from context:', contextProvider);
+    }
+  }, [contextProvider]);
+
+  // ✅ Refresh provider when modal opens
+  useEffect(() => {
+    if (showOrderForm) {
+      refreshProvider();
+    }
+  }, [showOrderForm]);
+
+  const refreshProvider = async () => {
+    try {
+      const response = await givingAPI.getPaymentProvider();
+      if (response.data?.success) {
+        const provider = response.data.provider;
+        setPaymentProvider(provider);
+        setPaymentMethod(provider);
+        // console.log('🔄 Provider refreshed:', provider);
+      }
+    } catch (error) {
+      // console.error('Error refreshing provider:', error);
+    }
+  };
 
   // Book data
   const booksData = {
@@ -98,7 +130,6 @@ function BookPurchase() {
       const foundBook = booksData[bookSlug];
       if (foundBook) {
         setBook(foundBook);
-        // Set default cash amount
         setFormData(prev => ({
           ...prev,
           cashAmountPaid: foundBook.price
@@ -141,18 +172,23 @@ function BookPurchase() {
         })
       };
 
+      // console.log('📤 Sending order data:', orderData);
+
       const response = await orderAPI.create(orderData);
 
       if (response.data.success) {
+        const orderId = response.data.data.order.id;
+        const paymentLink = response.data.data.paymentLink;
+        
         toast.success('🎉 Order placed successfully!');
         setShowOrderForm(false);
         
-        // If Flutterwave, redirect to payment
-        if (paymentMethod === 'flutterwave' && response.data.data.paymentLink) {
-          window.location.href = response.data.data.paymentLink;
+        if (paymentMethod !== 'cash' && paymentLink) {
+          window.location.href = paymentLink;
+        } else {
+          window.location.href = `/order-confirmation/${orderId}`;
         }
         
-        // Reset form
         setFormData({
           name: '',
           email: '',
@@ -165,8 +201,8 @@ function BookPurchase() {
         });
       }
     } catch (error) {
-      console.error('Error placing order:', error);
-      toast.error('Failed to place order. Please try again.');
+      // console.error('Error placing order:', error);
+      toast.error(error.response?.data?.message || 'Failed to place order. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -185,11 +221,11 @@ function BookPurchase() {
     }
   };
 
-  if (loading) {
+  if (loading || settingsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-church-gold mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-church-gold mx-auto" />
           <p className="mt-4 text-gray-500">Loading book details...</p>
         </div>
       </div>
@@ -216,7 +252,6 @@ function BookPurchase() {
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="container-custom max-w-5xl">
-        {/* Back Button */}
         <Link 
           to="/books" 
           className="inline-flex items-center gap-2 text-church-gold hover:underline mb-6"
@@ -225,12 +260,10 @@ function BookPurchase() {
           Back to books store
         </Link>
 
-        {/* Book Details */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
           <div className={`h-2 bg-gradient-to-r ${book.color}`}></div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-            {/* Book Image */}
             <div className="relative">
               <img 
                 src={book.image} 
@@ -247,7 +280,6 @@ function BookPurchase() {
               </div>
             </div>
 
-            {/* Book Info */}
             <div className="flex flex-col">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-3 py-1 rounded-full">
@@ -265,20 +297,17 @@ function BookPurchase() {
               <p className="text-church-gold font-medium mb-4">{book.subtitle}</p>
               <p className="text-sm text-gray-500 mb-2">By <span className="font-medium text-church-navy">{book.author}</span></p>
 
-              {/* Price */}
               <div className="bg-church-gold/10 rounded-xl p-4 mb-4 text-center border border-church-gold/20">
                 <p className="text-sm text-gray-500">Price</p>
                 <p className="text-3xl font-bold text-church-navy">{book.priceDisplay}</p>
               </div>
 
-              {/* Description */}
               <div className="prose prose-sm max-w-none mb-4">
                 <p className="text-gray-600 leading-relaxed">
                   {book.description}
                 </p>
               </div>
 
-              {/* Buy Button */}
               <button
                 onClick={() => setShowOrderForm(true)}
                 className="bg-church-gold text-church-navy px-6 py-3 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all inline-flex items-center justify-center gap-2"
@@ -287,7 +316,6 @@ function BookPurchase() {
                 Buy Now - {book.priceDisplay}
               </button>
 
-              {/* Share */}
               <button
                 onClick={handleShare}
                 className="mt-3 border-2 border-church-gold/30 text-church-navy px-6 py-2 rounded-xl font-semibold hover:bg-church-gold/5 transition-all inline-flex items-center justify-center gap-2"
@@ -296,7 +324,6 @@ function BookPurchase() {
                 Share
               </button>
 
-              {/* Book Details Grid */}
               <div className="grid grid-cols-2 gap-3 mt-6 pt-6 border-t border-gray-100">
                 <div className="text-center">
                   <p className="text-xs text-gray-400">Pages</p>
@@ -318,7 +345,6 @@ function BookPurchase() {
             </div>
           </div>
 
-          {/* Reviews */}
           {book.reviews && book.reviews.length > 0 && (
             <div className="border-t border-gray-100 p-8">
               <h3 className="text-xl font-display font-bold text-church-navy mb-4 flex items-center gap-2">
@@ -364,7 +390,6 @@ function BookPurchase() {
             </div>
 
             <form onSubmit={handleOrderSubmit} className="space-y-4">
-              {/* Customer Details */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                 <input
@@ -413,21 +438,25 @@ function BookPurchase() {
                 </select>
               </div>
 
-              {/* Payment Method */}
+              {/* ✅ Payment Method - Shows correct provider */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method *</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => setPaymentMethod('flutterwave')}
+                    onClick={() => {
+                      if (paymentProvider) {
+                        setPaymentMethod(paymentProvider);
+                      }
+                    }}
                     className={`p-3 rounded-xl border-2 transition-all flex items-center gap-2 justify-center ${
-                      paymentMethod === 'flutterwave' 
+                      paymentMethod !== 'cash' && paymentMethod !== '' 
                         ? 'border-church-gold bg-church-gold/10' 
                         : 'border-gray-200 hover:border-church-gold/50'
                     }`}
                   >
                     <CreditCard className="w-5 h-5 text-church-gold" />
-                    <span className="text-sm font-medium">Online</span>
+                    <span className="text-sm font-medium capitalize">{paymentProvider || 'Online'}</span>
                   </button>
                   <button
                     type="button"
@@ -442,9 +471,14 @@ function BookPurchase() {
                     <span className="text-sm font-medium">Cash</span>
                   </button>
                 </div>
+                {paymentMethod !== 'cash' && paymentProvider && (
+                  <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                    <Shield className="w-3 h-3 text-church-gold" />
+                    Secure payments via <span className="font-semibold capitalize">{paymentProvider}</span>
+                  </p>
+                )}
               </div>
 
-              {/* Cash Payment Details */}
               {paymentMethod === 'cash' && (
                 <div className="bg-gray-50 rounded-xl p-4 space-y-3">
                   <p className="text-sm font-medium text-church-navy">Cash Payment Details</p>
@@ -481,7 +515,6 @@ function BookPurchase() {
                 />
               </div>
 
-              {/* Order Summary */}
               <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-sm font-medium text-church-navy">Order Summary</p>
                 <div className="flex justify-between text-sm mt-2">
@@ -502,18 +535,21 @@ function BookPurchase() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !paymentProvider}
                 className="w-full bg-church-gold text-church-navy py-4 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
               >
                 {submitting ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-church-navy"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-church-navy" />
                     Processing...
                   </>
                 ) : (
                   <>
                     <Gift className="w-5 h-5" />
-                    {paymentMethod === 'flutterwave' ? 'Pay with Flutterwave' : 'Confirm Cash Order'}
+                    {paymentMethod === 'cash' 
+                      ? 'Confirm Cash Order' 
+                      : `Pay with ${paymentProvider ? paymentProvider.charAt(0).toUpperCase() + paymentProvider.slice(1) : '...'}`
+                    }
                   </>
                 )}
               </motion.button>

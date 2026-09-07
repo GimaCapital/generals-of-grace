@@ -140,7 +140,7 @@ const sendEmail = async ({ to, template, data }) => {
     const msg = {
       to,
       from: {
-        email: process.env.EMAIL_FROM || 'noreply@generalsofgrace.org',
+        email: process.env.EMAIL_FROM || 'noreply@gogintlchurch.org',
         name: 'Generals of Grace Intl Church',
       },
       subject: emailTemplate.subject,

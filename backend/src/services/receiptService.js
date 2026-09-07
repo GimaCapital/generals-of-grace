@@ -14,6 +14,16 @@ const generateReceipt = async (givingData) => {
     doc.on('data', (chunk) => chunks.push(chunk));
     doc.on('end', () => {});
 
+    // ✅ Get provider info
+    const provider = givingData.provider || 'flutterwave';
+    const providerDisplay = provider.charAt(0).toUpperCase() + provider.slice(1);
+
+    // ✅ Get reference based on provider
+    const reference = givingData.reference || 
+                      givingData.paystackRef || 
+                      givingData.flutterwaveRef || 
+                      uuidv4().slice(0, 8).toUpperCase();
+
     // Header
     doc
       .fontSize(22)
@@ -68,6 +78,7 @@ const generateReceipt = async (givingData) => {
 
     let yPos = doc.y;
 
+    // ✅ Receipt Number
     doc
       .text('Receipt Number:', 50, yPos, { continued: true })
       .font('Helvetica-Bold')
@@ -110,6 +121,51 @@ const generateReceipt = async (givingData) => {
 
     doc.fillColor('#333333').moveDown(1);
 
+    // ✅ Divider
+    doc
+      .strokeColor('#C9A84C')
+      .lineWidth(1)
+      .moveTo(50, doc.y + 10)
+      .lineTo(550, doc.y + 10)
+      .stroke()
+      .moveDown(1.5);
+
+    // ✅ Payment Details Section
+    doc
+      .fontSize(11)
+      .font('Helvetica-Bold')
+      .fillColor('#1B2A4A')
+      .text('Payment Details', { align: 'center' })
+      .moveDown(0.5);
+
+    doc
+      .fontSize(10)
+      .font('Helvetica')
+      .fillColor('#555555');
+
+    // ✅ Show provider info
+    const transactionRef = givingData.reference || 
+                          givingData.paystackRef || 
+                          givingData.flutterwaveRef || 
+                          'N/A';
+
+    doc
+      .text(`Payment Provider: ${providerDisplay}`, 50, doc.y + 10)
+      .moveDown(0.5)
+      .text(`Transaction Reference: ${transactionRef}`, 50, doc.y)
+      .moveDown(0.5);
+
+    // ✅ Show provider-specific reference
+    if (givingData.paystackRef) {
+      doc.text(`Paystack Reference: ${givingData.paystackRef}`, 50, doc.y);
+    }
+    if (givingData.flutterwaveRef) {
+      doc.text(`Flutterwave Reference: ${givingData.flutterwaveRef}`, 50, doc.y);
+    }
+
+    doc.moveDown(1);
+
+    // ✅ Divider
     doc
       .strokeColor('#C9A84C')
       .lineWidth(1)
@@ -118,6 +174,7 @@ const generateReceipt = async (givingData) => {
       .stroke()
       .moveDown(2);
 
+    // ✅ Thank You Message
     doc
       .fontSize(12)
       .font('Helvetica-Bold')
@@ -138,7 +195,9 @@ const generateReceipt = async (givingData) => {
       .fillColor('#999999')
       .text('This is a computer-generated receipt. No signature required.', { align: 'center' })
       .moveDown(0.5)
-      .text(process.env.FRONTEND_URL || 'https://generalsofgrace.org', { align: 'center' });
+      .text(process.env.FRONTEND_URL || 'https://gogintlchurch.org', { align: 'center' })
+      .moveDown(0.5)
+      .text(`Payment processed via ${providerDisplay}`, { align: 'center' });
 
     doc.end();
 
