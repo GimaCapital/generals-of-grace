@@ -93,6 +93,44 @@ class Giving {
     return Database.updateDoc(COLLECTION, id, data);
   }
 
+
+/**
+ * Get giving record by ANY reference type
+ * Uses all existing methods
+ */
+static async findByAnyReference(reference) {
+  try {
+    // Try each method in order
+    let result = await this.getByReference(reference);
+    if (result) return result;
+    
+    result = await this.getByFlutterwaveRef(reference);
+    if (result) return result;
+    
+    result = await this.getByPaystackRef(reference);
+    if (result) return result;
+    
+    // Try paymentReference
+    const results = await Database.getDocs(
+      COLLECTION,
+      [{ field: 'paymentReference', operator: '==', value: reference }]
+    );
+    if (results.length > 0) return results[0];
+    
+    // Try transactionId
+    const results2 = await Database.getDocs(
+      COLLECTION,
+      [{ field: 'transactionId', operator: '==', value: reference }]
+    );
+    if (results2.length > 0) return results2[0];
+    
+    return null;
+  } catch (error) {
+    console.error('Error in findByAnyReference:', error);
+    throw error;
+  }
+}
+
   /**
    * Get giving records by user
    */

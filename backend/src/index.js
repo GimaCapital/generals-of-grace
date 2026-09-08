@@ -1,3 +1,4 @@
+// backend/src/index.js
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -7,6 +8,9 @@ const rateLimit = require('express-rate-limit');
 const { logger } = require('./utils/logger');
 
 const app = express();
+
+// ✅ FIX: Trust Render's proxy for correct IP detection
+app.set('trust proxy', 1);
 
 // ============================================
 // ENVIRONMENT VARIABLES

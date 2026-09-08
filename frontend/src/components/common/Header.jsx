@@ -238,7 +238,7 @@ function Header({ onMenuToggle }) {
                 <img 
                   // src="images/general_grace_logo.jpg"
                   //  src="images/general_grace_logo.jpg"
-                  src="images/gog-new-logo.png"
+                  src="/images/gog-new-logo.png"
                   alt="church logo"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   loading="lazy"

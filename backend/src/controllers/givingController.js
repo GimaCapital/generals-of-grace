@@ -453,6 +453,34 @@ exports.generateReceipt = async (req, res) => {
   }
 };
 
+
+exports.getByReference = async (req, res) => {
+  try {
+    const { reference } = req.params;
+    
+    // Use the enhanced method
+    const donation = await Giving.getByReference(reference);
+    
+    if (!donation) {
+      return res.status(404).json({
+        success: false,
+        message: 'Donation not found'
+      });
+    }
+    
+    return res.status(200).json({
+      success: true,
+      data: donation
+    });
+  } catch (error) {
+    console.error('Error fetching donation:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch donation details'
+    });
+  }
+};
+
 /**
  * Get user total giving
  */

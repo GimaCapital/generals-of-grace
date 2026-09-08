@@ -82,6 +82,9 @@ export const givingAPI = {
   generateReceipt: (id) => api.get(`/giving/receipt/${id}`),
   getPaymentProvider: () => api.get('/giving/provider'),
   switchPaymentProvider: (provider) => api.post('/giving/provider', { provider }),
+  getByReference: (reference) => {
+    return api.get(`/giving/reference/${reference}`);
+  }
 };
 
 // Ministries API

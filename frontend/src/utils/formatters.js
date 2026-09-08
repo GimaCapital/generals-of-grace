@@ -1,9 +1,49 @@
+// C:\Users\HP\Desktop\generals-of-grace\frontend\src\utils\formatters.js
+
 // Formatting functions ONLY
+
+// ============================================
+// HELPER: Convert any date type to Date object
+// ============================================
+const toDate = (date) => {
+  if (!date) return null;
+  
+  // Handle Firestore Timestamp with _seconds (from Firebase v9+)
+  if (date._seconds !== undefined) {
+    return new Date(date._seconds * 1000 + (date._nanoseconds || 0) / 1000000);
+  }
+  
+  // Handle Firestore Timestamp with seconds (from Firebase v8)
+  if (date.seconds !== undefined) {
+    return new Date(date.seconds * 1000 + (date.nanoseconds || 0) / 1000000);
+  }
+  
+  // Handle Firestore Timestamp with toDate() method
+  if (typeof date.toDate === 'function') {
+    return date.toDate();
+  }
+  
+  // Handle string or regular Date
+  try {
+    const d = new Date(date);
+    if (!isNaN(d.getTime())) {
+      return d;
+    }
+  } catch (e) {
+    // Fall through to null
+  }
+  
+  return null;
+};
+
+// ============================================
+// DATE FORMATTING
+// ============================================
 
 export const formatDate = (date, format = 'MMM d, yyyy') => {
   if (!date) return 'N/A';
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return 'Invalid Date';
+  const d = toDate(date);
+  if (!d || isNaN(d.getTime())) return 'N/A';
   
   const options = {
     year: 'numeric',
@@ -15,8 +55,8 @@ export const formatDate = (date, format = 'MMM d, yyyy') => {
 
 export const formatDateTime = (date) => {
   if (!date) return 'N/A';
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return 'Invalid Date';
+  const d = toDate(date);
+  if (!d || isNaN(d.getTime())) return 'N/A';
   return d.toLocaleString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -87,9 +127,13 @@ export const formatAddress = (address) => {
 };
 
 export const formatRelativeTime = (date) => {
+  if (!date) return 'N/A';
+  
+  const d = toDate(date);
+  if (!d || isNaN(d.getTime())) return 'N/A';
+  
   const now = new Date();
-  const past = new Date(date);
-  const diff = Math.floor((now - past) / 1000);
+  const diff = Math.floor((now - d) / 1000);
 
   const intervals = [
     { label: 'year', seconds: 31536000 },

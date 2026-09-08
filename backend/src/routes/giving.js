@@ -20,5 +20,6 @@ router.get('/stats', authenticateUser, requireAdmin, givingController.getStats);
 router.get('/user-total', authenticateUser, givingController.getUserTotal);
 router.get('/transaction/:id', authenticateUser, givingController.getTransaction);
 router.get('/receipt/:id', authenticateUser, givingController.generateReceipt);
+router.get('/reference/:reference', givingController.getByReference);
 
 module.exports = router;
