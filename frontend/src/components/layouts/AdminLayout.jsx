@@ -1,3 +1,4 @@
+// src/components/layouts/AdminLayout.jsx
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -10,7 +11,9 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Menu as MenuIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Church as MinistriesIcon,
+  Chat as TestimoniesIcon  // ✅ Changed from MessageSquare to Chat
 } from '@mui/icons-material';
 
 function AdminLayout() {
@@ -23,6 +26,8 @@ function AdminLayout() {
     { path: '/admin/sermons', icon: <SermonsIcon />, label: 'Sermons' },
     { path: '/admin/events', icon: <EventsIcon />, label: 'Events' },
     { path: '/admin/giving', icon: <GivingIcon />, label: 'Giving' },
+    { path: '/admin/ministries', icon: <MinistriesIcon />, label: 'Ministries' },
+    { path: '/admin/testimonies', icon: <TestimoniesIcon />, label: 'Testimonies' },
     { path: '/admin/users', icon: <UsersIcon />, label: 'Users' },
     { path: '/admin/settings', icon: <SettingsIcon />, label: 'Settings' },
   ];

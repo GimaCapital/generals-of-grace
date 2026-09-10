@@ -1,4 +1,4 @@
-// backend/src/index.js
+// backend\src\index.js
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -160,6 +160,7 @@ const ministryRoutes = require('./routes/ministries');
 const dashboardRoutes = require('./routes/dashboard');
 const settingsRoutes = require('./routes/settings');
 const orderRoutes = require('./routes/orders');
+const testimonyRoutes = require('./routes/testimonies');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sermons', sermonRoutes);
@@ -170,6 +171,7 @@ app.use('/api/ministries', ministryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/testimonies', testimonyRoutes);
 
 // ============================================
 // 404 HANDLER

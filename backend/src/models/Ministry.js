@@ -1,3 +1,4 @@
+// backend/src/models/Ministry.js
 const Database = require('../config/database');
 const { slugify, generateId } = require('../utils/helpers');
 const { logger } = require('../utils/logger');
@@ -14,8 +15,8 @@ class Ministry {
         ...ministryData,
         slug: ministryData.slug || slugify(ministryData.name),
         ministryId: generateId(10),
-        members: [],
-        leaders: [],
+        members: ministryData.members || [],
+        leaders: ministryData.leaders || [],
         status: ministryData.status || 'active',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -54,10 +55,43 @@ class Ministry {
   }
 
   /**
-   * Update ministry
+   * Update ministry - Creates if doesn't exist (UPSERT)
    */
   static async update(id, data) {
-    return Database.updateDoc(COLLECTION, id, data);
+    try {
+      // ✅ Check if document exists
+      const existing = await Database.getDoc(COLLECTION, id);
+      
+      if (existing) {
+        // ✅ Document exists - update it
+        const updateData = {
+          ...data,
+          updatedAt: new Date().toISOString()
+        };
+        await Database.updateDoc(COLLECTION, id, updateData);
+        logger.info(`📝 Ministry updated: ${id}`);
+        return { success: true, action: 'updated' };
+      } else {
+        // ✅ Document doesn't exist - create it
+        const newData = {
+          ...data,
+          slug: data.slug || slugify(data.name || 'ministry'),
+          ministryId: generateId(10),
+          members: data.members || [],
+          leaders: data.leaders || [],
+          status: data.status || 'active',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        
+        const newId = await Database.createDoc(COLLECTION, newData);
+        logger.info(`🙏 Ministry created (via update): ${newData.name} (${newId})`);
+        return { success: true, action: 'created', id: newId };
+      }
+    } catch (error) {
+      logger.error('Error updating/creating ministry:', error);
+      throw error;
+    }
   }
 
   /**

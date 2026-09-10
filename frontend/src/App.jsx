@@ -31,6 +31,9 @@ import NotFound from './components/pages/NotFound';
 import PastorSocial from './components/pages/PastorSocial';
 import ChurchSocial from './components/pages/ChurchSocial';
 
+import Testimonies from './components/pages/Testimonies';
+import SubmitTestimony from './components/pages/SubmitTestimony';
+
 // Pages - Admin
 import AdminDashboard from './components/admin/Dashboard';
 import AdminSermons from './components/admin/Sermons';
@@ -39,6 +42,8 @@ import AdminGiving from './components/admin/Giving';
 import AdminUsers from './components/admin/Users';
 import AdminSettings from './components/admin/Settings';
 import { SettingsProvider } from './context/SettingsContext';
+import ManageMinistries from './components/admin/ManageMinistries';
+import AdminTestimonies from './components/admin/Testimonies';
 import BookPurchase from './components/pages/BookPurchase';
 import Books from './components/pages/Books';
 
@@ -95,6 +100,8 @@ function App() {
               <Route path="books/:bookSlug" element={<BookPurchase />} />
               <Route path="/books" element={<Books />} />
               <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+              <Route path="testimonies" element={<Testimonies />} />
+              <Route path="submit-testimony" element={<SubmitTestimony />} />   
             </Route>
           
 
@@ -110,6 +117,8 @@ function App() {
               <Route path="giving" element={<AdminGiving />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="/admin/ministries" element={<ManageMinistries />} />
+              <Route path="testimonies" element={<AdminTestimonies />} />
             </Route>
 
             {/* 404 */}

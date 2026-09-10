@@ -1,0 +1,12 @@
+﻿export { default as HeroSection } from './HeroSection';
+export { default as BooksSection } from './BooksSection';
+export { default as AboutSection } from './AboutSection';
+export { default as SermonsSection } from './SermonsSection';
+export { default as MinistriesSection } from './MinistriesSection';
+export { default as EventsSection } from './EventsSection';
+export { default as PastorsMessage } from './PastorsMessage';
+export { default as PrayerPartnership } from './PrayerPartnership';
+export { default as TestimoniesSection } from './TestimoniesSection';
+export { default as GallerySection } from './GallerySection';
+export { default as SoulWinningCTA } from './SoulWinningCTA';
+export { default as GeneralCTA } from './GeneralCTA';

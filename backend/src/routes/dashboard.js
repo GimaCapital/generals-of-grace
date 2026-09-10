@@ -1,3 +1,4 @@
+// backend\src\routes\dashboard.js
 const express = require('express');
 const router = express.Router();
 const { authenticateUser, requireAdmin } = require('../middleware/auth');

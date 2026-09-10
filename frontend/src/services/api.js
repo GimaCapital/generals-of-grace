@@ -1,4 +1,4 @@
-// src/services/api.js
+// frontend\src\services\api.js
 import axios from 'axios';
 import { auth } from './firebase';
 
@@ -105,12 +105,6 @@ export const userAPI = {
   updateRole: (id, role) => api.put(`/users/${id}/role`, { role }),
 };
 
-// ✅ Settings API
-// export const settingsAPI = {
-//   getSettings: () => api.get('/settings'),
-//   updateSettings: (data) => api.put('/settings', data),
-// };
-// src/services/api.js
 // ✅ Settings API - Clean data before sending
 export const settingsAPI = {
   getSettings: () => api.get('/settings'),
@@ -154,5 +148,37 @@ export const orderAPI = {
   updateCashPayment: (id, data) => api.put(`/orders/${id}/cash-payment`, data),
   cancelOrder: (id, data) => api.post(`/orders/${id}/cancel`, data),
   getStats: () => api.get('/orders/stats/overview'),
+};
+
+// Testimonies API
+export const testimonyAPI = {
+  // Public - Get approved testimonies
+  getAll: (params) => api.get('/testimonies', { params }),
+  
+  // Public - Submit testimony
+  submit: (data) => api.post('/testimonies', data),
+  
+  // Admin - Get all testimonies
+  adminGetAll: (params) => api.get('/testimonies/admin/all', { params }),
+  
+  // Admin - Get pending testimonies
+  adminGetPending: () => api.get('/testimonies/admin/pending'),
+  
+  // Admin - Get stats
+  adminGetStats: () => api.get('/testimonies/admin/stats'),
+
+   adminUpdate: (id, data) => api.put(`/testimonies/admin/${id}`, data),
+  
+  // Admin - Approve
+  adminApprove: (id) => api.put(`/testimonies/admin/${id}/approve`),
+  
+  // Admin - Reject
+  adminReject: (id, reason) => api.put(`/testimonies/admin/${id}/reject`, { reason }),
+  
+  // Admin - Delete
+  adminDelete: (id) => api.delete(`/testimonies/admin/${id}`),
+  
+  // Admin - Toggle featured
+  adminToggleFeatured: (id, featured) => api.put(`/testimonies/admin/${id}/featured`, { featured }),
 };
 export default api;

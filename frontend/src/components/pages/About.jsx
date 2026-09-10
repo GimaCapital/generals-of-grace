@@ -35,14 +35,15 @@ function About() {
     'We believe in the second coming of Jesus Christ',
   ];
 
-  // const values = [
-  //   { icon: <Heart className="w-6 h-6" />, title: 'Love', description: 'Loving God and loving others unconditionally as Christ loved us', color: 'bg-rose-500' },
-  //   { icon: <Shield className="w-6 h-6" />, title: 'Integrity', description: 'Walking in truth and righteousness with unwavering faith', color: 'bg-blue-500' },
-  //   { icon: <Target className="w-6 h-6" />, title: 'Excellence', description: 'Doing everything with excellence for God\'s glory and honor', color: 'bg-emerald-500' },
-  //   { icon: <Users className="w-6 h-6" />, title: 'Community', description: 'Building a family of believers in unity and love', color: 'bg-purple-500' },
-  //   { icon: <Award className="w-6 h-6" />, title: 'Discipleship', description: 'Raising generals of grace for the Kingdom of God', color: 'bg-amber-500' },
-  //   { icon: <Sparkles className="w-6 h-6" />, title: 'Impact', description: 'Making a lasting impact for Christ in every generation', color: 'bg-cyan-500' },
-  // ];
+// Core Values - Horizontal Format
+const coreValues = [
+  { icon: <Cross className="w-6 h-6" />, title: 'Soul Winning', description: 'Passionately reaching the lost with the gospel of Christ', scripture: 'Matthew 28:19-20', color: 'from-amber-400 to-yellow-500', bgColor: 'bg-amber-50', borderColor: 'border-amber-200', textColor: 'text-amber-600' },
+  { icon: <Users className="w-6 h-6" />, title: 'Leadership Development', description: 'Raising leaders who will impact their generation for Christ', scripture: '2 Timothy 2:2', color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', borderColor: 'border-blue-200', textColor: 'text-blue-600' },
+  { icon: <Heart className="w-6 h-6" />, title: 'Love & Sacrifice', description: 'Loving God and others unconditionally, giving our best for His kingdom', scripture: 'John 15:13', color: 'from-rose-400 to-red-500', bgColor: 'bg-rose-50', borderColor: 'border-rose-200', textColor: 'text-rose-600' },
+  { icon: <Shield className="w-6 h-6" />, title: 'Team Ministry', description: 'Working together in unity to fulfill God\'s purpose', scripture: 'Ecclesiastes 4:9-10', color: 'from-emerald-400 to-teal-500', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200', textColor: 'text-emerald-600' },
+  { icon: <Award className="w-6 h-6" />, title: 'Spiritual Maturity', description: 'Growing in Christ and becoming fully devoted followers of Him', scripture: 'Ephesians 4:13-15', color: 'from-purple-400 to-pink-500', bgColor: 'bg-purple-50', borderColor: 'border-purple-200', textColor: 'text-purple-600' },
+  { icon: <Target className="w-6 h-6" />, title: 'Excellence', description: 'Doing everything with excellence for God\'s glory', scripture: 'Colossians 3:23', color: 'from-orange-400 to-amber-500', bgColor: 'bg-orange-50', borderColor: 'border-orange-200', textColor: 'text-orange-600' },
+];
 
   const ministries = [
     { icon: <Music className="w-6 h-6" />, title: 'Worship & Music', description: 'Powerful praise and worship that invites God\'s presence' },
@@ -267,7 +268,6 @@ function About() {
 </section>
 
 {/* ==================== ABOUT US SECTION ==================== */}
-{/* ==================== ABOUT US & OUR STORY - COMBINED ==================== */}
 <section className="py-20 bg-gray-50 relative overflow-hidden">
   {/* Decorative background elements */}
   <div className="absolute top-0 right-0 w-96 h-96 bg-church-gold/5 rounded-full blur-3xl"></div>
@@ -452,6 +452,42 @@ function About() {
     </div>
   </div>
 </section>
+
+{/* ==================== CORE VALUES SECTION  ==================== */}
+      <section className="py-16 bg-church-navy">
+        <div className="container-custom max-w-6xl mx-auto px-4">
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Header - Takes 1/4 on desktop */}
+            <div className="md:col-span-1">
+              <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
+                Our Core Values
+              </h2>
+              <div className="w-12 h-px bg-white/10 mt-3"></div>
+              <p className="text-white/30 text-sm mt-3">
+                truths that anchor our souls.
+              </p>
+            </div>
+
+            {/* Values - Takes 3/4 on desktop, split into two columns */}
+            <div className="md:col-span-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                {coreValues.map((value, index) => (
+                  <div key={index} className="border-b border-white/5 pb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-white/20 text-sm">{String(index + 1).padStart(2, '0')}</span>
+                      <h3 className="text-white font-medium">{value.title}</h3>
+                    </div>
+                    <p className="text-white/40 text-sm pl-7 mt-1">{value.description}</p>
+                    <p className="text-white/20 text-xs pl-7 mt-1">{value.scripture}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
 {/* Main Pastor Section - Enhanced */}
 <section className="py-20 bg-gray-50">
