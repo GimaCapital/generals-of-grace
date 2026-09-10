@@ -2,68 +2,32 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Facebook, Twitter, Instagram, Youtube, 
-  MessageCircle, Mail, Phone, MapPin, 
-  Link as LinkIcon, User, ArrowLeft,
-  Share2, Heart, Crown, Sparkles, Quote
+  Facebook, Youtube, 
+  ArrowLeft, User, Quote
 } from 'lucide-react';
 
 function PastorSocial() {
-  // Pastor's Social Accounts
+  // Pastor's Social Accounts - Only Facebook & YouTube
   const pastorSocials = [
     { 
       name: 'Facebook', 
-      icon: <Facebook className="w-6 h-6" />, 
-      url: 'https://facebook.com/pastorandrewosalor',
+      icon: <Facebook className="w-8 h-8" />, 
+      url: 'https://www.facebook.com/profile.php?id=100041210169428',
       color: '#1877F2',
       bgColor: 'bg-[#1877F2]',
       hoverBg: 'hover:bg-[#1877F2]',
-      handle: '@PastorAndrewOsalor'
-    },
-    { 
-      name: 'Twitter', 
-      icon: <Twitter className="w-6 h-6" />, 
-      url: 'https://twitter.com/pastorandrew',
-      color: '#1DA1F2',
-      bgColor: 'bg-[#1DA1F2]',
-      hoverBg: 'hover:bg-[#1DA1F2]',
-      handle: '@PastorAndrew'
-    },
-    { 
-      name: 'Instagram', 
-      icon: <Instagram className="w-6 h-6" />, 
-      url: 'https://instagram.com/pastorandrewosalor',
-      color: '#E4405F',
-      bgColor: 'bg-gradient-to-r from-[#E4405F] to-[#F58529]',
-      hoverBg: 'hover:bg-[#E4405F]',
-      handle: '@PastorAndrewOsalor'
+      handle: '@PastorAndrewOsalor',
+      description: 'Follow for daily inspiration and updates'
     },
     { 
       name: 'YouTube', 
-      icon: <Youtube className="w-6 h-6" />, 
-      url: 'https://youtube.com/@pastorandrewosalor',
+      icon: <Youtube className="w-8 h-8" />, 
+      url: 'https://youtube.com/@gogglobaltv?si=dB3QXgG3n_G0Z3vx',
       color: '#FF0000',
       bgColor: 'bg-[#FF0000]',
       hoverBg: 'hover:bg-[#FF0000]',
-      handle: 'Pastor Andrew Osalor'
-    },
-    { 
-      name: 'WhatsApp', 
-      icon: <MessageCircle className="w-6 h-6" />, 
-      url: 'https://wa.me/2348000000000',
-      color: '#25D366',
-      bgColor: 'bg-[#25D366]',
-      hoverBg: 'hover:bg-[#25D366]',
-      handle: '+234 800 000 0000'
-    },
-    { 
-      name: 'Linktree', 
-      icon: <LinkIcon className="w-6 h-6" />, 
-      url: 'https://linktr.ee/pastorandrewosalor',
-      color: '#43E660',
-      bgColor: 'bg-[#43E660]',
-      hoverBg: 'hover:bg-[#43E660]',
-      handle: 'All Links'
+      handle: 'Pastor Andrew Osalor',
+      description: 'Watch sermons, teachings and more'
     },
   ];
 
@@ -115,25 +79,31 @@ function PastorSocial() {
           </div>
         </div>
 
-        {/* Social Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {/* Social Links Grid - 2 Columns for 2 Platforms */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {pastorSocials.map((social, index) => (
             <a
               key={index}
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-3 p-4 bg-white rounded-xl shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className="group flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
             >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${social.bgColor} group-hover:scale-110 transition-transform shadow-lg`}>
+              {/* Icon */}
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-white ${social.bgColor} group-hover:scale-110 transition-transform shadow-lg`}>
                 {social.icon}
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-church-navy text-sm">{social.name}</p>
-                <p className="text-xs text-gray-400 truncate max-w-[100px]">{social.handle}</p>
+              
+              {/* Info */}
+              <div className="text-center">
+                <p className="font-display font-bold text-church-navy text-xl mb-1">{social.name}</p>
+                <p className="text-sm text-church-gold font-medium mb-2">{social.handle}</p>
+                <p className="text-xs text-gray-500">{social.description}</p>
               </div>
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-2 h-2 bg-church-gold rounded-full"></div>
+
+              {/* Follow Button */}
+              <div className={`mt-2 px-6 py-2 rounded-full text-white text-sm font-semibold ${social.bgColor} group-hover:scale-105 transition-transform`}>
+                Follow →
               </div>
             </a>
           ))}
