@@ -99,7 +99,7 @@ export const DEFAULT_PAGINATION = {
 };
 
 // Preset Amounts for Giving
-export const PRESET_AMOUNTS = [1000, 2000, 5000, 10000, 20000, 50000];
+export const PRESET_AMOUNTS = [100, 200,300, 500, 1000, 2000, 5000, 10000, 20000, 50000];
 
 // Service Times
 export const SERVICE_TIMES = [

@@ -46,6 +46,7 @@ import ManageMinistries from './components/admin/ManageMinistries';
 import AdminTestimonies from './components/admin/Testimonies';
 import BookPurchase from './components/pages/BookPurchase';
 import Books from './components/pages/Books';
+import AdminBooks from './components/admin/Books';
 
 function App() {
   return (
@@ -119,6 +120,7 @@ function App() {
               <Route path="settings" element={<AdminSettings />} />
               <Route path="/admin/ministries" element={<ManageMinistries />} />
               <Route path="testimonies" element={<AdminTestimonies />} />
+              <Route path="books" element={<AdminBooks />} />
             </Route>
 
             {/* 404 */}

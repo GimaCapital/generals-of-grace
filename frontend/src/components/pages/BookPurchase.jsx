@@ -1,24 +1,24 @@
-// frontend/src/components/pages/BookPurchase.jsx
+// src/components/pages/BookPurchase.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, BookOpen, Heart, Share2, ChevronRight, 
+import {
+  ArrowLeft, BookOpen, Heart, Share2, ChevronRight,
   Star, ShoppingCart, Gift, X, CheckCircle,
   CreditCard, Wallet, Building, Phone, Shield
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { orderAPI, givingAPI } from '../../services/api';
+import { orderAPI, givingAPI, bookAPI } from '../../services/api';
 import { useSettings } from '../../context/SettingsContext';
 
 function BookPurchase() {
   const { bookSlug } = useParams();
-  const { settings, loading: settingsLoading, paymentProvider: contextProvider, refetch } = useSettings();
+  const { settings, loading: settingsLoading, paymentProvider: contextProvider } = useSettings();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showOrderForm, setShowOrderForm] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [paymentMethod, setPaymentMethod] = useState('');
   const [paymentProvider, setPaymentProvider] = useState('');
   const [formData, setFormData] = useState({
     name: '',
@@ -31,12 +31,11 @@ function BookPurchase() {
     cashNotes: ''
   });
 
-  // ✅ Set payment method from context when available
+  // ✅ Use context provider when available
   useEffect(() => {
     if (contextProvider) {
       setPaymentProvider(contextProvider);
-      setPaymentMethod(contextProvider);
-      // console.log('📦 Payment provider from context:', contextProvider);
+      setPaymentMethod(prev => prev || contextProvider);
     }
   }, [contextProvider]);
 
@@ -50,94 +49,44 @@ function BookPurchase() {
   const refreshProvider = async () => {
     try {
       const response = await givingAPI.getPaymentProvider();
-      if (response.data?.success) {
-        const provider = response.data.provider;
-        setPaymentProvider(provider);
-        setPaymentMethod(provider);
-        // console.log('🔄 Provider refreshed:', provider);
+      if (response.data?.success && response.data.provider) {
+        setPaymentProvider(response.data.provider);
+        setPaymentMethod(prev => prev || response.data.provider);
       }
     } catch (error) {
       // console.error('Error refreshing provider:', error);
     }
   };
 
-  // Book data
-  const booksData = {
-    'maximize-your-time': {
-      id: 1,
-      title: 'Maximize Your Time',
-      subtitle: 'Redeeming Your Time for Kingdom Impact',
-      slug: 'maximize-your-time',
-      image: '/images/maximize-your-time.jpg',
-      description: `Discover the secrets of redeeming your time for Kingdom impact. Learn how to prioritize what truly matters and make every moment count for eternity.`,
-      pages: 256,
-      format: 'Paperback',
-      releaseDate: 'August 2026',
-      category: 'Christian Living',
-      price: 5000,
-      priceDisplay: '₦5,000',
-      author: 'Pastor Andrew Osalor',
-      color: 'from-amber-500 to-orange-500',
-      reviews: [
-        { name: 'Brother John', rating: 5, comment: 'This book changed my perspective on time completely!' },
-        { name: 'Sister Mary', rating: 5, comment: 'Every Christian needs to read this book.' },
-      ]
-    },
-    'soul-winning': {
-      id: 2,
-      title: 'Soul Winning',
-      subtitle: 'Sharing Your Faith with Boldness and Love',
-      slug: 'soul-winning',
-      image: '/images/soul.jpg',
-      description: `A practical guide to sharing your faith with boldness and love. Learn how to lead people to Christ and disciple them effectively.`,
-      pages: 320,
-      format: 'Paperback',
-      releaseDate: 'August 2026',
-      category: 'Evangelism',
-      price: 6000,
-      priceDisplay: '₦6,000',
-      author: 'Pastor Andrew Osalor',
-      color: 'from-red-500 to-rose-500',
-      reviews: [
-        { name: 'Pastor David', rating: 5, comment: 'A must-read for every believer!' },
-        { name: 'Sister Grace', rating: 5, comment: 'This book gave me boldness to share my faith.' },
-      ]
-    },
-    'relationship': {
-      id: 3,
-      title: 'Relationship',
-      subtitle: 'Building Godly Relationships That Honor God',
-      slug: 'relationship',
-      image: '/images/relationship-book.jpg',
-      description: `Building healthy, godly relationships that honor God and bless others. Discover the principles for lasting and fulfilling connections.`,
-      pages: 288,
-      format: 'Paperback',
-      releaseDate: 'August 2026',
-      category: 'Relationships',
-      price: 5500,
-      priceDisplay: '₦5,500',
-      author: 'Pastor Andrew Osalor',
-      color: 'from-purple-500 to-pink-500',
-      reviews: [
-        { name: 'Brother Michael', rating: 5, comment: 'This book saved my marriage!' },
-        { name: 'Sister Esther', rating: 5, comment: 'Every couple should read this together.' },
-      ]
-    }
-  };
-
+  // ✅ Fetch book from database
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const foundBook = booksData[bookSlug];
-      if (foundBook) {
-        setBook(foundBook);
-        setFormData(prev => ({
-          ...prev,
-          cashAmountPaid: foundBook.price
-        }));
+    const fetchBook = async () => {
+      try {
+        setLoading(true);
+        const response = await bookAPI.getBySlug(bookSlug);
+
+        if (response.data.success && response.data.data) {
+          const foundBook = response.data.data;
+          setBook({
+            ...foundBook,
+            priceDisplay: `₦${(foundBook.price || 0).toLocaleString()}`,
+          });
+          setFormData(prev => ({
+            ...prev,
+            cashAmountPaid: foundBook.price || 0
+          }));
+        } else {
+          setBook(null);
+        }
+      } catch (error) {
+        // console.error('Error fetching book:', error);
+        setBook(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    };
+
+    if (bookSlug) fetchBook();
   }, [bookSlug]);
 
   const handleOrderSubmit = async (e) => {
@@ -146,7 +95,7 @@ function BookPurchase() {
 
     try {
       const total = book.price * formData.quantity;
-      
+
       const orderData = {
         customerName: formData.name,
         customerEmail: formData.email,
@@ -172,36 +121,22 @@ function BookPurchase() {
         })
       };
 
-      // console.log('📤 Sending order data:', orderData);
-
       const response = await orderAPI.create(orderData);
 
       if (response.data.success) {
         const orderId = response.data.data.order.id;
         const paymentLink = response.data.data.paymentLink;
-        
+
         toast.success('🎉 Order placed successfully!');
         setShowOrderForm(false);
-        
+
         if (paymentMethod !== 'cash' && paymentLink) {
           window.location.href = paymentLink;
         } else {
           window.location.href = `/order-confirmation/${orderId}`;
         }
-        
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          quantity: 1,
-          message: '',
-          cashPaidBy: '',
-          cashAmountPaid: book?.price || 0,
-          cashNotes: ''
-        });
       }
     } catch (error) {
-      // console.error('Error placing order:', error);
       toast.error(error.response?.data?.message || 'Failed to place order. Please try again.');
     } finally {
       setSubmitting(false);
@@ -239,8 +174,8 @@ function BookPurchase() {
           <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-display font-bold text-church-navy">Book Not Found</h2>
           <p className="text-gray-500 mt-2">The book you're looking for doesn't exist.</p>
-          <Link to="/" className="inline-block mt-6 bg-church-gold text-church-navy px-6 py-3 rounded-xl font-semibold">
-            Back to Home
+          <Link to="/books" className="inline-block mt-6 bg-church-gold text-church-navy px-6 py-3 rounded-xl font-semibold">
+            Back to Books
           </Link>
         </div>
       </div>
@@ -252,8 +187,8 @@ function BookPurchase() {
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="container-custom max-w-5xl">
-        <Link 
-          to="/books" 
+        <Link
+          to="/books"
           className="inline-flex items-center gap-2 text-church-gold hover:underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -261,12 +196,12 @@ function BookPurchase() {
         </Link>
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-          <div className={`h-2 bg-gradient-to-r ${book.color}`}></div>
-          
+          <div className={`h-2 bg-gradient-to-r ${book.color || 'from-amber-500 to-orange-500'}`}></div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
             <div className="relative">
-              <img 
-                src={book.image} 
+              <img
+                src={book.image}
                 alt={book.title}
                 className="w-full h-auto rounded-xl shadow-lg object-cover"
                 onError={(e) => {
@@ -274,7 +209,7 @@ function BookPurchase() {
                 }}
               />
               <div className="absolute top-4 left-4">
-                <span className={`bg-gradient-to-r ${book.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
+                <span className={`bg-gradient-to-r ${book.color || 'from-amber-500 to-orange-500'} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg`}>
                   New Release
                 </span>
               </div>
@@ -283,7 +218,7 @@ function BookPurchase() {
             <div className="flex flex-col">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-church-gold text-xs font-bold uppercase tracking-wider bg-church-gold/10 px-3 py-1 rounded-full">
-                  Book {book.id}
+                  {book.category || 'Book'}
                 </span>
                 <span className="text-xs text-gray-400">•</span>
                 <span className="text-xs text-gray-400">{book.pages} pages</span>
@@ -335,7 +270,7 @@ function BookPurchase() {
                 </div>
                 <div className="text-center">
                   <p className="text-xs text-gray-400">Release Date</p>
-                  <p className="text-sm font-bold text-church-gold">{book.releaseDate}</p>
+                  <p className="text-sm font-bold text-church-gold">{book.releaseDate || 'Available Now'}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-xs text-gray-400">Category</p>
@@ -373,11 +308,17 @@ function BookPurchase() {
 
       {/* Order Form Modal */}
       {showOrderForm && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowOrderForm(false);
+          }}
+        >
           <motion.div
             initial={{ scale: 0.9, y: 30 }}
             animate={{ scale: 1, y: 0 }}
             className="bg-white rounded-2xl max-w-lg w-full p-8 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-display font-bold text-church-navy">Order Book</h2>
@@ -396,7 +337,7 @@ function BookPurchase() {
                   type="text"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-church-gold focus:border-transparent"
                   placeholder="Your full name"
                 />
@@ -408,7 +349,7 @@ function BookPurchase() {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-church-gold focus:border-transparent"
                   placeholder="your@email.com"
                 />
@@ -419,7 +360,7 @@ function BookPurchase() {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-church-gold focus:border-transparent"
                   placeholder="Phone number"
                 />
@@ -429,41 +370,45 @@ function BookPurchase() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
                 <select
                   value={formData.quantity}
-                  onChange={(e) => setFormData({...formData, quantity: parseInt(e.target.value)})}
+                  onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-church-gold focus:border-transparent"
                 >
-                  {[1,2,3,4,5].map((num) => (
+                  {[1, 2, 3, 4, 5].map((num) => (
                     <option key={num} value={num}>{num}</option>
                   ))}
                 </select>
               </div>
 
-              {/* ✅ Payment Method - Shows correct provider */}
+              {/* Payment Method */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Payment Method *
+                </label>
                 <div className="grid grid-cols-2 gap-3">
+                  {/* Online - Uses paymentProvider from context */}
                   <button
                     type="button"
-                    onClick={() => {
-                      if (paymentProvider) {
-                        setPaymentMethod(paymentProvider);
-                      }
-                    }}
+                    onClick={() => setPaymentMethod(paymentProvider)}
+                    disabled={!paymentProvider}
                     className={`p-3 rounded-xl border-2 transition-all flex items-center gap-2 justify-center ${
-                      paymentMethod !== 'cash' && paymentMethod !== '' 
-                        ? 'border-church-gold bg-church-gold/10' 
+                      paymentMethod !== 'cash' && paymentMethod === paymentProvider
+                        ? 'border-church-gold bg-church-gold/10'
                         : 'border-gray-200 hover:border-church-gold/50'
-                    }`}
+                    } ${!paymentProvider ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <CreditCard className="w-5 h-5 text-church-gold" />
-                    <span className="text-sm font-medium capitalize">{paymentProvider || 'Online'}</span>
+                    <span className="text-sm font-medium capitalize">
+                      {paymentProvider || 'Loading...'}
+                    </span>
                   </button>
+
+                  {/* Cash */}
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('cash')}
                     className={`p-3 rounded-xl border-2 transition-all flex items-center gap-2 justify-center ${
-                      paymentMethod === 'cash' 
-                        ? 'border-church-gold bg-church-gold/10' 
+                      paymentMethod === 'cash'
+                        ? 'border-church-gold bg-church-gold/10'
                         : 'border-gray-200 hover:border-church-gold/50'
                     }`}
                   >
@@ -471,10 +416,12 @@ function BookPurchase() {
                     <span className="text-sm font-medium">Cash</span>
                   </button>
                 </div>
-                {paymentMethod !== 'cash' && paymentProvider && (
+
+                {paymentMethod && paymentMethod !== 'cash' && paymentProvider && (
                   <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
                     <Shield className="w-3 h-3 text-church-gold" />
-                    Secure payments via <span className="font-semibold capitalize">{paymentProvider}</span>
+                    Secure payments via{' '}
+                    <span className="font-semibold capitalize">{paymentProvider}</span>
                   </p>
                 )}
               </div>
@@ -487,7 +434,7 @@ function BookPurchase() {
                     <input
                       type="number"
                       value={formData.cashAmountPaid}
-                      onChange={(e) => setFormData({...formData, cashAmountPaid: parseFloat(e.target.value)})}
+                      onChange={(e) => setFormData({ ...formData, cashAmountPaid: parseFloat(e.target.value) })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
                     />
                   </div>
@@ -496,7 +443,7 @@ function BookPurchase() {
                     <input
                       type="text"
                       value={formData.cashPaidBy}
-                      onChange={(e) => setFormData({...formData, cashPaidBy: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, cashPaidBy: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
                       placeholder="Name of person paying"
                     />
@@ -508,7 +455,7 @@ function BookPurchase() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
                 <textarea
                   value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-church-gold focus:border-transparent"
                   rows="3"
                   placeholder="Any special requests..."
@@ -535,8 +482,8 @@ function BookPurchase() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                disabled={submitting || !paymentProvider}
-                className="w-full bg-church-gold text-church-navy py-4 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                disabled={submitting || !paymentMethod}
+                className="w-full bg-church-gold text-church-navy py-4 rounded-xl font-semibold shadow-lg shadow-church-gold/30 hover:shadow-church-gold/50 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {submitting ? (
                   <>
@@ -546,9 +493,9 @@ function BookPurchase() {
                 ) : (
                   <>
                     <Gift className="w-5 h-5" />
-                    {paymentMethod === 'cash' 
-                      ? 'Confirm Cash Order' 
-                      : `Pay with ${paymentProvider ? paymentProvider.charAt(0).toUpperCase() + paymentProvider.slice(1) : '...'}`
+                    {paymentMethod === 'cash'
+                      ? 'Confirm Cash Order'
+                      : `Pay with ${paymentMethod ? paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1) : 'Online'}`
                     }
                   </>
                 )}

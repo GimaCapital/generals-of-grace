@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ministryAPI } from '../../services/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, Users, Calendar, MapPin, User, Clock, X, Image, Video, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, Users, Calendar, MapPin, User, Clock, X, Image, Video, Upload, Save } from 'lucide-react';
 import MediaUpload from '../common/MediaUpload';
 
 function AdminMinistries() {
@@ -10,6 +10,7 @@ function AdminMinistries() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingMinistry, setEditingMinistry] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -106,6 +107,7 @@ function AdminMinistries() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
     try {
       if (editingMinistry) {
         await ministryAPI.update(editingMinistry.id, formData);
@@ -114,28 +116,12 @@ function AdminMinistries() {
         await ministryAPI.create(formData);
         toast.success('Ministry created successfully!');
       }
-      setShowForm(false);
-      setEditingMinistry(null);
-      setFormData({
-        name: '',
-        description: '',
-        leader: '',
-        meetingDay: '',
-        meetingTime: '',
-        venue: '',
-        subtitle: '',
-        type: 'ministry',
-        status: 'active',
-        image: '',
-        galleryImages: [],
-        videoUrl: '',
-        galleryVideos: [],
-        comingSoon: false,
-        date: ''
-      });
+      closeForm();
       fetchMinistries();
     } catch (error) {
       toast.error('Error saving ministry');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -173,6 +159,52 @@ function AdminMinistries() {
     setShowForm(true);
   };
 
+  // ✅ Reset form and close
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingMinistry(null);
+    setFormData({
+      name: '',
+      description: '',
+      leader: '',
+      meetingDay: '',
+      meetingTime: '',
+      venue: '',
+      subtitle: '',
+      type: 'ministry',
+      status: 'active',
+      image: '',
+      galleryImages: [],
+      videoUrl: '',
+      galleryVideos: [],
+      comingSoon: false,
+      date: ''
+    });
+  };
+
+  // ✅ Open form for new ministry
+  const openNewForm = () => {
+    setEditingMinistry(null);
+    setFormData({
+      name: '',
+      description: '',
+      leader: '',
+      meetingDay: '',
+      meetingTime: '',
+      venue: '',
+      subtitle: '',
+      type: 'ministry',
+      status: 'active',
+      image: '',
+      galleryImages: [],
+      videoUrl: '',
+      galleryVideos: [],
+      comingSoon: false,
+      date: ''
+    });
+    setShowForm(true);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -186,27 +218,7 @@ function AdminMinistries() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-display font-bold text-church-navy">Manage Ministries</h1>
         <button
-          onClick={() => {
-            setEditingMinistry(null);
-            setFormData({
-              name: '',
-              description: '',
-              leader: '',
-              meetingDay: '',
-              meetingTime: '',
-              venue: '',
-              subtitle: '',
-              type: 'ministry',
-              status: 'active',
-              image: '',
-              galleryImages: [],
-              videoUrl: '',
-              galleryVideos: [],
-              comingSoon: false,
-              date: ''
-            });
-            setShowForm(true);
-          }}
+          onClick={openNewForm}
           className="btn-primary flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
@@ -214,14 +226,38 @@ function AdminMinistries() {
         </button>
       </div>
 
-      {/* Form Modal */}
+      {/* ✅ Form Modal with Close Button at Top */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
-            <h2 className="text-2xl font-display font-bold text-church-navy mb-4">
-              {editingMinistry ? 'Edit Ministry' : 'Add New Ministry'}
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeForm();
+          }}
+        >
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            
+            {/* ✅ STICKY HEADER WITH CLOSE BUTTON */}
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between z-10 rounded-t-xl">
+              <div>
+                <h2 className="text-2xl font-display font-bold text-church-navy">
+                  {editingMinistry ? 'Edit Ministry' : 'Add New Ministry'}
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  {editingMinistry ? 'Update ministry details' : 'Fill in the details below'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={closeForm}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+                title="Close"
+              >
+                <X className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Form Content */}
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
               {/* Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
@@ -505,20 +541,31 @@ function AdminMinistries() {
                 <span className="text-xs text-gray-400">(This ministry will show as "Coming Soon")</span>
               </div>
 
-              {/* Buttons */}
-              <div className="flex gap-3 pt-4">
-                <button type="submit" className="btn-primary flex-1">
-                  {editingMinistry ? 'Update' : 'Create'}
-                </button>
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4 border-t border-gray-100">
                 <button
                   type="button"
-                  onClick={() => {
-                    setShowForm(false);
-                    setEditingMinistry(null);
-                  }}
+                  onClick={closeForm}
                   className="btn-outline flex-1"
                 >
                   Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={saving}
+                  className="btn-primary flex-1 inline-flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {saving ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      {editingMinistry ? 'Update' : 'Create'}
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -526,7 +573,7 @@ function AdminMinistries() {
         </div>
       )}
 
-      {/* ✅ Ministries List - Clean Professional Design */}
+      {/* ✅ Ministries List */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -543,7 +590,6 @@ function AdminMinistries() {
             <tbody>
               {ministries.map((ministry) => (
                 <tr key={ministry.id} className="border-b last:border-0 hover:bg-gray-50 transition-colors">
-                  {/* Ministry Name */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       {ministry.image ? (
@@ -566,7 +612,6 @@ function AdminMinistries() {
                     </div>
                   </td>
 
-                  {/* Leader */}
                   <td className="px-6 py-4">
                     {ministry.leader ? (
                       <div className="flex items-center gap-2">
@@ -578,7 +623,6 @@ function AdminMinistries() {
                     )}
                   </td>
 
-                  {/* Schedule */}
                   <td className="px-6 py-4">
                     <div className="space-y-1">
                       {ministry.meetingDay && (
@@ -602,7 +646,6 @@ function AdminMinistries() {
                     </div>
                   </td>
 
-                  {/* Status */}
                   <td className="px-6 py-4">
                     <div className="flex flex-col gap-1">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold w-fit ${
@@ -624,38 +667,32 @@ function AdminMinistries() {
                     </div>
                   </td>
 
-                  {/* Media - Clean Icons with Tooltips */}
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-center gap-2">
-                      {/* Main Image */}
                       {ministry.image && (
                         <div className="flex items-center gap-0.5 text-xs text-gray-500" title="Main Image">
                           <Image className="w-4 h-4 text-green-600" />
                           <span className="font-medium text-gray-700">1</span>
                         </div>
                       )}
-                      {/* Gallery Images */}
                       {ministry.galleryImages?.length > 0 && (
                         <div className="flex items-center gap-0.5 text-xs text-gray-500" title="Gallery Images">
                           <Image className="w-4 h-4 text-green-400" />
                           <span className="font-medium text-gray-700">{ministry.galleryImages.length}</span>
                         </div>
                       )}
-                      {/* Main Video */}
                       {ministry.videoUrl && (
                         <div className="flex items-center gap-0.5 text-xs text-gray-500" title="Main Video">
                           <Video className="w-4 h-4 text-blue-600" />
                           <span className="font-medium text-gray-700">1</span>
                         </div>
                       )}
-                      {/* Gallery Videos */}
                       {ministry.galleryVideos?.length > 0 && (
                         <div className="flex items-center gap-0.5 text-xs text-gray-500" title="Gallery Videos">
                           <Video className="w-4 h-4 text-blue-400" />
                           <span className="font-medium text-gray-700">{ministry.galleryVideos.length}</span>
                         </div>
                       )}
-                      {/* No Media */}
                       {!ministry.image && !ministry.galleryImages?.length && 
                        !ministry.videoUrl && !ministry.galleryVideos?.length && (
                         <span className="text-xs text-gray-400">—</span>
@@ -663,7 +700,6 @@ function AdminMinistries() {
                     </div>
                   </td>
 
-                  {/* Actions */}
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-1">
                       <button

@@ -161,6 +161,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const settingsRoutes = require('./routes/settings');
 const orderRoutes = require('./routes/orders');
 const testimonyRoutes = require('./routes/testimonies');
+const bookRoutes = require('./routes/books');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sermons', sermonRoutes);
@@ -172,6 +173,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/testimonies', testimonyRoutes);
+app.use('/api/books', bookRoutes);
 
 // ============================================
 // 404 HANDLER

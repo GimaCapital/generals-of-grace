@@ -30,7 +30,26 @@ const getPaymentMethodDisplay = (method) => PAYMENT_METHODS[method] || method ||
 
 const getPaymentType = (order) => {
   const payment = order.paymentResponse || {};
-  return (payment.payment_type || payment.channel || payment.authorization?.channel || 'N/A').toUpperCase();
+  
+  // ═══════════════════════════════════════════
+  // STEP 1: Try gateway response (most reliable)
+  // ═══════════════════════════════════════════
+  if (payment.payment_type) return payment.payment_type.toUpperCase();
+  if (payment.channel) return payment.channel.toUpperCase();
+  if (payment.authorization?.channel) return payment.authorization.channel.toUpperCase();
+  
+  // ═══════════════════════════════════════════
+  // STEP 2: Fallback based on provider
+  // ═══════════════════════════════════════════
+  const method = order.paymentProvider || order.paymentMethod;
+  if (method === 'paystack' || method === 'flutterwave') return 'CARD';
+  if (method === 'cash') return 'CASH';
+  if (method === 'bank_transfer') return 'BANK TRANSFER';
+  
+  // ═══════════════════════════════════════════
+  // STEP 3: Unknown
+  // ═══════════════════════════════════════════
+  return 'N/A';
 };
 
 const getTransactionRef = (order) => {
@@ -47,6 +66,12 @@ const getPaymentStatus = (order) => {
     return { label: '⏳ Pending', className: 'bg-yellow-100 text-yellow-800' };
   }
   return { label: '❌ Failed', className: 'bg-red-100 text-red-800' };
+};
+
+// ✅ Helper to capitalize text properly
+const capitalize = (str) => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
 // ============================================
@@ -377,14 +402,14 @@ function OrderConfirmation() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <div>
                   <p className="text-gray-500">Delivery Method</p>
-                  <p className="font-semibold text-church-navy capitalize">
-                    {order.deliveryMethod || 'Pickup'}
+                  <p className="font-semibold text-church-navy">
+                    {capitalize(order.deliveryMethod || 'Pickup')}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-500">Delivery Status</p>
-                  <p className="font-semibold text-church-navy capitalize">
-                    {order.deliveryStatus || 'Pending'}
+                  <p className="font-semibold text-church-navy">
+                    {capitalize(order.deliveryStatus || 'Pending')}
                   </p>
                 </div>
               </div>

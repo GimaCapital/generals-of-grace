@@ -46,7 +46,7 @@ function Give() {
     }
   };
 
-  // Extended giving types with icons
+  // ✅ UPDATED: Added Prophetic Seed and Gift to All Pastors
   const givingTypes = [
     { id: 'tithe', label: 'Tithe', icon: <Heart className="w-6 h-6" />, description: '10% of your income to God' },
     { id: 'offering', label: 'Offering', icon: <Wallet className="w-6 h-6" />, description: 'Freewill offering to God' },
@@ -54,6 +54,8 @@ function Give() {
     { id: 'mission', label: 'Missions', icon: <Globe className="w-6 h-6" />, description: 'Support missionaries' },
     { id: 'seed', label: 'Seed Offering', icon: <Gift className="w-6 h-6" />, description: 'Special seed for breakthrough' },
     { id: 'thanksgiving', label: 'Thanksgiving', icon: <Star className="w-6 h-6" />, description: 'Thanksgiving offering' },
+    { id: 'prophetic-seed', label: 'Prophetic Seed', icon: <Sparkles className="w-6 h-6" />, description: 'Prophetic seed for divine direction' },
+    { id: 'pastors-gift', label: 'Gift to All Pastors', icon: <Crown className="w-6 h-6" />, description: 'Bless all our pastors with a gift' },
   ];
 
   const getIcon = (id) => {
@@ -69,6 +71,8 @@ function Give() {
       case 'mission': return 'from-emerald-500 to-green-500';
       case 'seed': return 'from-purple-500 to-indigo-500';
       case 'thanksgiving': return 'from-orange-500 to-red-500';
+      case 'prophetic-seed': return 'from-violet-500 to-purple-500';
+      case 'pastors-gift': return 'from-church-gold to-amber-500';
       default: return 'from-church-gold to-amber-500';
     }
   };
@@ -81,6 +85,8 @@ function Give() {
       case 'mission': return 'bg-emerald-50 border-emerald-200';
       case 'seed': return 'bg-purple-50 border-purple-200';
       case 'thanksgiving': return 'bg-orange-50 border-orange-200';
+      case 'prophetic-seed': return 'bg-violet-50 border-violet-200';
+      case 'pastors-gift': return 'bg-yellow-50 border-yellow-200';
       default: return 'bg-gray-50 border-gray-200';
     }
   };
@@ -93,17 +99,26 @@ function Give() {
       case 'mission': return 'text-emerald-500';
       case 'seed': return 'text-purple-500';
       case 'thanksgiving': return 'text-orange-500';
+      case 'prophetic-seed': return 'text-violet-500';
+      case 'pastors-gift': return 'text-church-gold';
       default: return 'text-church-gold';
     }
   };
 
+  // ✅ UPDATED: Impact statement now starts from ₦100
   const getImpactStatement = (amount) => {
     const num = parseFloat(amount);
-    if (num >= 10000) return "Your generous gift will help fund major Kingdom projects and support our missionaries worldwide! 🌍";
+    if (num >= 50000) return "Your extraordinary gift will fund major Kingdom projects and transform lives worldwide! 🌍✨";
+    if (num >= 20000) return "Your generous seed will support our missionaries and expand God's Kingdom across nations! 🌍";
+    if (num >= 10000) return "Your gift will help fund major Kingdom projects and support our missionaries worldwide! 🙏";
     if (num >= 5000) return "Your gift will support church programs, outreach events, and community impact initiatives! 🙏";
-    if (num >= 2000) return "Your giving will help spread the Gospel and support our weekly ministries! ✝️";
-    if (num >= 1000) return "Your contribution will help provide resources for our worship services and church operations! 🎵";
-    if (num >= 500) return "Your gift will support our community outreach and prayer initiatives! 🤝";
+    if (num >= 3000) return "Your giving will help spread the Gospel and support our weekly ministries! ✝️";
+    if (num >= 2000) return "Your contribution will help provide resources for our worship services! 🎵";
+    if (num >= 1000) return "Your gift will support our community outreach and prayer initiatives! 🤝";
+    if (num >= 500) return "Your seed will help provide materials for our church programs! 📖";
+    if (num >= 300) return "Your giving will support our Sunday school and children's ministry! 👶";
+    if (num >= 200) return "Your gift will help with church utilities and daily operations! 🏛️";
+    if (num >= 100) return "Every seed you sow brings blessing to your life and advances God's Kingdom! 🌱";
     return "Every seed you sow brings blessing to your life and advances God's Kingdom! 🌱";
   };
 
@@ -513,7 +528,7 @@ function Give() {
                               placeholder="Enter amount"
                               className="w-full pl-10 pr-6 py-4 text-xl border-2 border-gray-200 rounded-xl focus:outline-none focus:border-church-gold transition-colors"
                               min="100"
-                              step="100"
+                              // step="100"
                               required
                             />
                           </div>

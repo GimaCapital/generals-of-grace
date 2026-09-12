@@ -181,4 +181,20 @@ export const testimonyAPI = {
   // Admin - Toggle featured
   adminToggleFeatured: (id, featured) => api.put(`/testimonies/admin/${id}/featured`, { featured }),
 };
+
+// Books API
+export const bookAPI = {
+  // Public
+  getAll: (params) => api.get('/books', { params }),
+  getBySlug: (slug) => api.get(`/books/slug/${slug}`),
+  getById: (id) => api.get(`/books/${id}`),
+  
+  // Admin
+  adminGetAll: (params) => api.get('/books/admin/all', { params }),
+  adminGetStats: () => api.get('/books/admin/stats'),
+  create: (data) => api.post('/books', data),
+  update: (id, data) => api.put(`/books/${id}`, data),
+  delete: (id) => api.delete(`/books/${id}`),
+  toggleFeatured: (id, featured) => api.put(`/books/${id}/featured`, { featured }),
+};
 export default api;

@@ -55,7 +55,7 @@ function AdminTestimonies() {
       const response = await testimonyAPI.adminGetAll({ status: filter === 'all' ? undefined : filter });
       setTestimonies(response.data.data || []);
     } catch (error) {
-      console.error('Error fetching testimonies:', error);
+    //   console.error('Error fetching testimonies:', error);
       toast.error('Failed to load testimonies');
     } finally {
       setLoading(false);
@@ -67,8 +67,21 @@ function AdminTestimonies() {
       const response = await testimonyAPI.adminGetStats();
       setStats(response.data.data);
     } catch (error) {
-      console.error('Error fetching stats:', error);
+    //   console.error('Error fetching stats:', error);
     }
+  };
+
+  // ✅ Close edit modal
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setSelectedTestimony(null);
+  };
+
+  // ✅ Close reject modal
+  const closeRejectModal = () => {
+    setShowRejectModal(false);
+    setRejectReason('');
+    setSelectedTestimony(null);
   };
 
   // ✅ Open edit modal with testimony data
@@ -107,11 +120,10 @@ function AdminTestimonies() {
     try {
       await testimonyAPI.adminUpdate(selectedTestimony.id, editFormData);
       toast.success('Testimony updated successfully!');
-      setShowEditModal(false);
-      setSelectedTestimony(null);
+      closeEditModal();
       fetchTestimonies();
     } catch (error) {
-      console.error('Error updating testimony:', error);
+    //   console.error('Error updating testimony:', error);
       toast.error('Failed to update testimony');
     } finally {
       setSaving(false);
@@ -133,8 +145,7 @@ function AdminTestimonies() {
     try {
       await testimonyAPI.adminReject(id, rejectReason);
       toast.success('Testimony rejected');
-      setRejectReason('');
-      setShowRejectModal(false);
+      closeRejectModal();
       fetchTestimonies();
       fetchStats();
     } catch (error) {
@@ -365,7 +376,7 @@ function AdminTestimonies() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-1">
-                        {/* ✅ Edit Button - Always visible */}
+                        {/* Edit Button */}
                         <button
                           onClick={() => handleOpenEdit(testimony)}
                           className="p-1.5 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
@@ -412,20 +423,22 @@ function AdminTestimonies() {
         </div>
       </div>
 
-      {/* ✅ Edit Modal - Admin can edit before approving */}
+      {/* ✅ Edit Modal */}
       {showEditModal && selectedTestimony && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeEditModal();
+          }}
+        >
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between z-10">
               <div>
                 <h2 className="text-2xl font-display font-bold text-church-navy">Edit Testimony</h2>
                 <p className="text-sm text-gray-500">Edit before approving</p>
               </div>
               <button
-                onClick={() => {
-                  setShowEditModal(false);
-                  setSelectedTestimony(null);
-                }}
+                onClick={closeEditModal}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <X className="w-6 h-6 text-gray-500" />
@@ -536,10 +549,7 @@ function AdminTestimonies() {
               {/* Buttons */}
               <div className="flex gap-3 pt-4 border-t border-gray-100">
                 <button
-                  onClick={() => {
-                    setShowEditModal(false);
-                    setSelectedTestimony(null);
-                  }}
+                  onClick={closeEditModal}
                   className="flex-1 border-2 border-gray-300 text-gray-600 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
                 >
                   Cancel
@@ -567,9 +577,14 @@ function AdminTestimonies() {
         </div>
       )}
 
-      {/* Reject Modal */}
+      {/* ✅ Reject Modal */}
       {showRejectModal && selectedTestimony && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeRejectModal();
+          }}
+        >
           <div className="bg-white rounded-2xl max-w-md w-full p-6">
             <h2 className="text-xl font-display font-bold text-church-navy mb-2">Reject Testimony</h2>
             <p className="text-sm text-gray-500 mb-4">
@@ -587,11 +602,7 @@ function AdminTestimonies() {
             </div>
             <div className="flex gap-3">
               <button
-                onClick={() => {
-                  setShowRejectModal(false);
-                  setRejectReason('');
-                  setSelectedTestimony(null);
-                }}
+                onClick={closeRejectModal}
                 className="flex-1 border-2 border-gray-300 text-gray-600 py-2 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
               >
                 Cancel
@@ -607,7 +618,7 @@ function AdminTestimonies() {
         </div>
       )}
 
-      {/* Image Modal */}
+      {/* ✅ Image Modal - With Click Outside to Close */}
       {selectedImage && (
         <div 
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
@@ -628,7 +639,7 @@ function AdminTestimonies() {
         </div>
       )}
 
-      {/* Video Modal */}
+      {/* ✅ Video Modal - With Click Outside to Close */}
       {selectedVideo && (
         <div 
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"

@@ -13,7 +13,8 @@ import {
   Menu as MenuIcon,
   Close as CloseIcon,
   Church as MinistriesIcon,
-  Chat as TestimoniesIcon  // ✅ Changed from MessageSquare to Chat
+  Chat as TestimoniesIcon,
+  MenuBook as BooksIcon
 } from '@mui/icons-material';
 
 function AdminLayout() {
@@ -28,6 +29,7 @@ function AdminLayout() {
     { path: '/admin/giving', icon: <GivingIcon />, label: 'Giving' },
     { path: '/admin/ministries', icon: <MinistriesIcon />, label: 'Ministries' },
     { path: '/admin/testimonies', icon: <TestimoniesIcon />, label: 'Testimonies' },
+    { path: '/admin/books', icon: <BooksIcon />, label: 'Books' },
     { path: '/admin/users', icon: <UsersIcon />, label: 'Users' },
     { path: '/admin/settings', icon: <SettingsIcon />, label: 'Settings' },
   ];
