@@ -10,6 +10,17 @@ const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 const FLUTTERWAVE_SECRET_HASH = process.env.FLUTTERWAVE_SECRET_HASH;
 
 // ============================================
+// HELPER: timing-safe string comparison
+// ============================================
+function safeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+// ============================================
 // UNIFIED WEBHOOK HANDLER
 // Handles both Giving and Orders from Paystack & Flutterwave
 // ============================================
@@ -36,9 +47,15 @@ router.post('/webhook', async (req, res) => {
     // STEP 2: Verify Signature
     // ============================================
     if (provider === 'paystack') {
+      // Use raw body for HMAC — re-stringifying req.body may produce
+      // different bytes and cause signature mismatch.
+      const payload = req.rawBody
+        ? req.rawBody
+        : Buffer.from(JSON.stringify(body));
+
       const hash = crypto
         .createHmac('sha512', PAYSTACK_SECRET_KEY)
-        .update(JSON.stringify(body))
+        .update(payload)
         .digest('hex');
 
       if (hash !== paystackSignature) {
@@ -46,7 +63,7 @@ router.post('/webhook', async (req, res) => {
         return res.status(401).json({ message: 'Unauthorized' });
       }
     } else if (provider === 'flutterwave') {
-      if (flutterwaveSignature !== FLUTTERWAVE_SECRET_HASH) {
+      if (!safeEqual(flutterwaveSignature, FLUTTERWAVE_SECRET_HASH)) {
         logger.warn('Invalid Flutterwave webhook signature');
         return res.status(401).json({ message: 'Unauthorized' });
       }

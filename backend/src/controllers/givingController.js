@@ -138,11 +138,13 @@ exports.initializePayment = async (req, res) => {
     };
 
     if (actualProvider === 'paystack') {
-      updateData.paystackRef = payment.data.reference;
+      updateData.paystackRef = payment.data.reference || reference;
       // ✅ REMOVED: paymentReference (duplicate)
       updateData.paymentLink = payment.data.authorization_url;
     } else {
-      updateData.flutterwaveRef = payment.data.tx_ref;
+      // Flutterwave's /payments response does not reliably echo tx_ref,
+      // so fall back to the reference we generated and sent.
+      updateData.flutterwaveRef = payment.data.tx_ref || reference;
       // ✅ REMOVED: paymentReference (duplicate)
       updateData.paymentLink = payment.data.link;
     }
@@ -211,11 +213,12 @@ exports.webhook = async (req, res) => {
     if (provider === 'paystack' && event === 'charge.success') {
       const { reference, amount, currency, customer, metadata } = data;
 
-      const giving = await Giving.getByPaystackRef(reference);
+      const giving = await Giving.findByAnyReference(reference);
       if (!giving) {
         logger.warn(`Giving record not found for ref: ${reference}`);
-        return res.status(404).json({ success: false, message: 'Record not found' });
+        return res.status(200).json({ success: false, message: 'Record not found' });
       }
+      logger.info(`✅ Giving record found: ${giving.reference} (status: ${giving.status})`);
 
       if (data.status === 'success') {
         await Giving.markSuccessful(giving.id, {
@@ -248,7 +251,7 @@ exports.webhook = async (req, res) => {
           },
         });
 
-        // logger.info(`✅ Paystack payment successful: ${reference}`);
+        logger.info(`✅ Paystack payment successful: ${reference}`);
       } else {
         await Giving.markFailed(giving.id, data?.gateway_response || 'Payment failed');
         logger.warn(`❌ Paystack payment failed: ${reference}`);
@@ -256,11 +259,12 @@ exports.webhook = async (req, res) => {
     } else if (provider === 'flutterwave' && event === 'charge.completed') {
       const { tx_ref, status, amount, currency, customer } = data;
 
-      const giving = await Giving.getByFlutterwaveRef(tx_ref);
+      const giving = await Giving.findByAnyReference(tx_ref);
       if (!giving) {
         logger.warn(`Giving record not found for ref: ${tx_ref}`);
-        return res.status(404).json({ success: false, message: 'Record not found' });
+        return res.status(200).json({ success: false, message: 'Record not found' });
       }
+      logger.info(`✅ Giving record found: ${giving.reference} (status: ${giving.status})`);
 
       if (status === 'successful') {
         await Giving.markSuccessful(giving.id, {
@@ -293,7 +297,7 @@ exports.webhook = async (req, res) => {
           },
         });
 
-        // logger.info(`✅ Flutterwave payment successful: ${giving.reference}`);
+        logger.info(`✅ Flutterwave payment successful: ${giving.reference}`);
       } else {
         await Giving.markFailed(giving.id, data?.failure_reason || 'Payment failed');
         logger.warn(`❌ Flutterwave payment failed: ${giving.reference}`);
@@ -302,7 +306,7 @@ exports.webhook = async (req, res) => {
 
     res.sendStatus(200);
   } catch (error) {
-    // logger.error('Webhook processing error:', error);
+    logger.error('Webhook processing error:', error);
     res.status(500).json({ success: false, message: 'Webhook processing failed' });
   }
 };

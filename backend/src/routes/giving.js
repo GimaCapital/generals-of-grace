@@ -1,3 +1,4 @@
+// backend\src\routes\giving.js
 const express = require('express');
 const router = express.Router();
 const { authenticateUser, requireAdmin } = require('../middleware/auth');

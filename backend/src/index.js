@@ -63,9 +63,30 @@ app.use(cors({
 }));
 
 // ============================================
-// STANDARD MIDDLEWARE
+// COMPRESSION
 // ============================================
 app.use(compression());
+
+// ============================================
+// ✅ WEBHOOK ROUTE — mounted BEFORE express.json()
+// so we capture the raw body for Paystack HMAC.
+// ============================================
+const webhookRoutes = require('./routes/webhooks');
+app.use(
+  '/api',
+  express.json({
+    limit: process.env.MAX_REQUEST_SIZE || '10mb',
+    verify: (req, res, buf) => {
+      // Save raw bytes for signature verification (Paystack HMAC)
+      req.rawBody = buf;
+    },
+  }),
+  webhookRoutes
+);
+
+// ============================================
+// STANDARD MIDDLEWARE (all other routes)
+// ============================================
 app.use(express.json({ limit: process.env.MAX_REQUEST_SIZE || '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: process.env.MAX_REQUEST_SIZE || '10mb' }));
 
@@ -89,12 +110,6 @@ const authLimiter = rateLimit({
   message: 'Too many authentication attempts, please try again later.',
 });
 app.use('/api/auth/', authLimiter);
-
-// ============================================
-// ✅ UNIFIED WEBHOOK ROUTE (MUST BE BEFORE OTHER ROUTES)
-// ============================================
-const webhookRoutes = require('./routes/webhooks');
-app.use('/api', webhookRoutes);
 
 // ============================================
 // ROOT ROUTE
