@@ -91,6 +91,12 @@ const authLimiter = rateLimit({
 app.use('/api/auth/', authLimiter);
 
 // ============================================
+// ✅ UNIFIED WEBHOOK ROUTE (MUST BE BEFORE OTHER ROUTES)
+// ============================================
+const webhookRoutes = require('./routes/webhooks');
+app.use('/api', webhookRoutes);
+
+// ============================================
 // ROOT ROUTE
 // ============================================
 app.get('/', (req, res) => {

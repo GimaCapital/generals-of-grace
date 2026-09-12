@@ -76,7 +76,7 @@ exports.switchPaymentProvider = async (req, res) => {
  */
 exports.initializePayment = async (req, res) => {
   try {
-    const { amount, type, currency = 'NGN' } = req.body;
+    const { amount, type, currency = 'NGN', customTypeName } = req.body;
     const userId = req.user.uid;
 
     if (!amount || amount < 100) {
@@ -108,6 +108,7 @@ exports.initializePayment = async (req, res) => {
       userId,
       amount,
       type,
+      customTypeName: customTypeName || '',
       currency,
       email: user.email,
       titheNumber: user.titheNumber,
@@ -117,10 +118,6 @@ exports.initializePayment = async (req, res) => {
       provider: currentProvider,
       // ✅ REMOVED: paymentMethod (duplicate)
     });
-
-    // logger.info(`📦 Initializing payment for ${user.email}: ${amount} ${currency}`);
-    // logger.info(`📦 Reference: ${reference}`);
-    // logger.info(`📦 Provider: ${currentProvider}`);
 
     const payment = await paymentService.initializePayment({
       amount,

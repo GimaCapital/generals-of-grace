@@ -1,6 +1,9 @@
+// backend/src/middleware/validation.js
 const Joi = require('joi');
 
-// Sermon validation schema
+// ============================================
+// SERMON VALIDATION
+// ============================================
 const sermonSchema = Joi.object({
   title: Joi.string().required().min(3).max(200),
   speaker: Joi.string().required().min(2).max(100),
@@ -15,7 +18,9 @@ const sermonSchema = Joi.object({
   isLive: Joi.boolean(),
 });
 
-// Event validation schema
+// ============================================
+// EVENT VALIDATION
+// ============================================
 const eventSchema = Joi.object({
   title: Joi.string().required().min(3).max(200),
   description: Joi.string().allow('').max(2000),
@@ -29,23 +34,35 @@ const eventSchema = Joi.object({
   imageUrl: Joi.string().uri().allow(''),
 });
 
-// Giving validation schema
+// ============================================
+// GIVING VALIDATION
+// ============================================
 const givingSchema = Joi.object({
-  amount: Joi.number().required().min(100).max(10000000),
+  amount: Joi.number().required().min(100).max(100000000),
   type: Joi.string().valid(
-    'tithe', 
-    'offering', 
-    'building', 
-    'mission', 
-    'seed', 
+    'tithe',
+    'offering',
+    'building',
+    'mission',
+    'seed',
     'thanksgiving',
-    'custom'  // ✅ Added custom type
+    'prophetic-seed',
+    'pastors-gift',
+    'custom'
   ).required(),
   currency: Joi.string().default('NGN'),
-  paymentMethod: Joi.string().valid('flutterwave', 'bank_transfer'),
-  customTypeName: Joi.string().allow('').max(100),  // ✅ For custom type name
+  paymentMethod: Joi.string().valid(
+    'flutterwave',
+    'paystack',
+    'bank_transfer',
+    'cash'
+  ),
+  customTypeName: Joi.string().allow('').max(100),
 });
-// User validation schema
+
+// ============================================
+// USER VALIDATION
+// ============================================
 const userSchema = Joi.object({
   displayName: Joi.string().min(2).max(100),
   email: Joi.string().email(),
@@ -59,7 +76,9 @@ const userSchema = Joi.object({
   }),
 });
 
-// Validation middleware
+// ============================================
+// VALIDATION MIDDLEWARE
+// ============================================
 const validate = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
