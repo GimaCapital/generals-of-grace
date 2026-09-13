@@ -1,4 +1,4 @@
-// C:\Users\HP\Desktop\generals-of-grace\frontend\src\utils\formatters.js
+// frontend/src/utils/formatters.js
 
 // Formatting functions ONLY
 
@@ -7,22 +7,22 @@
 // ============================================
 const toDate = (date) => {
   if (!date) return null;
-  
+
   // Handle Firestore Timestamp with _seconds (from Firebase v9+)
   if (date._seconds !== undefined) {
     return new Date(date._seconds * 1000 + (date._nanoseconds || 0) / 1000000);
   }
-  
+
   // Handle Firestore Timestamp with seconds (from Firebase v8)
   if (date.seconds !== undefined) {
     return new Date(date.seconds * 1000 + (date.nanoseconds || 0) / 1000000);
   }
-  
+
   // Handle Firestore Timestamp with toDate() method
   if (typeof date.toDate === 'function') {
     return date.toDate();
   }
-  
+
   // Handle string or regular Date
   try {
     const d = new Date(date);
@@ -32,7 +32,7 @@ const toDate = (date) => {
   } catch (e) {
     // Fall through to null
   }
-  
+
   return null;
 };
 
@@ -44,7 +44,7 @@ export const formatDate = (date, format = 'MMM d, yyyy') => {
   if (!date) return 'N/A';
   const d = toDate(date);
   if (!d || isNaN(d.getTime())) return 'N/A';
-  
+
   const options = {
     year: 'numeric',
     month: 'short',
@@ -64,6 +64,30 @@ export const formatDateTime = (date) => {
     hour: '2-digit',
     minute: '2-digit',
   });
+};
+
+/**
+ * Full timestamp with seconds, 24-hour format.
+ * Example: "Sep 12, 2026 · 20:23:47"
+ * Used for payment consoles where exact transaction time matters.
+ */
+export const formatDateTimeFull = (date) => {
+  if (!date) return 'N/A';
+  const d = toDate(date);
+  if (!d || isNaN(d.getTime())) return 'N/A';
+
+  const datePart = d.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+  const timePart = d.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  return `${datePart} · ${timePart}`;
 };
 
 export const formatCurrency = (amount, currency = '₦') => {
@@ -96,9 +120,11 @@ export const formatDuration = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = Math.floor(seconds % 60);
-  
+
   if (hours > 0) {
-    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs
+      .toString()
+      .padStart(2, '0')}`;
   }
   return `${minutes}:${secs.toString().padStart(2, '0')}`;
 };
@@ -128,10 +154,10 @@ export const formatAddress = (address) => {
 
 export const formatRelativeTime = (date) => {
   if (!date) return 'N/A';
-  
+
   const d = toDate(date);
   if (!d || isNaN(d.getTime())) return 'N/A';
-  
+
   const now = new Date();
   const diff = Math.floor((now - d) / 1000);
 
@@ -157,7 +183,11 @@ export const formatList = (items, separator = ', ', lastSeparator = ' and ') => 
   if (!items || items.length === 0) return '';
   if (items.length === 1) return items[0];
   if (items.length === 2) return items.join(lastSeparator);
-  return items.slice(0, -1).join(separator) + lastSeparator + items[items.length - 1];
+  return (
+    items.slice(0, -1).join(separator) +
+    lastSeparator +
+    items[items.length - 1]
+  );
 };
 
 export const getYouTubeEmbedUrl = (url) => {

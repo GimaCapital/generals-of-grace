@@ -1,3 +1,4 @@
+// frontend\src\App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -47,6 +48,7 @@ import AdminTestimonies from './components/admin/Testimonies';
 import BookPurchase from './components/pages/BookPurchase';
 import Books from './components/pages/Books';
 import AdminBooks from './components/admin/Books';
+import AdminPayments from './components/admin/Payments';
 
 function App() {
   return (
@@ -116,6 +118,7 @@ function App() {
               <Route path="sermons" element={<AdminSermons />} />
               <Route path="events" element={<AdminEvents />} />
               <Route path="giving" element={<AdminGiving />} />
+              <Route path="payments" element={<AdminPayments />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="/admin/ministries" element={<ManageMinistries />} />
