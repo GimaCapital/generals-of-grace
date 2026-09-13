@@ -186,6 +186,19 @@ const downloadCSV = (filename, csv) => {
   URL.revokeObjectURL(url);
 };
 
+// ✅ NEW HELPER — formats item types for the Items column
+const formatItemsShort = (items) => {
+  if (!Array.isArray(items) || items.length === 0) return '—';
+  const types = [...new Set(items.map((it) => it.type).filter(Boolean))];
+  if (types.length === 0) return '—';
+  if (types.length === 1) {
+    const t = types[0];
+    const totalQty = items.reduce((sum, it) => sum + (it.quantity || 1), 0);
+    return totalQty > 1 ? `${t}s` : t;
+  }
+  return `${types[0]} +${types.length - 1} more`;
+};
+
 const getMethodIcon = (method) => {
   const m = String(method || '').toLowerCase();
   if (m.includes('bank') || m.includes('transfer') || m.includes('account'))
@@ -387,7 +400,7 @@ function AdminPayments() {
       reference: o.orderNumber || o.id?.slice(0, 8) || '—',
       titheNumber: o.userId ? o.userId.slice(0, 8) : '—',
       customer: o.customerName || o.customerEmail || '—',
-      type: 'book_sale',
+      type: formatItemsShort(o.items),
       provider: o.paymentProvider || o.paymentMethod || '—',
       method: getOrderMethod(o),
       gross: safeNumber(o.total),

@@ -110,7 +110,7 @@ function AdminLayout() {
         }`}
       >
         <div className="p-4 flex items-center justify-between border-b border-gray-700">
-          <h1 className="text-xl font-display font-bold">Admin Panel</h1>
+          <h1 className="text-xl font-display font-bold">Admin Portal</h1>
           <button
             onClick={() => setMobileOpen(false)}
             className="p-1 hover:bg-gray-700 rounded"
@@ -161,7 +161,7 @@ function AdminLayout() {
             <MenuIcon />
           </button>
           <h1 className="font-display font-bold text-church-navy">
-            Admin Panel
+            Admin Portal
           </h1>
         </div>
 
@@ -188,7 +188,7 @@ function SidebarContent({
     <>
       <div className="p-4 flex items-center justify-between border-b border-gray-700">
         {sidebarOpen ? (
-          <h1 className="text-xl font-display font-bold">Admin Panel</h1>
+          <h1 className="text-xl font-display font-bold">Admin Portal</h1>
         ) : (
           <span className="text-2xl">⚡</span>
         )}

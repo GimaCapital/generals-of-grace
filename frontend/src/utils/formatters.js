@@ -90,9 +90,23 @@ export const formatDateTimeFull = (date) => {
   return `${datePart} · ${timePart}`;
 };
 
+/**
+ * Currency formatter.
+ * - Whole numbers → no decimals: ₦1,000
+ * - Fractional amounts → 2 decimals: ₦188.70
+ * - Null/undefined/NaN → ₦0
+ */
 export const formatCurrency = (amount, currency = '₦') => {
   if (amount === undefined || amount === null) return `${currency}0`;
-  return `${currency}${Number(amount).toLocaleString()}`;
+  const num = Number(amount);
+  if (isNaN(num)) return `${currency}0`;
+  const formatted = Number.isInteger(num)
+    ? num.toLocaleString('en-NG')
+    : num.toLocaleString('en-NG', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+  return `${currency}${formatted}`;
 };
 
 export const formatPhone = (phone) => {
