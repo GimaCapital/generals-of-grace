@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 // POST - Submit testimony (Anyone can submit)
 router.post('/', async (req, res) => {
   try {
-    const { name, testimony, category, image, video, email, location } = req.body;
+    const { name, testimony, category, image, video, email, phone, location } = req.body;
     
     if (!name || !testimony) {
       return res.status(400).json({ 
@@ -46,6 +46,7 @@ router.post('/', async (req, res) => {
       category: category || 'general',
       image: image || '',
       email: email || '',
+      phone: phone || '',
       video: video || '',
       location: location || '',
       status: 'pending',
@@ -113,7 +114,7 @@ router.get('/admin/stats', authenticateUser, requireAdmin, async (req, res) => {
 
 router.put('/admin/:id', authenticateUser, requireAdmin, async (req, res) => {
   try {
-    const { name, testimony, category, image, video, email, location } = req.body;
+    const { name, testimony, category, image, video, email, phone, location } = req.body;
     
     const updateData = {
       name: name?.trim(),
@@ -122,6 +123,7 @@ router.put('/admin/:id', authenticateUser, requireAdmin, async (req, res) => {
       image: image || '',
       video: video || '',
       email: email || '',
+      phone: phone || '',
       location: location || '',
       editedByAdmin: true,
       editedAt: new Date().toISOString(),
