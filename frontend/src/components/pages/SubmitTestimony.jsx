@@ -11,6 +11,7 @@ function SubmitTestimony() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    phone: '',
     email: '',
     location: '',
     testimony: '',
@@ -106,6 +107,20 @@ function SubmitTestimony() {
                 />
               </div>
             </div>
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Phone</label>    
+               <div className="relative">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="e.g., +234 801 234 5678"
+                    className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-church-gold transition-colors"
+                  />
+                </div>
+             </div>
 
             {/* Email */}
             <div>
@@ -176,7 +191,6 @@ function SubmitTestimony() {
               </p>
             </div>
 
-            {/* ✅ Image Upload - Same pattern as Ministry */}
             <div>
               <MediaUpload
                 onUpload={handleImageUpload}
@@ -187,7 +201,6 @@ function SubmitTestimony() {
               />
             </div>
 
-            {/* ✅ Video Upload - Same pattern as Ministry */}
             <div>
               <MediaUpload
                 onUpload={handleVideoUpload}
@@ -198,7 +211,6 @@ function SubmitTestimony() {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}

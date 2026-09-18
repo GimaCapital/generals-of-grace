@@ -69,26 +69,26 @@ const ErrorState = ({ onRetry }) => (
 function GiveSuccess() {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [loading, setLoading] = useState(true);
   const [donation, setDonation] = useState(null);
   const [status, setStatus] = useState('verifying');
   const [retryCount, setRetryCount] = useState(0);
-  
+
   const fetchAttempted = useRef(false);
   const toastShown = useRef(false);
 
   const getReference = useCallback(() => {
     const params = new URLSearchParams(location.search);
-    return params.get('reference') || 
-           params.get('trxref') || 
+    return params.get('reference') ||
+           params.get('trxref') ||
            params.get('tx_ref') ||
            params.get('txref');
   }, [location.search]);
 
   const fetchDonation = useCallback(async () => {
     const ref = getReference();
-    
+
     if (!ref) {
       setStatus('failed');
       setLoading(false);
@@ -98,13 +98,14 @@ function GiveSuccess() {
 
     try {
       setLoading(true);
-      const response = await givingAPI.getByReference(ref);
-      
+      // ✅ Verify with provider (handles both Paystack & Flutterwave)
+      const response = await givingAPI.verifyPayment(ref);
+
       if (response.data.success) {
         const donationData = response.data.data;
         setDonation(donationData);
         setStatus('success');
-        
+
         if (!toastShown.current) {
           toastShown.current = true;
           toast.success('🎉 Thank you for your generous giving!', {
@@ -115,10 +116,10 @@ function GiveSuccess() {
         }
       } else {
         setStatus('failed');
-        toast.error(response.data.message || 'Failed to fetch donation');
+        toast.error(response.data.message || 'Failed to verify donation');
       }
     } catch (error) {
-      console.error('Error fetching donation:', error);
+      console.error('Error verifying donation:', error);
       setStatus('failed');
       toast.error(error.response?.data?.message || 'Failed to load donation details');
     } finally {
@@ -128,7 +129,7 @@ function GiveSuccess() {
 
   useEffect(() => {
     if (fetchAttempted.current) return;
-    
+
     const ref = getReference();
     if (ref) {
       fetchAttempted.current = true;
@@ -146,7 +147,7 @@ function GiveSuccess() {
     setRetryCount(prev => prev + 1);
     setStatus('verifying');
     setLoading(true);
-    
+
     const ref = getReference();
     if (ref) {
       fetchDonation();
@@ -175,11 +176,11 @@ function GiveSuccess() {
           <h1 className="text-3xl font-display font-bold text-church-navy mb-2">
             Giving Successful! 🎉
           </h1>
-          
+
           <p className="text-gray-600 mb-6">
             Thank you for your generous giving to Generals of Grace Intl Church.
           </p>
-          
+
           {retryCount > 0 && (
             <p className="text-sm text-gray-500 mt-2">
               Loaded on attempt {retryCount + 1}
@@ -192,7 +193,7 @@ function GiveSuccess() {
           <h3 className="font-semibold text-church-navy text-sm uppercase tracking-wider">
             Giving Details
           </h3>
-          
+
           <div className="space-y-2 text-sm">
             {/* Tithe Number */}
             <div className="flex justify-between items-center py-1 border-b border-gray-200">
@@ -260,7 +261,7 @@ function GiveSuccess() {
               </div>
             )}
 
-            {/* Payment Method - Always shows "Online Payment" */}
+            {/* Payment Method */}
             <div className="flex justify-between items-center py-1 border-b border-gray-200">
               <span className="text-gray-500">Payment Method</span>
               <span className="font-semibold text-church-navy">
@@ -308,8 +309,8 @@ function GiveSuccess() {
         {/* Support */}
         <p className="text-xs text-gray-400 text-center mt-6">
           Having issues? Contact us at{' '}
-          <a 
-            href="mailto:support@generalsofgrace.com" 
+          <a
+            href="mailto:support@generalsofgrace.com"
             className="text-church-gold hover:underline"
           >
             support@generalsofgrace.com

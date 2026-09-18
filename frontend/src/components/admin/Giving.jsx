@@ -149,38 +149,44 @@ function AdminGiving() {
 
   // ============================================================
   // AGGREGATES — based on search/type-filtered set
+  // "Total Given" counts only successful payments.
+  // "Successful" counts how many of the filtered set succeeded.
+  // "Success Rate" = successful / count.
   // ============================================================
   const aggregates = useMemo(() => {
-    const total = searchAndTypeFiltered.reduce(
+    // ✅ Only successful records count toward Total Given
+    const successfulRecords = searchAndTypeFiltered.filter(
+      (r) => r.status === 'successful' || r.status === 'success'
+    );
+
+    const total = successfulRecords.reduce(
       (sum, r) => sum + safeNumber(r.amount),
       0
     );
     const count = searchAndTypeFiltered.length;
-    const successful = searchAndTypeFiltered.filter(
-      (r) => r.status === 'successful' || r.status === 'success'
-    ).length;
+    const successful = successfulRecords.length;
     const successRate = count > 0 ? (successful / count) * 100 : 0;
 
-    // Unique donors by titheNumber or email
+    // Unique donors by titheNumber or email (only successful)
     const donorSet = new Set();
-    searchAndTypeFiltered.forEach((r) => {
+    successfulRecords.forEach((r) => {
       const id = r.titheNumber || r.email;
       if (id) donorSet.add(id);
     });
     const donors = donorSet.size;
 
-    // By type
+    // By type (only successful)
     const byType = {};
-    searchAndTypeFiltered.forEach((r) => {
+    successfulRecords.forEach((r) => {
       const t = r.type || 'custom';
       if (!byType[t]) byType[t] = { amount: 0, count: 0 };
       byType[t].amount += safeNumber(r.amount);
       byType[t].count += 1;
     });
 
-    // Top donors
+    // Top donors (only successful)
     const donorMap = {};
-    searchAndTypeFiltered.forEach((r) => {
+    successfulRecords.forEach((r) => {
       const id = r.titheNumber || r.email || 'unknown';
       if (!donorMap[id]) {
         donorMap[id] = {
@@ -266,7 +272,7 @@ function AdminGiving() {
         ))}
       </div>
 
-      {/* SEARCH + FILTER (drives aggregates + breakdown + donors) */}
+      {/* SEARCH + FILTER */}
       <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-3">
           <div className="flex-1 relative">
@@ -299,7 +305,7 @@ function AdminGiving() {
         <StatTile
           label="Total Given"
           value={formatCurrency(aggregates.total)}
-          sub={`${aggregates.count} transactions`}
+          sub={`${aggregates.successful} successful of ${aggregates.count}`}
           icon={<TrendingUp className="w-6 h-6" />}
           accent="navy"
         />

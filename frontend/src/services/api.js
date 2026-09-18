@@ -73,11 +73,25 @@ export const eventAPI = {
   getAllEvents: (params) => api.get('/events/all', { params }),
 };
 
+// // Giving API
+// export const givingAPI = {
+//   initialize: (data) => api.post('/giving/initialize', data),
+//   verify: (reference) => api.post('/giving/verify', { reference }),
+//   // getHistory: () => api.get('/giving/history'),
+//   getHistory: (params) => api.get('/giving/history', { params }),
+//   getStats: () => api.get('/giving/stats'),
+//   generateReceipt: (id) => api.get(`/giving/receipt/${id}`),
+//   getPaymentProvider: () => api.get('/giving/provider'),
+//   switchPaymentProvider: (provider) => api.post('/giving/provider', { provider }),
+//   getByReference: (reference) => {
+//     return api.get(`/giving/reference/${reference}`);
+//   }
+// };
+
 // Giving API
 export const givingAPI = {
   initialize: (data) => api.post('/giving/initialize', data),
   verify: (reference) => api.post('/giving/verify', { reference }),
-  // getHistory: () => api.get('/giving/history'),
   getHistory: (params) => api.get('/giving/history', { params }),
   getStats: () => api.get('/giving/stats'),
   generateReceipt: (id) => api.get(`/giving/receipt/${id}`),
@@ -85,7 +99,13 @@ export const givingAPI = {
   switchPaymentProvider: (provider) => api.post('/giving/provider', { provider }),
   getByReference: (reference) => {
     return api.get(`/giving/reference/${reference}`);
-  }
+  },
+  // ✅ NEW — verify payment directly with provider (handles both Paystack & Flutterwave)
+  verifyPayment: (reference) => {
+    return api.get(`/giving/verify-payment/${reference}`);
+  },
+  // ✅ Also added — in case any component calls it
+  getUserTotal: () => api.get('/giving/user-total'),
 };
 
 // Ministries API

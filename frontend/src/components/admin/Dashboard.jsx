@@ -26,7 +26,7 @@ import { formatCurrency, formatDate } from '../../utils';
  *
  * Data sources:
  *   - Members, Sermons, Events → their respective APIs
- *   - Total Giving → sum of giving.amount
+ *   - Total Giving → sum of giving.amount where status === 'successful'
  *   - Total Orders → count of orders (all)
  *   - Orders Revenue → sum of orders where paymentStatus === 'paid'
  *   - Combined Revenue → Total Giving + Orders Revenue
@@ -111,10 +111,10 @@ function AdminDashboard() {
         console.warn('Could not fetch giving history:', err?.response?.status);
       }
 
-      const totalGiving = givingData.reduce(
-        (sum, item) => sum + (item.amount || 0),
-        0
-      );
+      // ✅ Only count successful payments toward Total Giving
+      const totalGiving = givingData
+        .filter(item => item.status === 'successful')
+        .reduce((sum, item) => sum + (item.amount || 0), 0);
 
       // ---- Orders ----
       try {
