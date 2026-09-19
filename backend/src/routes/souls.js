@@ -3,7 +3,27 @@ const express = require('express');
 const router = express.Router();
 const Soul = require('../models/Soul');
 const Badge = require('../models/Badge');
+const Rank = require('../models/Rank');
+const Settings = require('../models/Settings');
 const { authenticateUser, requirePastor } = require('../middleware/auth');
+
+// Safety net — only used if Settings can't be read
+const FALLBACK_SOULS_TO_POINTS = 10;
+
+/**
+ * Read soulsToPoints from Settings (Firestore) — dynamic, admin-controlled
+ */
+async function getSoulsToPoints() {
+  try {
+    const settings = await Settings.get();
+    const ratio = Number(settings?.soulsToPoints);
+    if (Number.isFinite(ratio) && ratio > 0) return ratio;
+    return FALLBACK_SOULS_TO_POINTS;
+  } catch (error) {
+    console.error('Error reading soulsToPoints:', error.message);
+    return FALLBACK_SOULS_TO_POINTS;
+  }
+}
 
 /**
  * POST /api/souls
@@ -103,24 +123,30 @@ router.get('/leaderboard', authenticateUser, async (req, res) => {
       userMap[doc.id] = doc.data();
     });
 
-    const leaderboard = topIds.map(([uid, count], idx) => {
-      const points = count * 100;
-      let title = 'Disciple';
-      if (points >= 25000) title = 'Legacy Builder';
-      else if (points >= 10000) title = 'Great Commission';
-      else if (points >= 5000) title = 'General of Grace';
-      else if (points >= 1000) title = 'Kingdom Builder';
-      else if (points >= 500) title = 'Harvester';
-      else if (points >= 100) title = 'Evangelist';
+    // ✅ Read ranks from Firestore (not hardcoded)
+    const allRanks = await Rank.getActive();
+    const sortedRanks = [...allRanks].sort(
+      (a, b) => (a.pointsRequired || 0) - (b.pointsRequired || 0)
+    );
 
-      return {
-        rank: idx + 1,
-        displayName: userMap[uid]?.displayName || 'Anonymous',
-        titheNumber: userMap[uid]?.titheNumber || '',
-        soulsWon: count,
-        rankTitle: title,
-      };
-    });
+    // ✅ Read soulsToPoints from Settings (not hardcoded)
+    const soulsToPoints = await getSoulsToPoints();
+
+    const getTitleForSouls = (souls) => {
+      const points = souls * soulsToPoints;
+      const current =
+        [...sortedRanks].reverse().find((r) => points >= (r.pointsRequired || 0)) ||
+        sortedRanks[0];
+      return current?.name || 'Disciple';
+    };
+
+    const leaderboard = topIds.map(([uid, count], idx) => ({
+      rank: idx + 1,
+      displayName: userMap[uid]?.displayName || 'Anonymous',
+      titheNumber: userMap[uid]?.titheNumber || '',
+      soulsWon: count,
+      rankTitle: getTitleForSouls(count),
+    }));
 
     res.json({ success: true, data: leaderboard });
   } catch (error) {

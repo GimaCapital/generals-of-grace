@@ -1,11 +1,10 @@
 // src/components/admin/Settings.jsx
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Save, Mail, Bell, Shield, Palette, CreditCard, CheckCircle, Globe } from 'lucide-react';
+import { Save, Mail, Bell, Shield, Palette, CreditCard, CheckCircle, Globe, TrendingUp } from 'lucide-react';
 import { settingsAPI } from '../../services/api';
 
 function AdminSettings() {
-  // ✅ Start with empty object - NO hardcoded values
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -19,15 +18,12 @@ function AdminSettings() {
     try {
       setFetching(true);
       const response = await settingsAPI.getSettings();
-      
+
       if (response.data) {
-        // ✅ Store EXACTLY what comes from the database
         const settingsData = response.data.data || response.data;
         setSettings(settingsData);
-        // console.log('📥 Settings loaded:', settingsData);
       }
     } catch (error) {
-      // console.error('Error fetching settings:', error);
       toast.error('Error loading settings');
     } finally {
       setFetching(false);
@@ -38,36 +34,27 @@ function AdminSettings() {
     e.preventDefault();
     setLoading(true);
     setSaved(false);
-    
+
     try {
-      // ✅ Send EXACTLY what's in the state - NO defaults, NO modifications
-      // Just clean out any metadata that might have sneaked in
       const dataToSend = { ...settings };
-      
-      // ✅ Remove metadata fields if they exist
+
       delete dataToSend.id;
       delete dataToSend.createdAt;
       delete dataToSend.updatedAt;
       delete dataToSend.success;
       delete dataToSend.message;
-      
-      // console.log('📤 Sending settings:', dataToSend);
-      
+
       const response = await settingsAPI.updateSettings(dataToSend);
-      
+
       if (response.data) {
-        // ✅ Store EXACTLY what comes back
         const responseData = response.data.data || response.data;
         setSettings(responseData);
-        // console.log('📥 Response data:', responseData);
       }
-      
+
       setSaved(true);
       toast.success('Settings saved successfully!');
       setTimeout(() => setSaved(false), 3000);
-      
     } catch (error) {
-      // console.error('Error saving settings:', error);
       toast.error(error.response?.data?.message || 'Error saving settings');
     } finally {
       setLoading(false);
@@ -77,23 +64,20 @@ function AdminSettings() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
-    // console.log(`🔄 Field changed: ${name} = ${newValue}`);
-    
-    // ✅ Update state with the new value - NO defaults
+
     setSettings({
       ...settings,
-      [name]: newValue
+      [name]: newValue,
     });
   };
 
   const handleNestedChange = (section, field, value) => {
-    // console.log(`🔄 Nested field changed: ${section}.${field} = ${value}`);
     setSettings({
       ...settings,
       [section]: {
         ...settings[section],
-        [field]: value
-      }
+        [field]: value,
+      },
     });
   };
 
@@ -195,10 +179,9 @@ function AdminSettings() {
                   : 'border-gray-200 hover:border-church-gold/50'
               }`}
               onClick={() => {
-                // console.log('🔄 Switching to Flutterwave');
                 setSettings({
                   ...settings,
-                  paymentProvider: 'flutterwave'
+                  paymentProvider: 'flutterwave',
                 });
               }}
             >
@@ -230,10 +213,9 @@ function AdminSettings() {
                   : 'border-gray-200 hover:border-church-gold/50'
               }`}
               onClick={() => {
-                // console.log('🔄 Switching to Paystack');
                 setSettings({
                   ...settings,
-                  paymentProvider: 'paystack'
+                  paymentProvider: 'paystack',
                 });
               }}
             >
@@ -265,6 +247,64 @@ function AdminSettings() {
               <span className="text-sm text-gray-600">
                 Current Provider: <span className="font-semibold capitalize">{settings.paymentProvider || 'Not set'}</span>
               </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Soul-Winning Points Ratio */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-display font-bold text-church-navy mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-church-gold" />
+            Soul-Winning Points Ratio
+          </h2>
+          <p className="text-gray-500 text-sm mb-4">
+            How many points each soul is worth. Used to compute ranks.
+            Change this and all rank thresholds rescale automatically.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                1 soul = points
+              </label>
+              <input
+                type="number"
+                name="soulsToPoints"
+                min="1"
+                value={settings.soulsToPoints || 10}
+                onChange={handleChange}
+                placeholder="e.g. 10"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-church-gold"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                Example: 5 souls at 10 points each = 50 points
+              </p>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                Preview
+              </p>
+              <div className="space-y-1 text-sm text-gray-600">
+                <div className="flex justify-between">
+                  <span>1 soul</span>
+                  <span className="font-medium">
+                    {(settings.soulsToPoints || 10) * 1} pts
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>5 souls</span>
+                  <span className="font-medium">
+                    {(settings.soulsToPoints || 10) * 5} pts
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>10 souls</span>
+                  <span className="font-medium">
+                    {(settings.soulsToPoints || 10) * 10} pts
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

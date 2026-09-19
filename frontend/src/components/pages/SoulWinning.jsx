@@ -18,13 +18,14 @@ import {
   badgesAPI,
   rewardsAPI,
   ranksAPI,
+  settingsAPI,
 } from '../../services/api';
 import toast from 'react-hot-toast';
 import Confetti from 'react-confetti';
 import { useInView } from 'react-intersection-observer';
 
 // ============================================================
-// ICON MAP — converts emoji strings to Lucide components
+// ICON MAP
 // ============================================================
 const ICON_BY_EMOJI = {
   '🌱': <Heart className="w-5 h-5" />,
@@ -113,6 +114,11 @@ function SoulWinning() {
     soulsWon: 0,
     totalPoints: 0,
   });
+  const [soulsToPoints, setSoulsToPoints] = useState(10);
+
+  const pointsToSouls = (points) =>
+    Math.round((points || 0) / soulsToPoints);
+
   const [badges, setBadges] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
   const [rankList, setRankList] = useState([]);
@@ -129,9 +135,6 @@ function SoulWinning() {
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
 
-  // ============================================================
-  // LOGIN GATE — redirects to login OR to dashboard if already logged in
-  // ============================================================
   const requireAuth = (targetSection) => {
     if (!currentUser) {
       toast.error('Please log in to continue');
@@ -142,9 +145,6 @@ function SoulWinning() {
     return true;
   };
 
-  // ============================================================
-  // FETCH USER STATS
-  // ============================================================
   const fetchUserStats = async () => {
     if (!currentUser?.uid) return;
     try {
@@ -159,7 +159,7 @@ function SoulWinning() {
 
       setUserStats({
         soulsWon: totalSouls,
-        totalPoints: totalSouls * 100,
+        totalPoints: totalSouls * soulsToPoints,
       });
       setBadges(badgesData);
     } catch (error) {
@@ -167,21 +167,23 @@ function SoulWinning() {
     }
   };
 
-  // ============================================================
-  // FETCH PUBLIC DATA
-  // ============================================================
   const fetchPublicData = async () => {
     try {
-      const [ranksRes, rewardsRes, badgesRes, leaderRes] = await Promise.all([
-        ranksAPI.getAll().catch(() => ({ data: { data: [] } })),
-        rewardsAPI.getAll().catch(() => ({ data: { data: [] } })),
-        badgesAPI.getAll().catch(() => ({ data: { data: [] } })),
-        soulsAPI.getLeaderboard?.().catch(() => ({ data: { data: [] } })),
-      ]);
+      const [ranksRes, rewardsRes, badgesRes, leaderRes, settingsRes] =
+        await Promise.all([
+          ranksAPI.getAll().catch(() => ({ data: { data: [] } })),
+          rewardsAPI.getAll().catch(() => ({ data: { data: [] } })),
+          badgesAPI.getAll().catch(() => ({ data: { data: [] } })),
+          soulsAPI.getLeaderboard?.().catch(() => ({ data: { data: [] } })),
+          settingsAPI.getSettings().catch(() => null),
+        ]);
 
       setRankList(ranksRes.data?.data || []);
       setRewardGroups(rewardsRes.data?.data || []);
       setLeaderboard(leaderRes?.data?.data || []);
+
+      const ratio = settingsRes?.data?.data?.soulsToPoints;
+      if (ratio) setSoulsToPoints(Number(ratio));
 
       const allBadges = badgesRes.data?.data || [];
       if (!currentUser) {
@@ -205,7 +207,6 @@ function SoulWinning() {
     setTimeout(() => setShowConfetti(false), 4000);
   }, [currentUser]);
 
-  // Scroll to hash on mount
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace('#', '');
@@ -216,18 +217,13 @@ function SoulWinning() {
     }
   }, [location.hash]);
 
-  // ============================================================
-  // HANDLERS — all actions redirect to /profile
-  // ============================================================
   const handleWinSoulClick = () => {
     if (!requireAuth()) return;
-    // ✅ Logged in → go to user dashboard, Soul Winning tab
     navigate('/profile?tab=soul-winning');
   };
 
   const handleJoinMovementClick = () => {
     if (!requireAuth('join-movement')) return;
-    // ✅ Logged in → go to user dashboard, Soul Winning tab
     navigate('/profile?tab=soul-winning');
   };
 
@@ -238,13 +234,9 @@ function SoulWinning() {
 
   const handleRewardModalAction = () => {
     setSelectedReward(null);
-    // ✅ Logged in → go to user dashboard, Soul Winning tab
     navigate('/profile?tab=soul-winning');
   };
 
-  // ============================================================
-  // DERIVED
-  // ============================================================
   const sortedRanks = [...rankList].sort(
     (a, b) => (a.pointsRequired || 0) - (b.pointsRequired || 0)
   );
@@ -465,6 +457,9 @@ function SoulWinning() {
           transition={{ duration: 0.6 }}
           className="container-custom py-12"
         >
+          <p className="text-center text-xs text-gray-500 mb-4">
+            Every soul you win moves you up the ladder. Each rank unlocks at a specific soul count.
+          </p>
           <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
             <div className="flex flex-col md:flex-row items-center justify-between mb-6">
               <div className="flex items-center gap-4 mb-4 md:mb-0">
@@ -493,9 +488,13 @@ function SoulWinning() {
 
             <div className="relative pt-1">
               <div className="flex items-center justify-between text-sm text-gray-500 mb-1">
-                <span>{currentUser ? `${userStats.totalPoints} pts` : '0 pts'}</span>
+                <span>
+                  {currentUser ? `${userStats.soulsWon} souls` : '0 souls'}
+                </span>
                 <span className="text-church-gold font-medium">
-                  {currentUser ? nextRank.pointsRequired : sortedRanks[1]?.pointsRequired || 100} pts needed
+                  {currentUser
+                    ? `Needs ${pointsToSouls(nextRank.pointsRequired)} souls`
+                    : `Needs ${pointsToSouls(sortedRanks[1]?.pointsRequired || 100)} souls`}
                 </span>
               </div>
               <div className="overflow-hidden h-4 text-xs flex rounded-full bg-gray-200">
@@ -512,6 +511,7 @@ function SoulWinning() {
               {sortedRanks.map((rank, index) => {
                 const isUnlocked =
                   currentUser && userStats.totalPoints >= (rank.pointsRequired || 0);
+                const soulsLabel = pointsToSouls(rank.pointsRequired || 0);
                 return (
                   <motion.div
                     key={rank.docId || index}
@@ -535,6 +535,9 @@ function SoulWinning() {
                       }`}
                     >
                       {rank.name}
+                    </p>
+                    <p className="text-[10px] text-gray-400">
+                      {soulsLabel} {soulsLabel === 1 ? 'soul' : 'souls'}
                     </p>
                   </motion.div>
                 );

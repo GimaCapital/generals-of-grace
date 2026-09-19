@@ -4,16 +4,16 @@ import {
   Plus, Edit3, Trash2, Loader, X, Eye, EyeOff, Trophy,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { ranksAPI } from '../../services/api';
+import { ranksAPI, settingsAPI } from '../../services/api';
 
 const RANK_PRESETS = [
-  { name: 'Disciple', description: 'The journey begins — walking with Christ', pointsRequired: 0, icon: '✝️', color: '#6B7280' },
-  { name: 'Evangelist', description: 'Consistent in reaching the lost for Christ', pointsRequired: 100, icon: '❤️', color: '#3B82F6' },
-  { name: 'Harvester', description: 'Multiplied impact — souls are being gathered', pointsRequired: 500, icon: '🎯', color: '#10B981' },
-  { name: 'Kingdom Builder', description: "Building God's kingdom one soul at a time", pointsRequired: 1000, icon: '⛪', color: '#F59E0B' },
-  { name: 'General of Grace', description: 'A leader among leaders in soul winning', pointsRequired: 5000, icon: '👑', color: '#C9A84C' },
-  { name: 'Great Commission', description: 'Fulfilling the mandate to reach all nations', pointsRequired: 10000, icon: '🚀', color: '#8B5CF6' },
-  { name: 'Legacy Builder', description: 'Leaving a lasting legacy for the Kingdom', pointsRequired: 25000, icon: '🔥', color: '#EF4444' },
+  { name: 'Disciple', description: 'The journey begins — walking with Christ', soulsRequired: 0, icon: '✝️', color: '#6B7280' },
+  { name: 'Evangelist', description: 'Consistent in reaching the lost for Christ', soulsRequired: 1, icon: '❤️', color: '#3B82F6' },
+  { name: 'Harvester', description: 'Multiplied impact — souls are being gathered', soulsRequired: 5, icon: '🎯', color: '#10B981' },
+  { name: 'Kingdom Builder', description: "Building God's kingdom one soul at a time", soulsRequired: 10, icon: '⛪', color: '#F59E0B' },
+  { name: 'General of Grace', description: 'A leader among leaders in soul winning', soulsRequired: 50, icon: '👑', color: '#C9A84C' },
+  { name: 'Great Commission', description: 'Fulfilling the mandate to reach all nations', soulsRequired: 100, icon: '🚀', color: '#8B5CF6' },
+  { name: 'Legacy Builder', description: 'Leaving a lasting legacy for the Kingdom', soulsRequired: 250, icon: '🔥', color: '#EF4444' },
 ];
 
 const EMOJI_SUGGESTIONS = ['⭐', '✝️', '❤️', '🎯', '⛪', '👑', '🚀', '🔥', '🏆', '💎', '🌟', '💫'];
@@ -21,7 +21,7 @@ const EMOJI_SUGGESTIONS = ['⭐', '✝️', '❤️', '🎯', '⛪', '👑', '�
 const emptyForm = {
   name: '',
   description: '',
-  pointsRequired: 0,
+  soulsRequired: 0,
   icon: '⭐',
   color: '#6B7280',
   order: 99,
@@ -48,13 +48,19 @@ function Ranks() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
+  const [soulsToPoints, setSoulsToPoints] = useState(10);
   const didLoad = useRef(false);
 
   const load = async () => {
     setLoading(true);
     try {
-      const res = await ranksAPI.adminGetAll();
-      setRanks(res.data?.data || []);
+      const [ranksRes, settingsRes] = await Promise.all([
+        ranksAPI.adminGetAll(),
+        settingsAPI.getSettings(),
+      ]);
+      setRanks(ranksRes.data?.data || []);
+      const ratio = settingsRes.data?.data?.soulsToPoints;
+      if (ratio) setSoulsToPoints(Number(ratio));
     } catch (error) {
       console.error(error);
       toast.error('Failed to load ranks');
@@ -70,7 +76,6 @@ function Ranks() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ✅ Set of existing rank names (lowercased) for instant duplicate check
   const existingNames = useMemo(
     () =>
       new Set(
@@ -98,7 +103,7 @@ function Ranks() {
     setForm({
       name: rank.name,
       description: rank.description || '',
-      pointsRequired: rank.pointsRequired || 0,
+      soulsRequired: rank.soulsRequired || 0,
       icon: rank.icon || '⭐',
       color: rank.color || '#6B7280',
       order: rank.order || 99,
@@ -113,13 +118,12 @@ function Ranks() {
       toast.error(`"${preset.name}" already exists`);
       return;
     }
-
     const presetIndex = RANK_PRESETS.findIndex((p) => p.name === preset.name);
     setForm({
       ...form,
       name: preset.name,
       description: preset.description,
-      pointsRequired: preset.pointsRequired,
+      soulsRequired: preset.soulsRequired,
       icon: preset.icon,
       color: preset.color,
       order: presetIndex + 1,
@@ -136,11 +140,18 @@ function Ranks() {
 
     setSaving(true);
     try {
+      const soulsNum = Number(form.soulsRequired) || 0;
+      const payload = {
+        ...form,
+        soulsRequired: soulsNum,
+        pointsRequired: soulsNum * soulsToPoints,
+      };
+
       if (editing) {
-        await ranksAPI.update(editing.docId, form);
+        await ranksAPI.update(editing.docId, payload);
         toast.success('Rank updated');
       } else {
-        await ranksAPI.create(form);
+        await ranksAPI.create(payload);
         toast.success('Rank created');
       }
       setModalOpen(false);
@@ -186,7 +197,7 @@ function Ranks() {
             Ranks
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Soul-winning progression tiers. 1 soul = 100 points.
+            Soul-winning progression tiers. Each rank unlocks at a soul count.
           </p>
         </div>
         <button
@@ -207,7 +218,7 @@ function Ranks() {
           <Trophy className="w-10 h-10 text-gray-300 mx-auto mb-3" />
           <p className="text-sm text-gray-500 mb-1">No ranks yet</p>
           <p className="text-xs text-gray-400 mb-4">
-            Start with "Disciple" at 0 points.
+            Start with "Disciple" at 0 souls.
           </p>
           <button
             onClick={openCreate}
@@ -224,6 +235,7 @@ function Ranks() {
               <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-200 bg-gray-50">
                 <th className="px-4 py-3 w-12"></th>
                 <th className="px-4 py-3">Rank</th>
+                <th className="px-4 py-3 text-right">Souls</th>
                 <th className="px-4 py-3 text-right">Points</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="px-4 py-3 text-right">Actions</th>
@@ -240,6 +252,9 @@ function Ranks() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-sm font-medium text-gray-900 text-right tabular-nums">
+                    {rank.soulsRequired}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-500 text-right tabular-nums">
                     {rank.pointsRequired}
                   </td>
                   <td className="px-4 py-3">
@@ -279,7 +294,6 @@ function Ranks() {
         </div>
       )}
 
-      {/* MODAL */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -321,7 +335,7 @@ function Ranks() {
                           <span className="text-base">{p.icon}</span>
                           {p.name}
                           <span className="text-amber-500">·</span>
-                          <span className="text-amber-600">{p.pointsRequired} pts</span>
+                          <span className="text-amber-600">{p.soulsRequired} souls</span>
                           {isUsed && <span className="text-[10px]">(exists)</span>}
                         </button>
                       );
@@ -361,13 +375,17 @@ function Ranks() {
               </Field>
 
               <div className="grid grid-cols-2 gap-4">
-                <Field label="Points Required" required helper="1 soul = 100 points.">
+                <Field
+                  label="Souls Required"
+                  required
+                  helper={`${form.soulsRequired || 0} souls = ${(form.soulsRequired || 0) * soulsToPoints} points`}
+                >
                   <input
                     type="number"
                     min="0"
-                    value={form.pointsRequired}
-                    onChange={(e) => setForm({ ...form, pointsRequired: e.target.value })}
-                    placeholder="e.g. 100"
+                    value={form.soulsRequired}
+                    onChange={(e) => setForm({ ...form, soulsRequired: e.target.value })}
+                    placeholder="e.g. 5"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-gray-900 focus:outline-none"
                     required
                   />
