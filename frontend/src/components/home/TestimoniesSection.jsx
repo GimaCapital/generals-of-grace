@@ -19,10 +19,10 @@ function TestimoniesSection() {
     try {
       setLoading(true);
       const response = await testimonyAPI.getAll({ limit: 10 });
-      console.log('📊 Testimonies data:', response.data.data);
+      // console.log('📊 Testimonies data:', response.data.data);
       setTestimonies(response.data.data || []);
     } catch (error) {
-      console.error('Error fetching testimonies:', error);
+      // console.error('Error fetching testimonies:', error);
       setTestimonies([]);
     } finally {
       setLoading(false);

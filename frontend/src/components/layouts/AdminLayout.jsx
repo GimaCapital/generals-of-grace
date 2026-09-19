@@ -17,7 +17,10 @@ import {
   Chat as TestimoniesIcon,
   MenuBook as BooksIcon,
   EmojiEvents as CompetitionsIcon,
-  VolunteerActivism as SoulsIcon
+  VolunteerActivism as SoulsIcon,
+  FolderOpen as CategoriesIcon,
+  CardGiftcard as RewardsIcon,
+  Leaderboard as RanksIcon,
 } from '@mui/icons-material';
 
 const menuItems = [
@@ -28,6 +31,9 @@ const menuItems = [
   { path: '/admin/payments', icon: <PaymentsIcon />, label: 'Payments' },
   { path: '/admin/souls', icon: <SoulsIcon />, label: 'Souls Won' },
   { path: '/admin/competitions', icon: <CompetitionsIcon />, label: 'Competitions' },
+  { path: '/admin/reward-categories', icon: <CategoriesIcon />, label: 'Reward Categories' },
+  { path: '/admin/rewards', icon: <RewardsIcon />, label: 'Rewards' },
+  { path: '/admin/ranks', icon: <RanksIcon />, label: 'Ranks' },
   { path: '/admin/ministries', icon: <MinistriesIcon />, label: 'Ministries' },
   { path: '/admin/testimonies', icon: <TestimoniesIcon />, label: 'Testimonies' },
   { path: '/admin/books', icon: <BooksIcon />, label: 'Books' },

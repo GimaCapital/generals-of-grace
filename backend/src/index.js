@@ -97,16 +97,24 @@ app.use(morgan('combined', {
 // ============================================
 // RATE LIMITING
 // ============================================
+const isDev = process.env.NODE_ENV === 'development';
+
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: isDev ? 10000 : 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => isDev,
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api/', globalLimiter);
 
 const authLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  max: 50,
+  max: isDev ? 1000 : 50,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => isDev,
   message: 'Too many authentication attempts, please try again later.',
 });
 app.use('/api/auth/', authLimiter);
@@ -186,6 +194,9 @@ const bookRoutes = require('./routes/books');
 const soulRoutes = require('./routes/souls');
 const badgeRoutes = require('./routes/badges');
 const competitionRoutes = require('./routes/competitions');
+const rewardCategoryRoutes = require('./routes/rewardCategories');
+const rewardRoutes = require('./routes/rewards');
+const rankRoutes = require('./routes/ranks');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sermons', sermonRoutes);
@@ -201,6 +212,9 @@ app.use('/api/books', bookRoutes);
 app.use('/api/souls', soulRoutes);
 app.use('/api/badges', badgeRoutes);
 app.use('/api/competitions', competitionRoutes);
+app.use('/api/reward-categories', rewardCategoryRoutes);
+app.use('/api/rewards', rewardRoutes);
+app.use('/api/ranks', rankRoutes);
 
 // ============================================
 // 404 HANDLER

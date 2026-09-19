@@ -1,5 +1,6 @@
+// frontend/src/components/pages/Register.jsx
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Mail, Lock, User, UserPlus } from 'lucide-react';
 import { isValidEmail, required, validatePassword } from '../../utils';
@@ -13,21 +14,22 @@ function Register() {
   const [errors, setErrors] = useState({});
   const { register } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const validateForm = () => {
     const newErrors = {};
     if (!required(displayName)) newErrors.displayName = 'Full name is required';
     if (!isValidEmail(email)) newErrors.email = 'Valid email is required';
-    
+
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
       newErrors.password = passwordValidation.errors[0];
     }
-    
+
     if (password !== confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -35,17 +37,30 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     try {
       setLoading(true);
       await register(email, password, displayName);
-      navigate('/');
+
+      // ✅ Redirect to the page the user came from, if provided
+      const redirectTo = searchParams.get('redirect');
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Registration error:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  // ✅ Preserve the redirect param on the "Sign in" link
+  const redirectParam = searchParams.get('redirect');
+  const loginLink = redirectParam
+    ? `/login?redirect=${encodeURIComponent(redirectParam)}`
+    : '/login';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -143,7 +158,7 @@ function Register() {
 
         <p className="text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link to="/login" className="text-church-gold hover:underline font-medium">
+          <Link to={loginLink} className="text-church-gold hover:underline font-medium">
             Sign in
           </Link>
         </p>

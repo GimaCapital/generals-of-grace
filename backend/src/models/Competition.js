@@ -19,7 +19,7 @@ class Competition {
         startDate: data.startDate,
         endDate: data.endDate,
         goal: data.goal || 0,
-        teamType: data.teamType || 'zone', // "zone" | "department" | "age-group"
+        teamType: data.teamType || 'zone',
         status: data.status || 'upcoming',
         createdBy: data.createdBy,
         createdAt: new Date().toISOString(),
@@ -98,7 +98,6 @@ class Competition {
         userId,
         teamId,
         teamName,
-        soulsWon: 0,
         joinedAt: new Date().toISOString(),
       };
       const id = await Database.createDoc(PARTICIPANTS, record);
@@ -128,7 +127,7 @@ class Competition {
     }
   }
 
-    /**
+  /**
    * Update a participant's team (used for team changes)
    */
   static async updateParticipant(participantId, data) {
@@ -236,7 +235,7 @@ class Competition {
     return leaderboard.reduce((sum, t) => sum + t.soulsWon, 0);
   }
 
-    /**
+  /**
    * Auto-start upcoming competitions whose start date has passed
    */
   static async autoStart() {

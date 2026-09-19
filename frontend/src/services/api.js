@@ -235,6 +235,7 @@ export const soulsAPI = {
   // ✅ Admin / Pastor endpoints
   getAll: (params) => api.get('/souls/all', { params }),
   getAdminStats: () => api.get('/souls/admin-stats'),
+  getLeaderboard: () => api.get('/souls/leaderboard'), 
 };
 
 // Badges API
@@ -255,5 +256,32 @@ export const competitionsAPI = {
   join: (id, data) => api.post(`/competitions/${id}/join`, data),
   changeTeam: (id, data) => api.post(`/competitions/${id}/change-team`, data),
   getMyTeam: (id) => api.get(`/competitions/${id}/my-team`),
+};
+
+// Reward Categories API
+export const rewardCategoriesAPI = {
+  getAll: () => api.get('/reward-categories'),
+  adminGetAll: () => api.get('/reward-categories/admin/all'),
+  create: (data) => api.post('/reward-categories', data),
+  update: (docId, data) => api.put(`/reward-categories/${docId}`, data),
+  delete: (docId) => api.delete(`/reward-categories/${docId}`),
+};
+
+// Rewards API
+export const rewardsAPI = {
+  getAll: () => api.get('/rewards'),
+  adminGetAll: () => api.get('/rewards/admin/all'),
+  create: (data) => api.post('/rewards', data),
+  update: (docId, data) => api.put(`/rewards/${docId}`, data),
+  delete: (docId) => api.delete(`/rewards/${docId}`),
+};
+
+// Ranks API
+export const ranksAPI = {
+  getAll: () => api.get('/ranks'),
+  adminGetAll: () => api.get('/ranks/admin/all'),
+  create: (data) => api.post('/ranks', data),
+  update: (docId, data) => api.put(`/ranks/${docId}`, data),
+  delete: (docId) => api.delete(`/ranks/${docId}`),
 };
 export default api;

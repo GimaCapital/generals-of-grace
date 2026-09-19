@@ -1,6 +1,6 @@
 // frontend/src/components/dashboard/UserDashboard.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Gift, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import OverviewTab from './tabs/OverviewTab';
@@ -21,7 +21,21 @@ const TABS = [
 
 function UserDashboard() {
   const { userProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [searchParams] = useSearchParams();
+
+  // Read ?tab= from URL, fallback to 'overview'
+  const tabFromUrl = searchParams.get('tab');
+  const initialTab = TABS.some((t) => t.id === tabFromUrl) ? tabFromUrl : 'overview';
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // Keep tab in sync if URL changes (e.g. user clicks link from another page)
+  useEffect(() => {
+    const nextTab = searchParams.get('tab');
+    if (nextTab && TABS.some((t) => t.id === nextTab)) {
+      setActiveTab(nextTab);
+    }
+  }, [searchParams]);
 
   const firstName = userProfile?.displayName?.split(' ')[0] || 'Friend';
 

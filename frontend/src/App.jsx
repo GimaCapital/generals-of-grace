@@ -52,6 +52,9 @@ import AdminBooks from './components/admin/Books';
 import AdminPayments from './components/admin/Payments';
 import AdminSouls from './components/admin/Souls';
 import AdminCompetitions from './components/admin/Competitions';
+import AdminRewardCategories from './components/admin/RewardCategories';
+import AdminRewards from './components/admin/Rewards';
+import AdminRanks from './components/admin/Ranks';
 
 function App() {
   return (
@@ -132,6 +135,9 @@ function App() {
               <Route path="payments" element={<AdminPayments />} />
               <Route path="souls" element={<AdminSouls />} />
               <Route path="competitions" element={<AdminCompetitions />} />
+              <Route path="reward-categories" element={<AdminRewardCategories />} />
+              <Route path="rewards" element={<AdminRewards />} />
+              <Route path="ranks" element={<AdminRanks />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="/admin/ministries" element={<ManageMinistries />} />

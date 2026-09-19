@@ -30,7 +30,6 @@ router.post('/', authenticateUser, async (req, res) => {
       notes: notes || '',
     });
 
-    // Auto-award badges based on new stats
     const stats = await Soul.getStats(userId);
     const badges = await Badge.checkAndAward(userId, stats);
 
@@ -72,8 +71,63 @@ router.get('/stats/:userId', authenticateUser, async (req, res) => {
 });
 
 // ============================================
-// ADMIN / PASTOR ROUTES — must come before /:id
+// PUBLIC + ADMIN ROUTES — must come before /:id
 // ============================================
+
+/**
+ * GET /api/souls/leaderboard
+ * Public: top soul winners (names + counts only)
+ * MUST be before /:id routes
+ */
+router.get('/leaderboard', authenticateUser, async (req, res) => {
+  try {
+    const Database = require('../config/database');
+    const allSouls = await Database.getDocs('souls', []);
+
+    // Count souls per user
+    const byUser = {};
+    allSouls.forEach((s) => {
+      if (!s.userId) return;
+      byUser[s.userId] = (byUser[s.userId] || 0) + 1;
+    });
+
+    // Top 10
+    const topIds = Object.entries(byUser)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10);
+
+    // Attach names
+    const userSnapshot = await Database.getCollection('users').get();
+    const userMap = {};
+    userSnapshot.forEach((doc) => {
+      userMap[doc.id] = doc.data();
+    });
+
+    const leaderboard = topIds.map(([uid, count], idx) => {
+      const points = count * 100;
+      let title = 'Disciple';
+      if (points >= 25000) title = 'Legacy Builder';
+      else if (points >= 10000) title = 'Great Commission';
+      else if (points >= 5000) title = 'General of Grace';
+      else if (points >= 1000) title = 'Kingdom Builder';
+      else if (points >= 500) title = 'Harvester';
+      else if (points >= 100) title = 'Evangelist';
+
+      return {
+        rank: idx + 1,
+        displayName: userMap[uid]?.displayName || 'Anonymous',
+        titheNumber: userMap[uid]?.titheNumber || '',
+        soulsWon: count,
+        rankTitle: title,
+      };
+    });
+
+    res.json({ success: true, data: leaderboard });
+  } catch (error) {
+    console.error('Error fetching leaderboard:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch leaderboard' });
+  }
+});
 
 /**
  * GET /api/souls/all
@@ -93,7 +147,6 @@ router.get('/all', authenticateUser, requirePastor, async (req, res) => {
 
     const Database = require('../config/database');
 
-    // Build server-side filters
     const filters = [];
     if (userId) filters.push({ field: 'userId', operator: '==', value: userId });
     if (status) filters.push({ field: 'status', operator: '==', value: status });
@@ -101,7 +154,6 @@ router.get('/all', authenticateUser, requirePastor, async (req, res) => {
 
     const allSouls = await Database.getDocs('souls', filters);
 
-    // Client-side filters (avoids Firestore composite indexes)
     let filtered = allSouls;
 
     if (month) {
@@ -122,20 +174,17 @@ router.get('/all', authenticateUser, requirePastor, async (req, res) => {
       });
     }
 
-    // Sort newest first
     filtered.sort((a, b) => {
       const aT = new Date(a.dateWon || a.createdAt).getTime();
       const bT = new Date(b.dateWon || b.createdAt).getTime();
       return bT - aT;
     });
 
-    // Paginate
     const total = filtered.length;
     const start = parseInt(offset) || 0;
     const end = start + (parseInt(limit) || 100);
     const page = filtered.slice(start, end);
 
-    // Enrich with member info
     const userIds = [...new Set(page.map((s) => s.userId).filter(Boolean))];
     const userMap = {};
     if (userIds.length > 0) {
@@ -228,7 +277,6 @@ router.get('/admin-stats', authenticateUser, requirePastor, async (req, res) => 
 
     stats.uniqueWinners = winnerSet.size;
 
-    // Top 5 soul winners
     const byUser = {};
     allSouls.forEach((s) => {
       if (!s.userId) return;
@@ -272,7 +320,6 @@ router.delete('/:id', authenticateUser, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Soul not found' });
     }
 
-    // Owner can delete their own; admins/pastors can delete any
     const { db } = require('../config/firebase');
     const userDoc = await db.collection('users').doc(req.user.uid).get();
     const role = userDoc.exists ? userDoc.data().role : null;

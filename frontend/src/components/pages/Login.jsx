@@ -1,5 +1,6 @@
+// frontend/src/components/pages/Login.jsx
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Mail, Lock, LogIn } from 'lucide-react';
 import { isValidEmail, required } from '../../utils';
@@ -11,6 +12,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const validateForm = () => {
     const newErrors = {};
@@ -23,17 +25,30 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    
+
     try {
       setLoading(true);
       await login(email, password);
-      navigate('/');
+
+      // ✅ Redirect to the page the user came from, if provided
+      const redirectTo = searchParams.get('redirect');
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Login error:', error);
     } finally {
       setLoading(false);
     }
   };
+
+  // ✅ Preserve the redirect param when user clicks "Sign up"
+  const redirectParam = searchParams.get('redirect');
+  const registerLink = redirectParam
+    ? `/register?redirect=${encodeURIComponent(redirectParam)}`
+    : '/register';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -111,7 +126,7 @@ function Login() {
 
         <p className="text-center text-sm text-gray-600">
           Don't have an account?{' '}
-          <Link to="/register" className="text-church-gold hover:underline font-medium">
+          <Link to={registerLink} className="text-church-gold hover:underline font-medium">
             Sign up
           </Link>
         </p>
