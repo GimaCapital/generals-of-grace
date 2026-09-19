@@ -183,6 +183,9 @@ const settingsRoutes = require('./routes/settings');
 const orderRoutes = require('./routes/orders');
 const testimonyRoutes = require('./routes/testimonies');
 const bookRoutes = require('./routes/books');
+const soulRoutes = require('./routes/souls');
+const badgeRoutes = require('./routes/badges');
+const competitionRoutes = require('./routes/competitions');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/sermons', sermonRoutes);
@@ -195,6 +198,9 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/testimonies', testimonyRoutes);
 app.use('/api/books', bookRoutes);
+app.use('/api/souls', soulRoutes);
+app.use('/api/badges', badgeRoutes);
+app.use('/api/competitions', competitionRoutes);
 
 // ============================================
 // 404 HANDLER

@@ -1,3 +1,4 @@
+// backend\src\middleware\auth.js
 const { auth } = require('../config/firebase');
 const { logger } = require('../utils/logger');
 
