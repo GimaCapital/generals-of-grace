@@ -16,6 +16,8 @@ import {
   Church as MinistriesIcon,
   Chat as TestimoniesIcon,
   MenuBook as BooksIcon,
+  EmojiEvents as CompetitionsIcon,
+  VolunteerActivism as SoulsIcon
 } from '@mui/icons-material';
 
 const menuItems = [
@@ -24,6 +26,8 @@ const menuItems = [
   { path: '/admin/events', icon: <EventsIcon />, label: 'Events' },
   { path: '/admin/giving', icon: <GivingIcon />, label: 'Giving' },
   { path: '/admin/payments', icon: <PaymentsIcon />, label: 'Payments' },
+  { path: '/admin/souls', icon: <SoulsIcon />, label: 'Souls Won' },
+  { path: '/admin/competitions', icon: <CompetitionsIcon />, label: 'Competitions' },
   { path: '/admin/ministries', icon: <MinistriesIcon />, label: 'Ministries' },
   { path: '/admin/testimonies', icon: <TestimoniesIcon />, label: 'Testimonies' },
   { path: '/admin/books', icon: <BooksIcon />, label: 'Books' },

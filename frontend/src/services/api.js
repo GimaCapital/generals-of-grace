@@ -218,4 +218,42 @@ export const bookAPI = {
   delete: (id) => api.delete(`/books/${id}`),
   toggleFeatured: (id, featured) => api.put(`/books/${id}/featured`, { featured }),
 };
+
+// Souls API
+// export const soulsAPI = {
+//   create: (data) => api.post('/souls', data),
+//   getByUser: (userId) => api.get(`/souls/user/${userId}`),
+//   getStats: (userId) => api.get(`/souls/stats/${userId}`),
+//   delete: (id) => api.delete(`/souls/${id}`),
+// };
+
+export const soulsAPI = {
+  create: (data) => api.post('/souls', data),
+  getByUser: (userId) => api.get(`/souls/user/${userId}`),
+  getStats: (userId) => api.get(`/souls/stats/${userId}`),
+  delete: (id) => api.delete(`/souls/${id}`),
+  // ✅ Admin / Pastor endpoints
+  getAll: (params) => api.get('/souls/all', { params }),
+  getAdminStats: () => api.get('/souls/admin-stats'),
+};
+
+// Badges API
+export const badgesAPI = {
+  getAll: () => api.get('/badges'),
+  getByUser: (userId) => api.get(`/badges/user/${userId}`),
+  getProgress: (userId) => api.get(`/badges/progress/${userId}`),
+};
+
+// Competitions API
+export const competitionsAPI = {
+  getAll: () => api.get('/competitions'),
+  getActive: () => api.get('/competitions/active'),
+  getById: (id) => api.get(`/competitions/${id}`),
+  create: (data) => api.post('/competitions', data),
+  update: (id, data) => api.put(`/competitions/${id}`, data),
+  delete: (id) => api.delete(`/competitions/${id}`),
+  join: (id, data) => api.post(`/competitions/${id}/join`, data),
+  changeTeam: (id, data) => api.post(`/competitions/${id}/change-team`, data),
+  getMyTeam: (id) => api.get(`/competitions/${id}/my-team`),
+};
 export default api;

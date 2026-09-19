@@ -22,25 +22,22 @@ function Header({ onMenuToggle }) {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const dropdownTimeoutRef = useRef(null);
+  const profileDropdownRef = useRef(null);
 
   // Detect scroll direction for navigation only
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Only hide navigation when scrolling down AND past 100px
-      // AND no dropdown is open
       if (currentScrollY > lastScrollY && currentScrollY > 100 && openDropdown === null) {
         if (isNavVisible) {
           setIsNavVisible(false);
         }
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling up - show navigation
         if (!isNavVisible) {
           setIsNavVisible(true);
         }
       } else if (currentScrollY < 50) {
-        // At the very top - always show
         if (!isNavVisible) {
           setIsNavVisible(true);
         }
@@ -64,7 +61,6 @@ function Header({ onMenuToggle }) {
     setIsDropdownOpen(false);
   };
 
-  // Function to handle smooth scroll to section
   const handleSoulWinningClick = (sectionId) => {
     setOpenDropdown(null);
     navigate('/soul-winning');
@@ -79,7 +75,6 @@ function Header({ onMenuToggle }) {
     }, 300);
   };
 
-  // Navigation structure
   const navItems = [
     {
       label: 'Home',
@@ -99,7 +94,7 @@ function Header({ onMenuToggle }) {
       label: 'Soul',
       icon: <Heart className="w-4 h-4" />,
       dropdown: [
-         { label: 'Soul Winning?', action: 'scroll', section: '/soul-winning' },
+        { label: 'Soul Winning?', action: 'scroll', section: '/soul-winning' },
         { label: 'Why Soul Winning?', action: 'scroll', section: 'why-soul-winning' },
         { label: 'Benefits', action: 'scroll', section: 'benefits-of-soul-winning' },
         { label: 'Rewards', action: 'scroll', section: 'kingdom-rewards' },
@@ -162,17 +157,14 @@ function Header({ onMenuToggle }) {
   ];
 
   const toggleDropdown = (index) => {
-    // Clear any pending timeout
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current);
       dropdownTimeoutRef.current = null;
     }
     
-    // Toggle dropdown
     const newState = openDropdown === index ? null : index;
     setOpenDropdown(newState);
     
-    // When opening dropdown, ensure nav is visible
     if (newState !== null) {
       setIsNavVisible(true);
     }
@@ -187,7 +179,7 @@ function Header({ onMenuToggle }) {
     }
   };
 
-  // Close dropdown when clicking outside
+  // Close nav dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (openDropdown !== null) {
@@ -208,16 +200,28 @@ function Header({ onMenuToggle }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [openDropdown]);
 
-  // Calculate header height for spacing
+  // ✅ Close profile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isDropdownOpen &&
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDropdownOpen]);
+
   const getHeaderHeight = () => {
-    // When nav is visible: top row (64-80px) + nav row (56px) = 120-136px
-    // When nav is hidden: top row only (64-80px)
     return isNavVisible || openDropdown !== null ? '136px' : '80px';
   };
 
   return (
     <>
-      {/* Spacer to push content down - matches header height */}
       <div 
         className="hidden lg:block"
         style={{ height: getHeaderHeight() }}
@@ -231,13 +235,10 @@ function Header({ onMenuToggle }) {
         <div className="container-custom">
           {/* ===== TOP ROW - ALWAYS STATIC ===== */}
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo - ALWAYS VISIBLE */}
+            {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 flex-shrink-0 group">
               <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-church-gold to-amber-400 rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-all">
-                {/* <span className="text-white font-display font-bold text-base md:text-xl">GOG</span> */}
                 <img 
-                  // src="images/general_grace_logo.jpg"
-                  //  src="images/general_grace_logo.jpg"
                   src="/images/gog-new-logo.png"
                   alt="church logo"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -255,10 +256,10 @@ function Header({ onMenuToggle }) {
               </div>
             </Link>
 
-            {/* User Actions - ALWAYS VISIBLE */}
+            {/* User Actions */}
             <div className="flex items-center space-x-3">
               {currentUser ? (
-                <div className="relative">
+                <div className="relative" ref={profileDropdownRef}>
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center space-x-2 focus:outline-none"
@@ -314,7 +315,6 @@ function Header({ onMenuToggle }) {
                 </Link>
               )}
 
-              {/* Mobile Menu Button */}
               <button
                 onClick={onMenuToggle}
                 className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"

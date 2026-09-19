@@ -50,10 +50,15 @@ const PROVIDERS = ['flutterwave', 'paystack', 'cash', 'bank_transfer'];
 // ============================================================
 const safeNumber = (v) => (typeof v === 'number' && !isNaN(v) ? v : 0);
 
-const getGivingFee = (g) =>
-  safeNumber(g?.transactionData?.app_fee) ||
-  safeNumber(g?.transactionData?.merchant_fee) ||
-  0;
+const getGivingFee = (g) => {
+  const td = g?.transactionData || {};
+  // Flutterwave: app_fee / merchant_fee (already in Naira)
+  if (td.app_fee) return safeNumber(td.app_fee);
+  if (td.merchant_fee) return safeNumber(td.merchant_fee);
+  // Paystack: fees is in kobo → convert to Naira
+  if (td.fees) return safeNumber(td.fees) / 100;
+  return 0;
+};
 
 const getGivingNet = (g) => {
   const gross = safeNumber(g?.amount);
@@ -505,6 +510,9 @@ function AdminPayments() {
 
   // ============================================================
   // TOTALS
+  // Industry standard:
+  //   - Gross / Fees / Net → successful payments only
+  //   - attempted → all records (for the "Total Attempted" tile)
   // ============================================================
   const totals = useMemo(() => {
     let gross = 0;
@@ -512,22 +520,26 @@ function AdminPayments() {
     let net = 0;
     let count = 0;
     let successful = 0;
+    let attempted = 0;
 
     filteredRows.forEach((r) => {
-      gross += r.gross;
-      fee += r.fee;
-      net += r.net;
       count += 1;
-      if (
+      attempted += r.gross;
+
+      const isSuccess =
         r.status === 'successful' ||
         r.status === 'success' ||
-        r.status === 'paid'
-      ) {
+        r.status === 'paid';
+
+      if (isSuccess) {
+        gross += r.gross;
+        fee += r.fee;
+        net += r.net;
         successful += 1;
       }
     });
 
-    return { gross, fee, net, count, successful };
+    return { gross, fee, net, count, successful, attempted };
   }, [filteredRows]);
 
   // ============================================================
@@ -631,11 +643,12 @@ function AdminPayments() {
       </div>
 
       {/* SUMMARY TILES */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <SummaryTile
           label="Gross"
           value={formatCurrency(totals.gross)}
           accent="navy"
+          sub="Successful only"
         />
         <SummaryTile
           label="Fees"
@@ -648,6 +661,12 @@ function AdminPayments() {
           value={formatCurrency(totals.net)}
           accent="green"
           sub="After fees"
+        />
+        <SummaryTile
+          label="Total Attempted"
+          value={formatCurrency(totals.attempted)}
+          accent="slate"
+          sub={`${totals.count} attempts`}
         />
         <SummaryTile
           label="Transactions"

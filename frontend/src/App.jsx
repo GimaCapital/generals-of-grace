@@ -20,6 +20,7 @@ import Events from './components/pages/Events';
 import EventDetail from './components/pages/EventDetail';
 import Give from './components/pages/Give';
 import GiveSuccess from './components/pages/GiveSuccess';
+import UserDashboard from './components/dashboard/UserDashboard';
 import OrderConfirmation from './components/pages/OrderConfirmation';
 import Ministries from './components/pages/Ministries';
 import MinistryDetail from './components/pages/MinistryDetail';
@@ -49,6 +50,8 @@ import BookPurchase from './components/pages/BookPurchase';
 import Books from './components/pages/Books';
 import AdminBooks from './components/admin/Books';
 import AdminPayments from './components/admin/Payments';
+import AdminSouls from './components/admin/Souls';
+import AdminCompetitions from './components/admin/Competitions';
 
 function App() {
   return (
@@ -100,6 +103,14 @@ function App() {
               <Route path="pastor-social" element={<PastorSocial />} />
               <Route path="church-social" element={<ChurchSocial />} />
               <Route path="give/success" element={<GiveSuccess />} />
+              <Route
+                path="profile"
+                element={
+                  <ProtectedRoute>
+                    <UserDashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="books/:bookSlug" element={<BookPurchase />} />
               <Route path="/books" element={<Books />} />
               <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
@@ -119,6 +130,8 @@ function App() {
               <Route path="events" element={<AdminEvents />} />
               <Route path="giving" element={<AdminGiving />} />
               <Route path="payments" element={<AdminPayments />} />
+              <Route path="souls" element={<AdminSouls />} />
+              <Route path="competitions" element={<AdminCompetitions />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="/admin/ministries" element={<ManageMinistries />} />

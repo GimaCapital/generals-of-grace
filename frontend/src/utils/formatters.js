@@ -5,7 +5,7 @@
 // ============================================
 // HELPER: Convert any date type to Date object
 // ============================================
-const toDate = (date) => {
+export const toDate = (date) => {
   if (!date) return null;
 
   // Handle Firestore Timestamp with _seconds (from Firebase v9+)

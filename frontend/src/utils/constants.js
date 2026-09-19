@@ -127,3 +127,58 @@ export const ADMIN_NAV_LINKS = [
   { path: '/admin/users', label: 'Users', icon: 'People' },
   { path: '/admin/settings', label: 'Settings', icon: 'Settings' },
 ];
+
+// ============================================================
+// GIVING HELPERS
+// ============================================================
+
+// Fast lookup map: type key → display label
+// (Complements GIVING_TYPES array above — that one is for select dropdowns)
+export const GIVING_TYPE_LABELS = {
+  tithe: 'Tithe',
+  offering: 'Offering',
+  seed: 'Seed Offering',
+  building: 'Building Fund',
+  mission: 'Missions',
+  thanksgiving: 'Thanksgiving',
+  'prophetic-seed': 'Prophetic Seed',
+  'pastors-gift': "Pastor's Gift",
+  custom: 'Custom Giving',
+};
+
+export const getGivingTypeLabel = (type) =>
+  GIVING_TYPE_LABELS[type?.toLowerCase()] || type || 'Giving';
+
+// Status metadata — only the 3 statuses your system actually writes
+export const GIVING_STATUS_META = {
+  successful: {
+    label: 'Received',
+    dot: 'bg-emerald-500',
+    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    tableBadge: 'bg-green-100 text-green-800',
+  },
+  pending: {
+    label: 'Pending',
+    dot: 'bg-amber-500',
+    badge: 'bg-amber-50 text-amber-700 border-amber-200',
+    tableBadge: 'bg-yellow-100 text-yellow-800',
+  },
+  failed: {
+    label: 'Failed',
+    dot: 'bg-red-500',
+    badge: 'bg-red-50 text-red-700 border-red-200',
+    tableBadge: 'bg-red-100 text-red-800',
+  },
+};
+
+export const getGivingStatusMeta = (status) =>
+  GIVING_STATUS_META[status] || GIVING_STATUS_META.pending;
+
+// Provider fee helper — Paystack kobo, Flutterwave naira
+export const getProviderFee = (record) => {
+  const td = record?.transactionData || record?.paymentResponse || {};
+  if (td.app_fee) return Number(td.app_fee) || 0;
+  if (td.merchant_fee) return Number(td.merchant_fee) || 0;
+  if (td.fees) return (Number(td.fees) || 0) / 100;
+  return 0;
+};
