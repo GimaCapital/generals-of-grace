@@ -55,6 +55,7 @@ import AdminCompetitions from './components/admin/Competitions';
 import AdminRewardCategories from './components/admin/RewardCategories';
 import AdminRewards from './components/admin/Rewards';
 import AdminRanks from './components/admin/Ranks';
+import AdminBadges from './components/admin/Badges';
 
 function App() {
   return (
@@ -137,6 +138,7 @@ function App() {
               <Route path="competitions" element={<AdminCompetitions />} />
               <Route path="reward-categories" element={<AdminRewardCategories />} />
               <Route path="rewards" element={<AdminRewards />} />
+              <Route path="badges" element={<AdminBadges />} />
               <Route path="ranks" element={<AdminRanks />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="settings" element={<AdminSettings />} />

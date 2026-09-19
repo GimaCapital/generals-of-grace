@@ -21,6 +21,7 @@ import {
   FolderOpen as CategoriesIcon,
   CardGiftcard as RewardsIcon,
   Leaderboard as RanksIcon,
+  WorkspacePremium as BadgesIcon,
 } from '@mui/icons-material';
 
 const menuItems = [
@@ -33,6 +34,7 @@ const menuItems = [
   { path: '/admin/competitions', icon: <CompetitionsIcon />, label: 'Competitions' },
   { path: '/admin/reward-categories', icon: <CategoriesIcon />, label: 'Reward Categories' },
   { path: '/admin/rewards', icon: <RewardsIcon />, label: 'Rewards' },
+  { path: '/admin/badges', icon: <BadgesIcon />, label: 'Badges' }, 
   { path: '/admin/ranks', icon: <RanksIcon />, label: 'Ranks' },
   { path: '/admin/ministries', icon: <MinistriesIcon />, label: 'Ministries' },
   { path: '/admin/testimonies', icon: <TestimoniesIcon />, label: 'Testimonies' },

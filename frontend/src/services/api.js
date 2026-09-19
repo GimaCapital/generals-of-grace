@@ -243,8 +243,12 @@ export const badgesAPI = {
   getAll: () => api.get('/badges'),
   getByUser: (userId) => api.get(`/badges/user/${userId}`),
   getProgress: (userId) => api.get(`/badges/progress/${userId}`),
+  // ✅ Admin
+  adminGetAll: () => api.get('/badges/admin/all'),
+  create: (data) => api.post('/badges', data),
+  update: (docId, data) => api.put(`/badges/${docId}`, data),
+  delete: (docId) => api.delete(`/badges/${docId}`),
 };
-
 // Competitions API
 export const competitionsAPI = {
   getAll: () => api.get('/competitions'),

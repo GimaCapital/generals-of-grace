@@ -7,37 +7,52 @@ const USER_BADGES = 'userBadges';
 
 class Badge {
   /**
-   * Create a badge definition (admin only, called by seed script)
+   * Create a badge definition — with duplicate name prevention
    */
   static async create(data) {
     try {
+      const name = data.name?.trim();
+      if (!name) throw new Error('Name is required');
+
+      // ✅ Prevent duplicate badge names
+      const all = await this.getAllAdmin();
+      const dup = all.find((b) => b.name.toLowerCase() === name.toLowerCase());
+      if (dup) {
+        const err = new Error(`A badge named "${dup.name}" already exists`);
+        err.code = 'DUPLICATE';
+        throw err;
+      }
+
       const badge = {
-        id: data.id,
-        name: data.name,
-        description: data.description,
+        id: data.id || name.toLowerCase().replace(/\s+/g, '-'),
+        name,
+        description: data.description || '',
         emoji: data.emoji || '🏅',
         category: data.category || 'milestone',
         requirement: data.requirement || {},
-        order: data.order || 99,
+        order: Number(data.order) || 99,
+        active: data.active !== false,
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
-      await Database.createDoc(COLLECTION, badge);
-      return badge;
+      const docId = await Database.createDoc(COLLECTION, badge);
+      logger.info(`🏅 Badge created: ${badge.name}`);
+      return { docId, ...badge };
     } catch (error) {
-      logger.error('Error creating badge:', error);
+      logger.error('Error creating badge:', error.message);
       throw error;
     }
   }
 
   /**
-   * Get all badge definitions (sorted by order)
+   * Get all badge definitions (sorted by order) — public shape
    */
   static async getAll() {
     try {
       const snapshot = await Database.getCollection(COLLECTION).get();
       const badges = [];
       snapshot.forEach((doc) => {
-        badges.push({ id: doc.id, ...doc.data() });
+        badges.push({ docId: doc.id, ...doc.data() });
       });
       return badges.sort((a, b) => (a.order || 99) - (b.order || 99));
     } catch (error) {
@@ -47,14 +62,20 @@ class Badge {
   }
 
   /**
+   * Get all badges — admin shape (same as getAll, kept for API symmetry)
+   */
+  static async getAllAdmin() {
+    return this.getAll();
+  }
+
+  /**
    * Get a badge by its human-readable id
    */
   static async getById(badgeId) {
     try {
-      const results = await Database.getDocs(
-        COLLECTION,
-        [{ field: 'id', operator: '==', value: badgeId }]
-      );
+      const results = await Database.getDocs(COLLECTION, [
+        { field: 'id', operator: '==', value: badgeId },
+      ]);
       return results.length > 0 ? results[0] : null;
     } catch (error) {
       logger.error('Error getting badge:', error);
@@ -67,10 +88,9 @@ class Badge {
    */
   static async getUserBadges(userId) {
     try {
-      const results = await Database.getDocs(
-        USER_BADGES,
-        [{ field: 'userId', operator: '==', value: userId }]
-      );
+      const results = await Database.getDocs(USER_BADGES, [
+        { field: 'userId', operator: '==', value: userId },
+      ]);
       return results;
     } catch (error) {
       logger.error('Error getting user badges:', error);
@@ -83,14 +103,10 @@ class Badge {
    */
   static async award(userId, badgeId) {
     try {
-      // Check if already awarded
-      const existing = await Database.getDocs(
-        USER_BADGES,
-        [
-          { field: 'userId', operator: '==', value: userId },
-          { field: 'badgeId', operator: '==', value: badgeId },
-        ]
-      );
+      const existing = await Database.getDocs(USER_BADGES, [
+        { field: 'userId', operator: '==', value: userId },
+        { field: 'badgeId', operator: '==', value: badgeId },
+      ]);
       if (existing.length > 0) return existing[0];
 
       const record = {
@@ -108,6 +124,47 @@ class Badge {
   }
 
   /**
+   * Update a badge — with duplicate name prevention
+   */
+  static async update(docId, data) {
+    try {
+      // ✅ Prevent renaming into a duplicate
+      if (data.name) {
+        const name = data.name.trim();
+        const all = await this.getAllAdmin();
+        const dup = all.find(
+          (b) =>
+            b.name.toLowerCase() === name.toLowerCase() && b.docId !== docId
+        );
+        if (dup) {
+          const err = new Error(`A badge named "${dup.name}" already exists`);
+          err.code = 'DUPLICATE';
+          throw err;
+        }
+        data.name = name;
+      }
+
+      // Coerce numbers
+      if (data.order !== undefined) data.order = Number(data.order) || 99;
+
+      return Database.updateDoc(COLLECTION, docId, {
+        ...data,
+        updatedAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error('Error updating badge:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a badge
+   */
+  static async delete(docId) {
+    return Database.deleteDoc(COLLECTION, docId);
+  }
+
+  /**
    * Check which badges a user should have based on current stats,
    * award any newly earned, and return the full list with progress.
    */
@@ -120,6 +177,9 @@ class Badge {
       const results = [];
 
       for (const badge of allBadges) {
+        // Skip inactive badges
+        if (badge.active === false) continue;
+
         const earned = earnedIds.has(badge.id);
         let progress = 0;
         let target = 0;
@@ -137,7 +197,13 @@ class Badge {
         if (progress >= target && target > 0 && !earned) {
           await this.award(userId, badge.id);
           earnedIds.add(badge.id);
-          results.push({ ...badge, earned: true, earnedAt: new Date().toISOString(), progress, target });
+          results.push({
+            ...badge,
+            earned: true,
+            earnedAt: new Date().toISOString(),
+            progress,
+            target,
+          });
         } else {
           const earnedRecord = userBadges.find((b) => b.badgeId === badge.id);
           results.push({

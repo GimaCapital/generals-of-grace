@@ -23,7 +23,7 @@ const DEFAULT_BADGES = [
   },
   {
     id: 'harvester',
-    name: 'Harvester',
+    name: 'Faithful Witness',
     description: 'Won 10 souls',
     emoji: '🌾',
     category: 'milestone',
@@ -41,7 +41,7 @@ const DEFAULT_BADGES = [
   },
   {
     id: 'soul-circle',
-    name: "Soul Winner's Circle",
+    name: 'Soul Champion',
     description: 'Won 50 souls',
     emoji: '🏆',
     category: 'milestone',
@@ -50,7 +50,7 @@ const DEFAULT_BADGES = [
   },
   {
     id: 'soul-legacy',
-    name: "Soul Winner's Legacy",
+    name: 'Soul Legacy',
     description: 'Won 100 souls',
     emoji: '👑',
     category: 'milestone',
